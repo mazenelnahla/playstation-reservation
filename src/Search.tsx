@@ -23,7 +23,7 @@ import { fetchUsers, UserItem } from "./DataHandle/users";
 import { useLanguage } from "./context/LanguageContext";
 import {
   BanIcon,
-  Pencil,
+  Archive,
   PlusIcon,
   Printer,
   Trash2,
@@ -306,7 +306,7 @@ export default function SearchPage() {
             </div>
             <div>
               <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                📁 Session History & Archive Records
+                Sessions History
               </h1>
               <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
                 Search, filter by date or column, view session details, and generate printable reports
