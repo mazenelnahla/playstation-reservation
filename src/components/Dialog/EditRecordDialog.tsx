@@ -38,6 +38,8 @@ export default function EditRecordDialog({
   const { t } = useLanguage();
   if (!editing) return null;
 
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+
   const [customerName, setCustomerName] = useState(editing.CustomerName || "");
   const [customerPhoneNumber, setCustomerPhoneNumber] = useState(editing.CustomerPhoneNumber || "");
   const [vendorName, setVendorName] = useState(editing.VendorName || "");
@@ -198,14 +200,16 @@ export default function EditRecordDialog({
 
           {/* Staff Assigned */}
           <div className="grid gap-1">
-            <Label htmlFor="edit_DoneBy" className="text-xs font-semibold text-slate-300">
-              Staff Member / Cashier
+            <Label htmlFor="edit_DoneBy" className="text-xs font-semibold text-slate-300 flex items-center justify-between">
+              <span>Staff Member / Cashier</span>
+              {!isAdmin && <span className="text-[10px] text-amber-400 font-bold">(Admin Only)</span>}
             </Label>
             <select
               id="edit_DoneBy"
               value={doneBy}
+              disabled={!isAdmin}
               onChange={(e) => setDoneBy(e.target.value)}
-              className="h-10 text-xs bg-slate-900 border border-white/10 text-white rounded-xl px-3 outline-none focus:border-blue-400"
+              className="h-10 text-xs bg-slate-900 border border-white/10 text-white rounded-xl px-3 outline-none focus:border-blue-400 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {users.length > 0 ? (
                 users.map((u) => (
@@ -214,7 +218,7 @@ export default function EditRecordDialog({
                   </option>
                 ))
               ) : (
-                <option value="Staff" className="bg-slate-900 text-white">Staff</option>
+                <option value={doneBy || "Staff"} className="bg-slate-900 text-white">{doneBy || "Staff"}</option>
               )}
             </select>
           </div>
