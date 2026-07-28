@@ -186,17 +186,17 @@ export default function StationGrid({ sessions, onRefresh, onSaveOut, onOpenNewS
             const formattedTimer = `${hrs > 0 ? hrs + ":" : ""}${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 
             // Card styling according to status
-            let statusCardStyle = "bg-slate-900 border-white/10 hover:border-blue-500/40";
-            let badgeBg = "bg-blue-500/20 text-blue-300 border-blue-500/30";
+            let statusCardStyle = "bg-slate-900 light:bg-white border-white/10 light:border-slate-300 hover:border-blue-500/40";
+            let badgeBg = "bg-blue-500/20 text-blue-300 light:text-blue-700 border-blue-500/30";
             let statusText = "Active Session";
 
             if (isWarning5Mins) {
-              statusCardStyle = "bg-amber-950/40 border-amber-500/60 animate-pulse";
-              badgeBg = "bg-amber-500/30 text-amber-200 border-amber-500/50";
+              statusCardStyle = "bg-amber-950/40 light:bg-amber-50 border-amber-500/60 animate-pulse";
+              badgeBg = "bg-amber-500/30 text-amber-200 light:text-amber-800 border-amber-500/50";
               statusText = "⚠️ 5 MINS REMAINING!";
             } else if (isOverdue) {
-              statusCardStyle = "bg-red-950/40 border-red-500/60";
-              badgeBg = "bg-red-500/30 text-red-200 border-red-500/50";
+              statusCardStyle = "bg-red-950/40 light:bg-red-50 border-red-500/60";
+              badgeBg = "bg-red-500/30 text-red-200 light:text-red-800 border-red-500/50";
               statusText = "🚨 OVERTIME / DELAYED";
             }
 
@@ -205,17 +205,17 @@ export default function StationGrid({ sessions, onRefresh, onSaveOut, onOpenNewS
                 key={session.id}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className={`p-4 rounded-2xl border ${statusCardStyle} transition-all space-y-3 relative overflow-hidden flex flex-col justify-between`}
+                className={`p-4 rounded-2xl border ${statusCardStyle} transition-all space-y-3 relative overflow-hidden flex flex-col justify-between shadow-md`}
               >
                 <div>
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-2">
+                  <div className="flex items-center justify-between border-b border-white/10 light:border-slate-200 pb-2 mb-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-extrabold text-xs">
+                      <div className="w-8 h-8 rounded-lg bg-emerald-500/20 light:bg-emerald-100 border border-emerald-500/30 flex items-center justify-center text-emerald-400 light:text-emerald-700 font-extrabold text-xs">
                         #{session.id}
                       </div>
                       <div>
-                        <h4 className="text-sm font-bold text-white leading-tight">{session.Device_Type}</h4>
-                        <span className="text-[11px] text-slate-400">{session.VendorName}</span>
+                        <h4 className="text-sm font-bold text-white light:text-slate-900 leading-tight">{session.Device_Type}</h4>
+                        <span className="text-[11px] text-slate-400 light:text-slate-500">{session.VendorName}</span>
                       </div>
                     </div>
 
@@ -225,22 +225,22 @@ export default function StationGrid({ sessions, onRefresh, onSaveOut, onOpenNewS
                   </div>
 
                   <div className="space-y-1 text-xs">
-                    <div className="flex justify-between text-slate-300">
+                    <div className="flex justify-between text-slate-300 light:text-slate-700">
                       <span>Customer:</span>
-                      <strong className="text-white">{session.CustomerName}</strong>
+                      <strong className="text-white light:text-slate-900">{session.CustomerName}</strong>
                     </div>
-                    <div className="flex justify-between text-slate-400 text-[11px]">
+                    <div className="flex justify-between text-slate-400 light:text-slate-500 text-[11px]">
                       <span>Shift Staff:</span>
-                      <strong className="text-blue-400">{session.DoneBy || "Employee"}</strong>
+                      <strong className="text-blue-400 light:text-blue-700">{session.DoneBy || "Employee"}</strong>
                     </div>
                   </div>
 
                   {/* Dynamic Timer Box */}
-                  <div className="mt-3 bg-slate-950/80 p-3 rounded-xl border border-white/5 text-center">
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-0.5">
+                  <div className="mt-3 bg-slate-950/80 light:bg-slate-100 p-3 rounded-xl border border-white/5 light:border-slate-200 text-center">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 light:text-slate-500 block mb-0.5">
                       {isOverdue ? "Overdue Delay Time" : "Time Remaining"}
                     </span>
-                    <div className={`text-2xl font-black font-mono tracking-widest ${isOverdue ? "text-red-400 animate-pulse" : isWarning5Mins ? "text-amber-400" : "text-emerald-400"}`}>
+                    <div className={`text-2xl font-black font-mono tracking-widest ${isOverdue ? "text-red-400 light:text-red-600 animate-pulse" : isWarning5Mins ? "text-amber-400 light:text-amber-600" : "text-emerald-400 light:text-emerald-700"}`}>
                       {isOverdue ? `+ ${formattedTimer}` : formattedTimer}
                     </div>
                   </div>

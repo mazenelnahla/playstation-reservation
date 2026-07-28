@@ -91,7 +91,8 @@ html.light .bg-slate-900,
 html.light .bg-slate-900\/90,
 html.light .bg-slate-900\/80,
 html.light .bg-slate-900\/60,
-html.light .bg-slate-950\/80 {
+html.light .bg-slate-950\/80,
+html.light .bg-slate-950 {
   background-color: #ffffff !important;
 }
 
@@ -111,10 +112,17 @@ html.light .border-white\/5 {
   border-color: #cbd5e1 !important;
 }
 
+/* Stat Cards & Station Cards Light Mode Gradients */
 html.light .from-emerald-950\/80,
 html.light .from-emerald-950 {
   background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%) !important;
   border-color: #a7f3d0 !important;
+}
+
+html.light .from-teal-950\/80,
+html.light .from-teal-950 {
+  background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 100%) !important;
+  border-color: #99f6e4 !important;
 }
 
 html.light .from-blue-950\/80,
@@ -129,29 +137,38 @@ html.light .from-purple-950 {
   border-color: #e9d5ff !important;
 }
 
+html.light .from-amber-950\/40,
+html.light .from-amber-950 {
+  background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%) !important;
+  border-color: #fde68a !important;
+}
+
+html.light .from-red-950\/40,
+html.light .from-red-950 {
+  background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%) !important;
+  border-color: #fca5a5 !important;
+}
+
+/* Light mode text contrast fixes */
+html.light .text-white,
 html.light h1.text-white,
 html.light h2.text-white,
 html.light h3.text-white,
 html.light h4.text-white,
 html.light p.text-white,
-html.light div.text-white:not(button *):not(a.bg-blue-600 *),
-html.light span.text-white:not(button *):not(a.bg-blue-600 *) {
-  color: #0f172a;
+html.light strong.text-white {
+  color: #0f172a !important;
 }
 
-/* Button & Badge Light Mode Text Protection */
-html.light button .text-white,
-html.light button.text-white,
-html.light a.text-white,
-html.light .btn-warning,
-html.light .btn-destructive,
-html.light [class*="bg-gradient-to-r"],
-html.light .bg-blue-600,
-html.light .bg-blue-600\/50,
-html.light .bg-emerald-600,
-html.light .bg-emerald-600\/50,
-html.light [class*="bg-blue-600"] span,
-html.light [class*="bg-emerald-600"] span {
+/* Preserve white text on dark buttons */
+html.light button.bg-emerald-600 *,
+html.light button.bg-blue-600 *,
+html.light button.bg-indigo-600 *,
+html.light [class*="bg-gradient-to-r"] *,
+html.light button.bg-emerald-600,
+html.light button.bg-blue-600,
+html.light button.bg-indigo-600,
+html.light [class*="bg-gradient-to-r"] {
   color: #ffffff !important;
 }
 
@@ -175,7 +192,12 @@ html.light .hover\:bg-slate-700:hover {
 
 html.light .text-slate-300,
 html.light .text-slate-200 {
-  color: #334155;
+  color: #1e293b !important;
+}
+
+html.light .text-slate-400,
+html.light .text-slate-500 {
+  color: #475569 !important;
 }
 
 html.light .text-slate-100 {
