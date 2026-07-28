@@ -1,0 +1,587 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+:root {
+  color-scheme: dark;
+  margin: 0;
+  width: 100%;
+  background-color: #0f172a;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: #0f172a;
+}
+
+/* RTL Layout Rules for Arabic Language */
+html[dir="rtl"] body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+html, body, #root {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #0f172a;
+}
+
+html.light {
+  color-scheme: light;
+  background-color: #f8fafc;
+  background: #f8fafc;
+}
+
+html.light, html.light body, html.light #root {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+html.light body {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: #0f172a;
+}
+
+html.light h1, html.light h2, html.light h3, html.light h4, html.light h5, html.light h6 {
+  color: #0f172a;
+}
+
+html.light input, html.light textarea, html.light select {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light input::placeholder, html.light textarea::placeholder {
+  color: #64748b;
+}
+
+/* Light Mode Automatic Overrides */
+html.light body,
+html.light .min-h-screen {
+  background: #f8fafc !important;
+  background-image: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+}
+
+html.light header {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.dark aside,
+html.dark [class*="sidebar"],
+html.dark [class*="Sidebar"] {
+  background-color: #090d16 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.light aside,
+html.light [class*="sidebar"],
+html.light [class*="Sidebar"] {
+  background-color: #cbd5e1 !important;
+  border-color: #94a3b8 !important;
+}
+
+html.light .bg-slate-900,
+html.light .bg-slate-900\/90,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/60,
+html.light .bg-slate-950\/80 {
+  background-color: #ffffff !important;
+}
+
+html.light .bg-slate-800,
+html.light .bg-slate-800\/80,
+html.light .bg-slate-800\/60,
+html.light .bg-slate-800\/50,
+html.light .bg-slate-800\/40,
+html.light .bg-slate-700\/50,
+html.light .bg-slate-700\/60 {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .border-white\/10,
+html.light .border-white\/20,
+html.light .border-white\/5 {
+  border-color: #cbd5e1 !important;
+}
+
+html.light .from-emerald-950\/80,
+html.light .from-emerald-950 {
+  background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%) !important;
+  border-color: #a7f3d0 !important;
+}
+
+html.light .from-blue-950\/80,
+html.light .from-blue-950 {
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%) !important;
+  border-color: #bfdbfe !important;
+}
+
+html.light .from-purple-950\/80,
+html.light .from-purple-950 {
+  background: linear-gradient(135deg, #faf5ff 0%, #ffffff 100%) !important;
+  border-color: #e9d5ff !important;
+}
+
+html.light h1.text-white,
+html.light h2.text-white,
+html.light h3.text-white,
+html.light h4.text-white,
+html.light p.text-white,
+html.light div.text-white:not(button *):not(a.bg-blue-600 *),
+html.light span.text-white:not(button *):not(a.bg-blue-600 *) {
+  color: #0f172a;
+}
+
+/* Button & Badge Light Mode Text Protection */
+html.light button .text-white,
+html.light button.text-white,
+html.light a.text-white,
+html.light .btn-warning,
+html.light .btn-destructive,
+html.light [class*="bg-gradient-to-r"],
+html.light .bg-blue-600,
+html.light .bg-blue-600\/50,
+html.light .bg-emerald-600,
+html.light .bg-emerald-600\/50,
+html.light [class*="bg-blue-600"] span,
+html.light [class*="bg-emerald-600"] span {
+  color: #ffffff !important;
+}
+
+/* Light Mode Secondary/Ghost Button styling */
+html.light button.bg-slate-800,
+html.light button.bg-slate-800\/80,
+html.light button.bg-slate-700,
+html.light .bg-slate-800,
+html.light .bg-slate-800\/80 {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light button.bg-slate-800:hover,
+html.light button.bg-slate-700:hover,
+html.light .hover\:bg-slate-700:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html.light .text-slate-300,
+html.light .text-slate-200 {
+  color: #334155;
+}
+
+html.light .text-slate-100 {
+  color: #0f172a;
+}
+
+html.light .text-slate-400 {
+  color: #64748b;
+}
+
+html.light .text-slate-500 {
+  color: #475569;
+}
+
+/* Light Mode Labels & Form Titles */
+html.light .label,
+html.light label,
+html.light .field_label_large,
+html.light .field_label_small,
+html.light .view_label_large,
+html.light .view_label_small {
+  color: #0f172a !important;
+}
+
+/* Light Mode Borders, Inputs & Tables */
+html.light .border-slate-700,
+html.light .border-slate-600 {
+  border-color: #cbd5e1 !important;
+}
+
+html.light .bg-\[\#1F2020\] {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light input.bg-slate-800,
+html.light input.border-slate-700,
+html.light textarea.bg-slate-800,
+html.light select.bg-slate-800 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light tr:hover,
+html.light .hover\:bg-white\/5:hover {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .divide-white\/5 > :not([hidden]) ~ :not([hidden]),
+html.light .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #e2e8f0 !important;
+}
+
+html.light table thead,
+html.light table th {
+  background-color: #e2e8f0 !important;
+  color: #1e3a8a !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+html.light table td {
+  color: #0f172a !important;
+}
+
+/* Light Mode Gradient Text High Contrast */
+html.light .bg-clip-text {
+  background-image: linear-gradient(135deg, #1d4ed8 0%, #3730a3 60%, #581c87 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+body {
+  @apply bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.7);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.9);
+}
+
+/* Typography */
+.Titleh1 {
+  @apply text-white text-center font-semibold text-4xl;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-semibold text-slate-100;
+}
+
+/* Buttons */
+.btn-warning {
+  @apply bg-amber-500 text-white border-none hover:bg-amber-600 focus:bg-amber-600;
+}
+
+/* Utility classes */
+.container {
+  @apply mx-auto;
+}
+
+/* Backgrounds with glassmorphism effect */
+.glass-effect {
+  @apply bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl;
+}
+
+.bg-login {
+  @apply bg-gradient-to-br from-slate-800 to-slate-900;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent;
+}
+
+/* Smooth animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Card styles */
+.card {
+  @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl shadow-xl;
+}
+
+.card-hover {
+  @apply transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:shadow-2xl;
+}
+
+/* Input styling */
+input, textarea, select {
+  @apply bg-white/5 border border-white/10 text-white placeholder-slate-400;
+}
+
+input:focus, textarea:focus, select:focus {
+  @apply outline-none border-blue-400 ring-2 ring-blue-400/50;
+}
+
+/* Button hover effects */
+button {
+  @apply transition-all duration-200;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.card {
+  @apply rounded-2xl bg-white shadow-sm border border-slate-200;
+  background-color: #ffffff;
+}
+
+.card-header {
+  @apply px-6 pt-5;
+}
+
+.card-title {
+  @apply text-lg font-semibold;
+}
+
+.card-description {
+  @apply text-sm text-slate-500;
+}
+
+.card-content {
+  @apply px-6 pb-6 pt-4 text-lg;
+}
+
+.buttonIcon {
+  @apply w-5 ml-2 inline;
+}
+.btn-outline {
+  @apply bg-white;
+}
+
+.btn-destructive {
+  @apply bg-red-600 text-white border-red-600 hover:bg-red-700;
+}
+
+.btn-sm {
+  @apply h-8 p-5;
+}
+.btn-lg {
+  @apply h-20 px-3;
+}
+.btn-mini {
+  padding: 10px;
+}
+.btn-lg:hover,
+.btn-lg:focus {
+  background-color: #000f63e3 !important;
+  color: whitesmoke;
+  /* Tailwind green-600 */
+}
+.input {
+  @apply rounded-xl border border-slate-300 text-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-200;
+  font-size: 0.9rem;
+  padding: 1rem;
+  color: #6b7280;
+}
+.field_label_large {
+  font-size: 1.5rem;
+  color: #334155;
+  font-weight: 600;
+}
+.field_label_small {
+  font-size: 1rem;
+  padding-bottom: 0;
+  color: #334155;
+}
+
+.view_label_large {
+  font-size: 22px;
+  color: #334155;
+  font-weight: 600;
+}
+.view_label_small {
+  font-size: 20px;
+  padding-bottom: 0;
+  color: #334155;
+}
+
+.label {
+  @apply text-white;
+  font-weight: 600;
+}
+
+.textarea {
+  @apply rounded-xl border border-slate-300 p-3 text-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-200;
+  color: #6b7280;
+}
+
+.select,
+select {
+  @apply rounded-xl border border-slate-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-200;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+.homeHeadimg {
+  color: rgb(0, 0, 0);
+  font-size: 50px !important;
+  font-weight: 800;
+}
+.homeImage {
+  width: 35rem !important;
+}
+
+.table-view-card {
+  width: 100%;
+  table-layout: fixed;
+}
+th {
+  text-align: center !important;
+  font-weight: bold !important;
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  white-space: normal !important;
+}
+
+td {
+  color: #000000;
+}
+
+
+@media print {
+  th {
+    background-color: #cbd5e1 !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 5mm;
+  }
+
+  /* neutralize app-y min-heights/margins so they don't create extra pages */
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    height: auto !important;
+  }
+
+  .min-h-screen {
+    min-height: auto !important;
+  }
+
+  /* Hide EVERYTHING by default */
+  body * {
+    display: none !important;
+  }
+
+  /* Re-show the print area and all its descendants */
+  #print-area,
+  #print-area * {
+    display: revert !important;
+  }
+
+  .no-print,
+  #print-area .no-print,
+  #print-area .no-print * {
+    display: none !important;
+  }
+
+  /* CRUCIAL: also re-show all ancestors so #print-area stays in the tree */
+  body *:has(#print-area) {
+    display: revert !important;
+  }
+
+  /* Let the table expand instead of being clipped/scrolling */
+  #print-area {
+    position: absolute !important;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
+
+  .print-table {
+    width: 100% !important;
+    table-layout: auto !important;
+    border-collapse: collapse !important;
+  }
+
+  .print-table thead,
+  .print-table thead tr,
+  .print-table thead th {
+    display: table-header-group !important;
+    text-align: center !important;
+    font-weight: bold !important;
+    background-color: #adadad !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color: #000000 !important;
+    white-space: normal !important;
+  }
+  .print-table tfoot {
+    display: table-footer-group !important;
+  }
+  
+  .print-table th,
+  .print-table td {
+    text-align: left !important;
+    border: 1px solid #ccc !important;
+    padding: 4px 6px !important;
+    word-break: keep-all !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: pre-wrap !important;
+    font-size: 12px !important; /* ensure cells also use smaller font */
+  }
+}
