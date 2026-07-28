@@ -173,7 +173,7 @@ export default function PrintTable({
       </div>
 
       <div
-        className="overflow-auto rounded-2xl border border-slate-200 print:border-0 print:overflow-visible"
+        className="overflow-x-auto rounded-2xl border border-white/10 light:border-slate-300 shadow-xl print:border-0 print:overflow-visible bg-slate-900/90 light:bg-white"
         id="print-area"
         ref={printRef}
         style={{
@@ -182,54 +182,53 @@ export default function PrintTable({
         }}
       >
         {/* Compact print header */}
-        <div className="mb-1 hidden print:flex print:justify-between print:items-center">
-          <div className="text-base font-semibold ">
-            Report - Items: {displayList.length}
+        <div className="mb-2 hidden print:flex print:justify-between print:items-center p-2">
+          <div className="text-base font-bold text-slate-900">
+            Session & Gaming Records History ({displayList.length} items)
           </div>
-          <div className="text-xs text-slate-600 ">
-            Total Profit:{" "}
-            <span className="font-semibold text-indigo-600">
-              {totalProfitFormatted}
+          <div className="text-xs text-slate-700">
+            Total Revenue:{" "}
+            <span className="font-bold text-emerald-700">
+              EGP {totalProfitFormatted}
             </span>
             {" — "} {format(new Date(), "yyyy-MM-dd")} —{" "}
             {formatTime12h(format(new Date(), "HH:mm"))}
           </div>
         </div>
 
-        <table className="w-full text-xs md:text-sm print-table text-black">
-          <thead className="bg-slate-50 print:bg-white text-center">
+        <table className="w-full text-xs md:text-sm print-table text-slate-200 light:text-slate-900 border-collapse">
+          <thead className="bg-slate-950 light:bg-slate-200 text-slate-300 light:text-slate-800 text-center font-bold">
             {/* Column headers */}
-            <tr>
-              <th className="px-3 py-2">{t("colId")}</th>
-              <th className="px-3 py-2">{t("colDateIn")}</th>
-              <th className="px-3 py-2">{t("colCustomerName")}</th>
-              <th className="px-3 py-2">{t("colCustomerPhone")}</th>
-              <th className="px-3 py-2">{t("colDeviceType")}</th>
-              <th className="px-3 py-2">{t("colVendor")}</th>
-              <th className="px-3 py-2">{t("colModel")}</th>
-              <th className="px-3 py-2">{t("colIssue")}</th>
-              <th className="px-3 py-2">{t("colTechnician")}</th>
-              <th className="px-3 py-2">{t("colCost")}</th>
-              <th className="px-3 py-2">{t("colDateOut")}</th>
-              <th className="px-3 py-2">{t("colNotes")}</th>
-              <th className="px-3 py-2 no-print">{t("colActions")}</th>
+            <tr className="border-b border-white/10 light:border-slate-300">
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-emerald-400 light:text-emerald-700">#</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colDateIn")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colCustomerName")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colCustomerPhone")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colDeviceType")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colVendor")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colModel")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colIssue")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colTechnician")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-emerald-400 light:text-emerald-700">{t("colCost")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colDateOut")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colNotes")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700 no-print">{t("colActions")}</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-white/5 light:divide-slate-200">
             {displayList.length === 0 && (
               <tr>
                 <td
                   colSpan={20}
-                  className="px-4 py-6 text-center text-slate-500"
+                  className="px-4 py-8 text-center text-slate-400 light:text-slate-500 font-medium"
                 >
-                  No search results
+                  No session records found matching current query or filters.
                 </td>
               </tr>
             )}
             <AnimatePresence>
               {displayList.map((r, idx) => {
-                const displayIndex = idx + 1; // UI-only index (1-based) — not linked to DB
-                // Only show current page in screen, show all in print
+                const displayIndex = idx + 1; // UI-only index (1-based)
                 const isVisible =
                   idx >= page * PAGE_SIZE && idx < (page + 1) * PAGE_SIZE;
                 const isMissingDateOut =
@@ -248,71 +247,89 @@ export default function PrintTable({
                     }}
                     className={`${
                       isMissingDateOut
-                        ? "bg-red-100 print:bg-red-100"
-                        : "odd:bg-white even:bg-slate-50"
+                        ? "bg-amber-950/40 light:bg-amber-100/90 text-white light:text-slate-900 border-l-4 border-l-amber-500"
+                        : "hover:bg-white/5 light:hover:bg-slate-100 bg-slate-900/40 light:bg-white text-slate-200 light:text-slate-900"
                     } ${isVisible ? "" : "hidden print:table-row"}`}
                   >
-                    <td className="px-3 py-2">{displayIndex}</td>
-                    <td className="px-3 py-2">{r.Date_in}</td>
-                    <td className="px-3 py-2">{r.CustomerName}</td>
-                    <td className="px-3 py-2 relative group">
-                      <div className="flex items-center justify-between">
-                        <span className="flex-1">{r.CustomerPhoneNumber}</span>
-                        <button
-                          onClick={() =>
-                            copyToClipboard(r.CustomerPhoneNumber, r.id)
-                          }
-                          className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 ml-2 p-1 rounded hover:bg-slate-200 no-print"
-                          title="Copy Customer Phone Number"
-                          type="button"
-                        >
-                          {copiedId === r.id ? (
-                            <Check className="h-3 w-3 text-green-600" />
-                          ) : (
-                            <Copy className="h-3 w-3 text-slate-600" />
-                          )}
-                        </button>
+                    <td className="px-3 py-3 font-bold text-center text-emerald-400 light:text-emerald-700">{displayIndex}</td>
+                    <td className="px-3 py-3 whitespace-nowrap text-slate-300 light:text-slate-700">{r.Date_in || "—"}</td>
+                    <td className="px-3 py-3 font-semibold text-white light:text-slate-900">{r.CustomerName || "—"}</td>
+                    <td className="px-3 py-3 relative group">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="font-mono text-slate-300 light:text-slate-700">{r.CustomerPhoneNumber || "—"}</span>
+                        {r.CustomerPhoneNumber && (
+                          <button
+                            onClick={() =>
+                              copyToClipboard(r.CustomerPhoneNumber, r.id)
+                            }
+                            className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1 rounded hover:bg-slate-700 light:hover:bg-slate-200 no-print text-slate-400 hover:text-white"
+                            title="Copy Phone Number"
+                            type="button"
+                          >
+                            {copiedId === r.id ? (
+                              <Check className="h-3.5 w-3.5 text-emerald-400" />
+                            ) : (
+                              <Copy className="h-3.5 w-3.5" />
+                            )}
+                          </button>
+                        )}
                       </div>
                     </td>
-                    <td className="px-3 py-2">{r.Device_Type}</td>
-                    <td className="px-3 py-2">{r.VendorName}</td>
-                    <td className="px-3 py-2">{r.ModelName}</td>
-                    <td className="px-3 py-2">{r.issue}</td>
-                    <td className="px-3 py-2">{r.DoneBy}</td>
-                    <td className="px-3 py-2">{r.MaintinancePrice}</td>
-                    <td className="px-3 py-2">{r.Date_out}</td>
+                    <td className="px-3 py-3 whitespace-nowrap">
+                      <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-800 light:bg-slate-200 text-slate-300 light:text-slate-800 border border-white/10 light:border-slate-300">
+                        {r.Device_Type || "Room / Station"}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 font-medium text-slate-300 light:text-slate-700">{r.VendorName || "—"}</td>
+                    <td className="px-3 py-3 font-medium text-slate-300 light:text-slate-700">{r.ModelName || "—"}</td>
+                    <td className="px-3 py-3 max-w-[12rem] break-words text-slate-300 light:text-slate-700">{r.issue || "—"}</td>
+                    <td className="px-3 py-3 font-semibold text-blue-400 light:text-blue-600">{r.DoneBy || "—"}</td>
+                    <td className="px-3 py-3 font-extrabold text-emerald-400 light:text-emerald-700 text-right whitespace-nowrap">
+                      {r.MaintinancePrice ? `EGP ${r.MaintinancePrice}` : "—"}
+                    </td>
+                    <td className="px-3 py-3 whitespace-nowrap">
+                      {isMissingDateOut ? (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                          Active Session
+                        </span>
+                      ) : (
+                        <span className="text-slate-300 light:text-slate-700">{r.Date_out}</span>
+                      )}
+                    </td>
                     <td
-                      className="px-3 py-2 break-words whitespace-normal max-w-[20rem] print:max-w-[12rem]"
+                      className="px-3 py-3 break-words max-w-[14rem] text-slate-400 light:text-slate-600 text-xs"
                       title={typeof r.Notes === "string" ? r.Notes : undefined}
                     >
-                      {r.Notes}
+                      {r.Notes || "—"}
                     </td>
-                    <td className="px-3 py-2 no-print">
-                      <div className="flex gap-2">
+                    <td className="px-3 py-3 no-print whitespace-nowrap">
+                      <div className="flex items-center gap-1.5 justify-center">
                         <Button
                           size="sm"
-                          className="btn-warning"
+                          className="h-8 px-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg"
                           onClick={() => setOut(r)}
                           title={t("checkout")}
                         >
-                          <LogOutIcon className="h-4 w-4" />
+                          <LogOutIcon className="h-3.5 w-3.5" />
                         </Button>
                         <Button
                           size="sm"
+                          className="h-8 px-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-white/10"
                           onClick={() => setEditing(r)}
                           title={t("edit")}
                         >
-                          <Pencil className="h-4 w-4" />
+                          <Pencil className="h-3.5 w-3.5" />
                         </Button>
                         <Button
                           size="sm"
                           variant="destructive"
+                          className="h-8 px-2 bg-red-600/80 hover:bg-red-600 rounded-lg"
                           onClick={() => {
                             handleDeleteRecord(r);
                           }}
                           title={t("delete")}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
                     </td>
@@ -325,23 +342,25 @@ export default function PrintTable({
       </div>
       {/* Pagination controls outside table, not printed */}
       {displayList.length > PAGE_SIZE && (
-        <div className=" flex justify-center gap-2 mt-4 no-print">
-          <Button
-            size="sm"
-            disabled={(page + 1) * PAGE_SIZE >= displayList.length}
-            onClick={() => setPage((p) => p + 1)}
-          >
-            Next
-          </Button>
-          <span className="self-center text-xs">
-            Page {page + 1} of {Math.ceil(displayList.length / PAGE_SIZE)}
-          </span>
+        <div className="flex items-center justify-between mt-4 no-print bg-slate-900/80 light:bg-slate-100 p-3 rounded-xl border border-white/10 light:border-slate-300">
           <Button
             size="sm"
             disabled={page === 0}
             onClick={() => setPage((p) => Math.max(0, p - 1))}
+            className="h-9 px-4 bg-slate-800 hover:bg-slate-700 text-white rounded-lg disabled:opacity-40"
           >
             Previous
+          </Button>
+          <span className="text-xs font-semibold text-slate-300 light:text-slate-800">
+            Page <span className="text-white light:text-slate-900 font-bold">{page + 1}</span> of {Math.ceil(displayList.length / PAGE_SIZE)}
+          </span>
+          <Button
+            size="sm"
+            disabled={(page + 1) * PAGE_SIZE >= displayList.length}
+            onClick={() => setPage((p) => p + 1)}
+            className="h-9 px-4 bg-slate-800 hover:bg-slate-700 text-white rounded-lg disabled:opacity-40"
+          >
+            Next
           </Button>
         </div>
       )}
