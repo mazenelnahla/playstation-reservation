@@ -36,14 +36,15 @@ const OutRecordDialog: React.FC<OutRecordDialogProps> = ({
       Date_out: String(formData.get("Date_out") || ""),
       DoneBy: String(formData.get("DoneBy") || ""),
       MaintinancePrice: String(formData.get("MaintinancePrice") || ""),
+      Notes: String(formData.get("Notes") || ""),
     };
     onSave(updated);
   };
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
-      <div className="border border-white/10 bg-slate-800/50 rounded-xl p-4">
-        <h3 className="text-sm font-semibold text-slate-200 mb-3">
+      <div className="border border-white/10 bg-slate-800/50 rounded-xl p-4 space-y-4">
+        <h3 className="text-sm font-semibold text-slate-200">
           {t("checkOutDetails")}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -52,7 +53,7 @@ const OutRecordDialog: React.FC<OutRecordDialogProps> = ({
             name="Date_out"
             label={t("colDateOut")}
             type="date"
-            defaultValue={Out.Date_out}
+            defaultValue={Out.Date_out || new Date().toISOString().substring(0, 10)}
           />
           <SelectField
             id="DoneBy"
@@ -67,6 +68,21 @@ const OutRecordDialog: React.FC<OutRecordDialogProps> = ({
             info={t("colCost")}
             label={t("colCost")}
             defaultValue={Out.MaintinancePrice}
+          />
+        </div>
+
+        {/* Checkout Notes / Leftover items field */}
+        <div className="grid gap-1.5 pt-2 border-t border-white/10">
+          <label htmlFor="Notes" className="text-xs font-semibold text-amber-400 flex items-center gap-1.5">
+            <span>📝 Checkout Notes / Missing & Left Items:</span>
+          </label>
+          <textarea
+            id="Notes"
+            name="Notes"
+            rows={3}
+            placeholder="Record any missing items, left-behind belongings, controller damage, or checkout notes..."
+            defaultValue={Out.Notes || ""}
+            className="w-full bg-slate-900/90 border border-white/10 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/30 transition-all resize-none"
           />
         </div>
       </div>
