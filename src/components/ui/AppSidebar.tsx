@@ -20,8 +20,6 @@ interface SidebarNavProps {
   setSidebarOpen: (open: boolean) => void;
   isAdmin: boolean;
   username: string;
-  addVendorNameOpen: boolean;
-  setAddVendorNameOpen: (open: boolean) => void;
   handleLogout: () => void;
   closeSidebarOnMobile: () => void;
 }
@@ -31,8 +29,6 @@ export function AppSidebar({
   setSidebarOpen,
   isAdmin,
   username,
-  addVendorNameOpen,
-  setAddVendorNameOpen,
   handleLogout,
   closeSidebarOnMobile,
 }: SidebarNavProps) {
@@ -148,22 +144,6 @@ export function AppSidebar({
                   </Link>
                 </Button>
               )}
-
-              <Button
-                variant="ghost"
-                size="sm"
-                className={`justify-start w-full rounded-lg transition-all ${
-                  addVendorNameOpen
-                    ? "bg-slate-700 text-white"
-                    : "hover:bg-slate-800 text-slate-300"
-                }`}
-                onClick={() => setAddVendorNameOpen(!addVendorNameOpen)}
-              >
-                <div className="flex items-center gap-3 w-full">
-                  <PlusCircle className="w-5 h-5 shrink-0" />
-                  <span className="truncate">{t("addPhoneType")}</span>
-                </div>
-              </Button>
             </div>
 
             {/* User Profile Section */}

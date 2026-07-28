@@ -18,7 +18,6 @@ import Dialog, {
 } from "./components/ui/Dialog";
 import EditRecordDialog from "./components/Dialog/EditRecordDialog";
 import OutRecordDialog from "./components/Dialog/OutRecordDialog";
-import VendorNameDialog from "./components/Dialog/VendorNameDialog";
 import PrintTable from "./components/PrintTable";
 import { fetchUsers, UserItem } from "./DataHandle/users";
 import { useLanguage } from "./context/LanguageContext";
@@ -659,29 +658,6 @@ export default function SearchPage() {
         </div>
       </Dialog>
 
-      {/* add VendorNames confirm */}
-      <VendorNameDialog
-        open={addVendorNameOpen}
-        onOpenChange={setAddVendorNameOpen}
-        VendorName={VendorName}
-        setVendorName={setVendorName}
-        editingVendorNames={editingVendorNames}
-        setEditingVendorNames={setEditingVendorNames}
-        confirmDeleteVendorNames={confirmDeleteVendorNames}
-        setConfirmDeleteVendorNames={setConfirmDeleteVendorNames}
-        addVendorNamesItem={addVendorNamesItem}
-        handleEditVendorNames={handleEditVendorNames}
-        handleDeleteVendorNames={handleDeleteVendorNames}
-        confirmDeleteVendorNamesAction={confirmDeleteVendorNamesAction}
-        Field={Field}
-        Button={Button}
-        PlusIcon={PlusIcon}
-        Pencil={Pencil}
-        Trash2={Trash2}
-        BanIcon={BanIcon}
-        AnimatePresence={AnimatePresence}
-        motion={motion}
-      />
       <DataEntryDialog
         open={dataEntryOpen}
         onOpenChange={setDataEntryOpen}

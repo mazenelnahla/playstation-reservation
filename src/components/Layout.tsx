@@ -1,31 +1,14 @@
 import React, { useState, ReactNode, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import Field from "./ui/Field";
-import Button from "./ui/Button";
+import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
-import {
-  BanIcon,
-  Pencil,
-  PlusIcon,
-  Trash2,
-} from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
-import VendorNameDialog from "../components/Dialog/VendorNameDialog";
 import { HeaderNavbar, MobileBottomNavbar } from "./ui/NavigationBars";
 import { AppSidebar } from "./ui/AppSidebar";
-import {
-  loadVendorName,
-  addOrUpdateVendorName,
-  deleteVendorName,
-  VendorName,
-} from "../DataHandle/VendorName";
 
 interface LayoutProps {
   children: ReactNode;
 }
-
-type VendorNameItem = VendorName;
 
 export default function Layout({ children }: LayoutProps) {
   const navigate = useNavigate();
@@ -33,14 +16,6 @@ export default function Layout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [username, setUsername] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
-
-  // VendorName state
-  const [VendorName, setVendorName] = useState<VendorNameItem[]>([]);
-  const [addVendorNameOpen, setAddVendorNameOpen] = useState(false);
-  const [editingVendorNames, setEditingVendorNames] =
-    useState<VendorNameItem | null>(null);
-  const [confirmDeleteVendorNames, setConfirmDeleteVendorNames] =
-    useState<VendorNameItem | null>(null);
 
   const [avatarColor, setAvatarColor] = useState("blue");
   const [theme, setTheme] = useState<"dark" | "light">(() => {
@@ -122,53 +97,6 @@ export default function Layout({ children }: LayoutProps) {
     navigate("/login");
   };
 
-  useEffect(() => {
-    loadVendorName()
-      .then((v) => setVendorName(Array.isArray(v) ? v : []))
-      .catch(() => setVendorName([]));
-  }, []);
-
-  async function addVendorNamesItem(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const VendorNamesform = new FormData(e.currentTarget);
-    const name = String(VendorNamesform.get("Name") || "");
-
-    try {
-      if (editingVendorNames) {
-        await addOrUpdateVendorName({ id: editingVendorNames.id, name });
-      } else {
-        await addOrUpdateVendorName({ name } as VendorName);
-      }
-      const updated = await loadVendorName();
-      setVendorName(Array.isArray(updated) ? updated : []);
-      setEditingVendorNames(null);
-      const form = e.currentTarget as HTMLFormElement;
-      if (form) form.reset();
-    } catch (err) {
-      console.error("[addVendorNamesItem] failed", err);
-    }
-  }
-
-  function handleEditVendorNames(s: VendorNameItem) {
-    setEditingVendorNames(s);
-  }
-
-  function handleDeleteVendorNames(s: VendorNameItem) {
-    setConfirmDeleteVendorNames(s);
-  }
-
-  async function confirmDeleteVendorNamesAction() {
-    if (!confirmDeleteVendorNames) return;
-    try {
-      await deleteVendorName(confirmDeleteVendorNames.id);
-      const updated = await loadVendorName();
-      setVendorName(Array.isArray(updated) ? updated : []);
-      setConfirmDeleteVendorNames(null);
-    } catch (err) {
-      console.error("[confirmDeleteVendorNamesAction] failed", err);
-    }
-  }
-
   const closeSidebarOnMobile = () => {
     if (window.innerWidth < 768) {
       setSidebarOpen(false);
@@ -196,34 +124,8 @@ export default function Layout({ children }: LayoutProps) {
         setSidebarOpen={setSidebarOpen}
         isAdmin={isAdmin}
         username={username}
-        addVendorNameOpen={addVendorNameOpen}
-        setAddVendorNameOpen={setAddVendorNameOpen}
         handleLogout={handleLogout}
         closeSidebarOnMobile={closeSidebarOnMobile}
-      />
-
-      {/* Add VendorNames Dialog */}
-      <VendorNameDialog
-        open={addVendorNameOpen}
-        onOpenChange={setAddVendorNameOpen}
-        VendorName={VendorName}
-        setVendorName={setVendorName}
-        editingVendorNames={editingVendorNames}
-        setEditingVendorNames={setEditingVendorNames}
-        confirmDeleteVendorNames={confirmDeleteVendorNames}
-        setConfirmDeleteVendorNames={setConfirmDeleteVendorNames}
-        addVendorNamesItem={addVendorNamesItem}
-        handleEditVendorNames={handleEditVendorNames}
-        handleDeleteVendorNames={handleDeleteVendorNames}
-        confirmDeleteVendorNamesAction={confirmDeleteVendorNamesAction}
-        Field={Field}
-        Button={Button}
-        PlusIcon={PlusIcon}
-        Pencil={Pencil}
-        Trash2={Trash2}
-        BanIcon={BanIcon}
-        AnimatePresence={AnimatePresence}
-        motion={motion}
       />
 
       {/* Main Content Area */}
