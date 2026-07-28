@@ -24,6 +24,24 @@ function formatTime12h(time: string) {
   return `${h}:${minutes.toString().padStart(2, "0")} ${ampm}`;
 }
 
+function formatCompactDateTime(dateStr: string | undefined) {
+  if (!dateStr || dateStr.trim() === "") return { date: "—", time: "" };
+  const str = dateStr.trim();
+
+  // If string contains ISO timestamp format "2026-07-28T16:16:25" or space
+  if (str.includes("T") || str.includes(" ")) {
+    const parts = str.split(/[T ]/);
+    const datePart = parts[0];
+    const timePart = parts[1] ? parts[1].substring(0, 5) : "";
+    return {
+      date: datePart,
+      time: timePart ? formatTime12h(timePart) : "",
+    };
+  }
+
+  return { date: str, time: "" };
+}
+
 interface PrintTableProps {
   filtered: RecordItem[];
   DEVICE_TYPES: string[];
@@ -252,7 +270,17 @@ export default function PrintTable({
                     } ${isVisible ? "" : "hidden print:table-row"}`}
                   >
                     <td className="px-3 py-3 font-bold text-center text-emerald-400 light:text-emerald-700">{displayIndex}</td>
-                    <td className="px-3 py-3 whitespace-nowrap text-slate-300 light:text-slate-700">{r.Date_in || "—"}</td>
+                    <td className="px-3 py-3 whitespace-nowrap">
+                      {(() => {
+                        const { date, time } = formatCompactDateTime(r.Date_in);
+                        return (
+                          <div className="flex flex-col text-xs">
+                            <span className="font-semibold text-slate-200 light:text-slate-900">{date}</span>
+                            {time && <span className="text-[11px] font-mono text-emerald-400 light:text-emerald-700">{time}</span>}
+                          </div>
+                        );
+                      })()}
+                    </td>
                     <td className="px-3 py-3 font-semibold text-white light:text-slate-900">{r.CustomerName || "—"}</td>
                     <td className="px-3 py-3 relative group">
                       <div className="flex items-center justify-between gap-1">
@@ -293,7 +321,15 @@ export default function PrintTable({
                           Active Session
                         </span>
                       ) : (
-                        <span className="text-slate-300 light:text-slate-700">{r.Date_out}</span>
+                        (() => {
+                          const { date, time } = formatCompactDateTime(r.Date_out);
+                          return (
+                            <div className="flex flex-col text-xs">
+                              <span className="font-semibold text-slate-200 light:text-slate-900">{date}</span>
+                              {time && <span className="text-[11px] font-mono text-blue-400 light:text-blue-700">{time}</span>}
+                            </div>
+                          );
+                        })()
                       )}
                     </td>
                     <td
