@@ -263,16 +263,15 @@ export default function Maintenance() {
         >
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-              <CheckCircle className="w-4 h-4 text-emerald-400" /> Fixed / Restored
+              <CheckCircle className="w-4 h-4 text-emerald-400" /> {t("fixedRestored")}
             </span>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-              Ready
+              {t("ready")}
             </span>
           </div>
           <div className="text-3xl font-extrabold text-white tracking-tight my-2">
-            {repairedCount} <span className="text-sm font-normal text-slate-400">completed</span>
+            {repairedCount} <span className="text-sm font-normal text-slate-400">{t("activeCount")}</span>
           </div>
-          <p className="text-xs text-slate-400">Returned back to active gaming stations</p>
         </motion.div>
       </div>
 
@@ -282,7 +281,7 @@ export default function Maintenance() {
           <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
           <input
             type="text"
-            placeholder="Search station or repair details..."
+            placeholder={t("searchMaintPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-4 py-2 bg-slate-800/80 border border-white/10 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"
@@ -299,7 +298,7 @@ export default function Maintenance() {
                 : "bg-slate-800 text-slate-300 border-white/10 hover:bg-slate-700"
             }`}
           >
-            All ({logs.length})
+            {t("filterAll")} ({logs.length})
           </button>
 
           <button
@@ -310,7 +309,7 @@ export default function Maintenance() {
                 : "bg-slate-800 text-amber-400 border-white/10 hover:bg-slate-700"
             }`}
           >
-            🛠️ Down ({activeDownCount})
+            🛠️ {t("filterDown")} ({activeDownCount})
           </button>
 
           <button
@@ -321,7 +320,7 @@ export default function Maintenance() {
                 : "bg-slate-800 text-emerald-400 border-white/10 hover:bg-slate-700"
             }`}
           >
-            ✅ Fixed ({repairedCount})
+            ✅ {t("filterFixed")} ({repairedCount})
           </button>
         </div>
       </div>
@@ -332,25 +331,25 @@ export default function Maintenance() {
           <table className="w-full text-left text-xs text-slate-300">
             <thead className="bg-slate-800/80 text-slate-400 uppercase font-semibold text-[11px] border-b border-white/10">
               <tr>
-                <th className="py-3 px-4">Station / Device</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4">Repair Issue / Notes</th>
-                <th className="py-3 px-4 text-right">Cost (EGP)</th>
-                <th className="py-3 px-4">Logged Date</th>
-                <th className="py-3 px-4 text-center">Actions</th>
+                <th className="py-3 px-4">{t("colStationDevice")}</th>
+                <th className="py-3 px-4">{t("colStatus")}</th>
+                <th className="py-3 px-4">{t("colRepairIssue")}</th>
+                <th className="py-3 px-4 text-right">{t("colCostEgp")}</th>
+                <th className="py-3 px-4">{t("colLoggedDate")}</th>
+                <th className="py-3 px-4 text-center">{t("colActions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
               {loading ? (
                 <tr>
                   <td colSpan={6} className="py-8 text-center text-slate-400">
-                    Loading maintenance logs...
+                    {t("loadingMaintLogs")}
                   </td>
                 </tr>
               ) : filteredLogs.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-8 text-center text-slate-400">
-                    No maintenance records found.
+                    {t("noMaintLogs")}
                   </td>
                 </tr>
               ) : (
@@ -376,12 +375,12 @@ export default function Maintenance() {
                           {isDown ? (
                             <>
                               <AlertTriangle className="w-3 h-3" />
-                              <span>Down for Maintenance</span>
+                              <span>{t("downForMaint")}</span>
                             </>
                           ) : (
                             <>
                               <CheckCircle className="w-3 h-3" />
-                              <span>Fixed / Ready</span>
+                              <span>{t("fixedReady")}</span>
                             </>
                           )}
                         </button>
