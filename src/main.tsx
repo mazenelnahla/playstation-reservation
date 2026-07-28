@@ -42,6 +42,30 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
 
 import { LanguageProvider } from "./context/LanguageContext";
 
+// Login Wrapper to handle Theme toggle on login page
+function LoginWrapper() {
+  const [theme, setTheme] = React.useState<"dark" | "light">(() => {
+    return (localStorage.getItem("theme") as "dark" | "light") || "dark";
+  });
+
+  React.useEffect(() => {
+    if (theme === "light") {
+      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
+
+  return <Login theme={theme} toggleTheme={toggleTheme} />;
+}
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <LanguageProvider>
@@ -51,7 +75,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             path="/login"
             element={
               <GuestRoute>
-                <Login />
+                <LoginWrapper />
               </GuestRoute>
             }
           />

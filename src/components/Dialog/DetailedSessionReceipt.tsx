@@ -114,7 +114,7 @@ export default function DetailedSessionReceipt({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
           <div id="print-area" className="bg-slate-900 light:bg-white border border-emerald-500/30 light:border-slate-300 rounded-2xl shadow-2xl w-[96vw] max-w-xl max-h-[92vh] overflow-y-auto p-4 md:p-6 text-slate-100 light:text-slate-900 print:bg-white print:text-black print:border-0 print:shadow-none print:w-full print:max-w-none print:p-0">
             <DialogHeader>
               <div className="flex items-center justify-between border-b border-white/10 light:border-slate-200 pb-4 mb-4">

@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { LogIn, Mail, Lock, AlertCircle, Loader } from "lucide-react";
+import { LogIn, Mail, Lock, AlertCircle, Loader, Sun, Moon, Globe } from "lucide-react";
 import Button from "./components/ui/Button";
+import { useLanguage } from "./context/LanguageContext";
 
-const Login = () => {
+interface LoginProps {
+  theme?: "dark" | "light";
+  toggleTheme?: () => void;
+}
+
+const Login = ({ theme = "dark", toggleTheme }: LoginProps) => {
+  const { toggleLanguage, t, isRtl } = useLanguage();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -87,17 +94,40 @@ const Login = () => {
     },
   };
 
-  const inputVariants = {
-    focus: { scale: 1.02, boxShadow: "0 0 20px rgba(59, 130, 246, 0.5)" },
-  };
-
   return (
-    <div className="fixed inset-0 w-full h-[100dvh] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-3 overflow-hidden">
-      {/* Background decoration (desktop/tablet only to save space/performance) */}
+    <div className="fixed inset-0 w-full h-[100dvh] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 light:from-slate-100 light:via-slate-50 light:to-slate-200 flex items-center justify-center p-3 overflow-hidden">
+      {/* Top Header Control Buttons: Theme & Language Toggles */}
+      <div className="absolute top-4 right-4 z-50 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={toggleLanguage}
+          className="h-9 px-3 rounded-xl bg-slate-800/80 light:bg-white border border-white/10 light:border-slate-300 text-slate-200 light:text-slate-800 text-xs font-bold flex items-center gap-1.5 shadow-sm hover:bg-slate-700 light:hover:bg-slate-100 transition-all"
+        >
+          <Globe className="w-3.5 h-3.5 text-emerald-400 light:text-emerald-700" />
+          <span>{t("switchLanguage")}</span>
+        </button>
+
+        {toggleTheme && (
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="w-9 h-9 rounded-xl bg-slate-800/80 light:bg-white border border-white/10 light:border-slate-300 text-slate-200 light:text-slate-800 flex items-center justify-center shadow-sm hover:bg-slate-700 light:hover:bg-slate-100 transition-all"
+            title="Toggle Theme"
+          >
+            {theme === "dark" ? (
+              <Sun className="w-4 h-4 text-amber-400" />
+            ) : (
+              <Moon className="w-4 h-4 text-indigo-600" />
+            )}
+          </button>
+        )}
+      </div>
+
+      {/* Background decoration */}
       <div className="hidden sm:block fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 light:opacity-10 animate-pulse"></div>
         <div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-red-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"
+          className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 light:opacity-10 animate-pulse"
           style={{ animationDelay: "2s" }}
         ></div>
       </div>
@@ -109,7 +139,7 @@ const Login = () => {
         animate="visible"
       >
         {/* Card */}
-        <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-8">
+        <div className="bg-slate-900/90 light:bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 light:border-slate-300 p-4 sm:p-8 text-slate-100 light:text-slate-900">
           {/* Header */}
           <motion.div
             className="text-center mb-3 sm:mb-6"
@@ -117,16 +147,14 @@ const Login = () => {
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
           >
-            <div className="hidden sm:flex w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full items-center justify-center mx-auto mb-4">
+            <div className="hidden sm:flex w-16 h-16 bg-gradient-to-br from-blue-500 to-emerald-500 rounded-2xl items-center justify-center mx-auto mb-4 shadow-lg">
               <LogIn className="text-white w-8 h-8" />
             </div>
-            <h1 className="text-xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
-              {isLogin ? "Welcome Back" : "Create Account"}
+            <h1 className="text-xl sm:text-3xl font-bold text-white light:text-slate-900 mb-1 sm:mb-2">
+              {isLogin ? t("welcomeBack") : t("createAccountTitle")}
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300">
-              {isLogin
-                ? "Sign in to your account to continue"
-                : "Create a new account to get started"}
+            <p className="text-xs sm:text-sm text-slate-300 light:text-slate-600">
+              {isLogin ? t("signInDesc") : t("createAccountDesc")}
             </p>
           </motion.div>
 
@@ -145,17 +173,17 @@ const Login = () => {
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                <label className="block text-xs sm:text-sm font-medium text-slate-200 mb-1">
-                  Full Name
+                <label className="block text-xs sm:text-sm font-medium text-slate-200 light:text-slate-700 mb-1">
+                  {t("fullNameLabel")}
                 </label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  placeholder="Enter your full name"
+                  placeholder={t("fullNamePlaceholder")}
                   required={!isLogin}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-slate-800/80 light:bg-slate-50 border border-white/10 light:border-slate-300 rounded-lg text-white light:text-slate-900 text-sm placeholder-slate-400 light:placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all"
                 />
               </motion.div>
             )}
@@ -166,12 +194,12 @@ const Login = () => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: !isLogin ? 0.5 : 0.4 }}
             >
-              <label className="block text-xs sm:text-sm font-medium text-slate-200 mb-1">
-                Email
+              <label className="block text-xs sm:text-sm font-medium text-slate-200 light:text-slate-700 mb-1">
+                {t("emailLabel")}
               </label>
               <div className="relative">
                 <Mail
-                  className="absolute left-3 top-2.5 sm:top-3.5 text-slate-400"
+                  className={`absolute ${isRtl ? "right-3" : "left-3"} top-2.5 sm:top-3.5 text-slate-400`}
                   size={18}
                 />
                 <input
@@ -179,9 +207,9 @@ const Login = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  placeholder="you@example.com"
+                  placeholder={t("emailPlaceholder")}
                   required
-                  className="w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all"
+                  className={`w-full ${isRtl ? "pr-9 sm:pr-10 pl-3" : "pl-9 sm:pl-10 pr-3"} py-2 sm:py-3 bg-slate-800/80 light:bg-slate-50 border border-white/10 light:border-slate-300 rounded-lg text-white light:text-slate-900 text-sm placeholder-slate-400 light:placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all`}
                 />
               </div>
             </motion.div>
@@ -192,12 +220,12 @@ const Login = () => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: !isLogin ? 0.6 : 0.5 }}
             >
-              <label className="block text-xs sm:text-sm font-medium text-slate-200 mb-1">
-                Password
+              <label className="block text-xs sm:text-sm font-medium text-slate-200 light:text-slate-700 mb-1">
+                {t("passwordLabel")}
               </label>
               <div className="relative">
                 <Lock
-                  className="absolute left-3 top-2.5 sm:top-3.5 text-slate-400"
+                  className={`absolute ${isRtl ? "right-3" : "left-3"} top-2.5 sm:top-3.5 text-slate-400`}
                   size={18}
                 />
                 <input
@@ -205,9 +233,9 @@ const Login = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  placeholder="••••••••"
+                  placeholder={t("passwordPlaceholder")}
                   required
-                  className="w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-3 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all"
+                  className={`w-full ${isRtl ? "pr-9 sm:pr-10 pl-3" : "pl-9 sm:pl-10 pr-3"} py-2 sm:py-3 bg-slate-800/80 light:bg-slate-50 border border-white/10 light:border-slate-300 rounded-lg text-white light:text-slate-900 text-sm placeholder-slate-400 light:placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all`}
                 />
               </div>
             </motion.div>
@@ -215,26 +243,26 @@ const Login = () => {
             {/* Error Message */}
             {error && (
               <motion.div
-                className="flex items-center gap-2 p-2 bg-red-500/10 border border-red-500/50 rounded-lg"
+                className="flex items-center gap-2 p-2.5 bg-red-500/10 light:bg-red-50 border border-red-500/50 light:border-red-300 rounded-lg"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <AlertCircle className="text-red-400 shrink-0" size={16} />
-                <span className="text-red-200 text-xs sm:text-sm">{error}</span>
+                <AlertCircle className="text-red-400 light:text-red-600 shrink-0" size={16} />
+                <span className="text-red-200 light:text-red-800 text-xs sm:text-sm font-semibold">{error}</span>
               </motion.div>
             )}
 
             {/* Success Message */}
             {success && (
               <motion.div
-                className="flex items-center gap-2 p-2 bg-green-500/10 border border-green-500/50 rounded-lg"
+                className="flex items-center gap-2 p-2.5 bg-emerald-500/10 light:bg-emerald-50 border border-emerald-500/50 light:border-emerald-300 rounded-lg"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <span className="text-green-200 text-xs sm:text-sm">
+                <span className="text-emerald-200 light:text-emerald-800 text-xs sm:text-sm font-semibold">
                   {isLogin
-                    ? "Login successful! Redirecting..."
-                    : "Account created! Redirecting to login..."}
+                    ? t("loginSuccess")
+                    : t("accountCreatedSuccess")}
                 </span>
               </motion.div>
             )}
@@ -243,22 +271,25 @@ const Login = () => {
             <motion.button
               type="submit"
               disabled={loading || success}
-              className="w-full py-2.5 sm:py-3 px-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm sm:text-base font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-3 sm:mt-5"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className="w-full py-2.5 sm:py-3 px-4 bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white text-sm sm:text-base font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-3 sm:mt-5 shadow-md"
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
             >
               {loading ? (
                 <>
                   <Loader className="animate-spin" size={18} />
-                  Loading...
+                  <span>Loading...</span>
                 </>
               ) : isLogin ? (
                 <>
                   <LogIn size={18} />
-                  Sign In
+                  <span>{t("signInBtn")}</span>
                 </>
               ) : (
-                <>Create Account</>
+                <>
+                  <LogIn size={18} />
+                  <span>{t("createAccountBtn")}</span>
+                </>
               )}
             </motion.button>
           </motion.form>
@@ -270,8 +301,8 @@ const Login = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
           >
-            <p className="text-slate-400 text-xs sm:text-sm">
-              {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+            <p className="text-slate-400 light:text-slate-600 text-xs sm:text-sm">
+              {isLogin ? t("dontHaveAccount") : t("alreadyHaveAccount")}{" "}
               <button
                 type="button"
                 onClick={() => {
@@ -279,21 +310,21 @@ const Login = () => {
                   setFormData({ email: "", password: "", name: "" });
                   setError("");
                 }}
-                className="text-blue-400 hover:text-blue-300 font-semibold transition-colors"
+                className="text-blue-400 light:text-blue-700 hover:underline font-bold transition-colors"
               >
-                {isLogin ? "Sign up" : "Sign in"}
+                {isLogin ? t("signUpLink") : t("signInLink")}
               </button>
             </p>
           </motion.div>
 
           {/* Footer */}
           <motion.p
-            className="text-center text-slate-400 text-[10px] sm:text-xs mt-2.5 sm:mt-5"
+            className="text-center text-slate-400 light:text-slate-500 text-[10px] sm:text-xs mt-2.5 sm:mt-5"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
           >
-            PlayStation Hub & Coffee Net System
+            {t("footerCopyright")}
           </motion.p>
         </div>
       </motion.div>
