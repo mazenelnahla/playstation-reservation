@@ -73,7 +73,7 @@ export function AppSidebar({
                 className={`justify-start w-full rounded-xl transition-all ${
                   isActive("/")
                     ? "bg-emerald-600 text-white font-bold"
-                    : "hover:bg-slate-800 text-slate-300"
+                    : "hover:bg-slate-800 light:hover:bg-slate-300 text-slate-300 light:text-slate-800"
                 }`}
               >
                 <Link to="/" onClick={closeSidebarOnMobile} className="flex items-center gap-3 w-full">
@@ -89,7 +89,7 @@ export function AppSidebar({
                 className={`justify-start w-full rounded-xl transition-all ${
                   isActive("/Search")
                     ? "bg-emerald-600 text-white font-bold"
-                    : "hover:bg-slate-800 text-slate-300"
+                    : "hover:bg-slate-800 light:hover:bg-slate-300 text-slate-300 light:text-slate-800"
                 }`}
               >
                 <Link to="/Search" onClick={closeSidebarOnMobile} className="flex items-center gap-3 w-full">
@@ -105,7 +105,7 @@ export function AppSidebar({
                 className={`justify-start w-full rounded-xl transition-all ${
                   isActive("/Profits")
                     ? "bg-emerald-600 text-white font-bold"
-                    : "hover:bg-slate-800 text-slate-300"
+                    : "hover:bg-slate-800 light:hover:bg-slate-300 text-slate-300 light:text-slate-800"
                 }`}
               >
                 <Link to="/Profits" onClick={closeSidebarOnMobile} className="flex items-center gap-3 w-full">
@@ -121,7 +121,7 @@ export function AppSidebar({
                 className={`justify-start w-full rounded-xl transition-all ${
                   isActive("/Maintenance")
                     ? "bg-emerald-600 text-white font-bold"
-                    : "hover:bg-slate-800 text-slate-300"
+                    : "hover:bg-slate-800 light:hover:bg-slate-300 text-slate-300 light:text-slate-800"
                 }`}
               >
                 <Link to="/Maintenance" onClick={closeSidebarOnMobile} className="flex items-center gap-3 w-full">
@@ -137,7 +137,7 @@ export function AppSidebar({
               <Button
                 variant="ghost"
                 size="sm"
-                className="justify-start w-full rounded-xl transition-all hover:bg-slate-800 text-slate-300"
+                className="justify-start w-full rounded-xl transition-all hover:bg-slate-800 light:hover:bg-slate-300 text-slate-300 light:text-slate-800"
                 onClick={toggleLanguage}
               >
                 <div className="flex items-center gap-3 w-full">
@@ -150,7 +150,7 @@ export function AppSidebar({
               <Button
                 variant="ghost"
                 size="sm"
-                className="justify-start w-full rounded-xl transition-all hover:bg-slate-800 text-slate-300"
+                className="justify-start w-full rounded-xl transition-all hover:bg-slate-800 light:hover:bg-slate-300 text-slate-300 light:text-slate-800"
                 onClick={toggleTheme}
               >
                 <div className="flex items-center gap-3 w-full">
@@ -173,7 +173,7 @@ export function AppSidebar({
                   className={`justify-start w-full rounded-lg transition-all ${
                     isActive("/Admin")
                       ? "bg-amber-600 text-white font-bold"
-                      : "hover:bg-slate-800 text-slate-300"
+                      : "hover:bg-slate-800 light:hover:bg-slate-300 text-slate-300 light:text-slate-800"
                   }`}
                 >
                   <Link to="/Admin" onClick={closeSidebarOnMobile} className="flex items-center gap-3 w-full">
@@ -189,18 +189,18 @@ export function AppSidebar({
               <Link
                 to="/Profile"
                 onClick={closeSidebarOnMobile}
-                className="block bg-slate-800/80 hover:bg-slate-800 rounded-xl p-3 mb-3 transition-colors"
+                className="block bg-slate-800/80 light:bg-slate-200 hover:bg-slate-800 light:hover:bg-slate-300 rounded-xl p-3 mb-3 transition-colors"
                 title={t("profile")}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold shrink-0 bg-slate-700">
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold shrink-0 bg-slate-700 light:bg-slate-400">
                     <User className="w-4 h-4 text-white shrink-0" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-sm font-semibold text-white truncate">
+                    <p className="text-xs sm:text-sm font-semibold text-white light:text-slate-900 truncate">
                       {username}
                     </p>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-slate-400 light:text-slate-600">
                       {isAdmin ? t("adminRole") : t("userRole")}
                     </p>
                   </div>

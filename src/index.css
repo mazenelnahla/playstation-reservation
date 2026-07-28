@@ -185,8 +185,18 @@ html.light .bg-slate-800\/80 {
 
 html.light button.bg-slate-800:hover,
 html.light button.bg-slate-700:hover,
-html.light .hover\:bg-slate-700:hover {
-  background-color: #e2e8f0 !important;
+html.light .hover\:bg-slate-800:hover,
+html.light .hover\:bg-slate-700:hover,
+html.light aside a:hover,
+html.light aside button:hover {
+  background-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light aside a:hover *,
+html.light aside button:hover *,
+html.light .hover\:bg-slate-800:hover *,
+html.light .hover\:bg-slate-700:hover * {
   color: #0f172a !important;
 }
 
