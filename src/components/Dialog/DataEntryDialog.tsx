@@ -187,9 +187,9 @@ export default function DataEntryDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md p-3 sm:p-4 overflow-y-auto">
         <div
-          className="bg-slate-900 border border-emerald-500/30 rounded-2xl shadow-2xl w-[96vw] max-w-4xl max-h-[92vh] overflow-y-auto p-4 md:p-6 text-slate-100"
+          className="bg-slate-900 border border-emerald-500/30 rounded-2xl shadow-2xl w-[96vw] max-w-4xl max-h-[90vh] overflow-y-auto p-4 md:p-6 pb-28 md:pb-6 text-slate-100 my-auto"
           role="dialog"
           aria-modal="true"
         >
