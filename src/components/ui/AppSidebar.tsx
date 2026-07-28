@@ -10,6 +10,9 @@ import {
   PlusCircle,
   User,
   LogOut,
+  Globe,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { Sidebar as BaseSidebar, SidebarContent } from "./Sidebar";
 import Button from "./Button";
@@ -18,6 +21,8 @@ import { useLanguage } from "../../context/LanguageContext";
 interface SidebarNavProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
+  theme: "dark" | "light";
+  toggleTheme: () => void;
   isAdmin: boolean;
   username: string;
   handleLogout: () => void;
@@ -27,12 +32,14 @@ interface SidebarNavProps {
 export function AppSidebar({
   sidebarOpen,
   setSidebarOpen,
+  theme,
+  toggleTheme,
   isAdmin,
   username,
   handleLogout,
   closeSidebarOnMobile,
 }: SidebarNavProps) {
-  const { t } = useLanguage();
+  const { toggleLanguage, t } = useLanguage();
   const location = useLocation();
   const isActive = (path: string): boolean => location.pathname === path;
 
@@ -124,9 +131,40 @@ export function AppSidebar({
               </Button>
             </div>
           </div>
-
           <div>
             <div className="border-t border-white/10 my-4 pt-4 space-y-2">
+              {/* Language Switcher */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="justify-start w-full rounded-xl transition-all hover:bg-slate-800 text-slate-300"
+                onClick={toggleLanguage}
+              >
+                <div className="flex items-center gap-3 w-full">
+                  <Globe className="w-5 h-5 text-emerald-400 shrink-0" />
+                  <span className="truncate">{t("switchLanguage")}</span>
+                </div>
+              </Button>
+
+              {/* Theme Switcher */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="justify-start w-full rounded-xl transition-all hover:bg-slate-800 text-slate-300"
+                onClick={toggleTheme}
+              >
+                <div className="flex items-center gap-3 w-full">
+                  {theme === "dark" ? (
+                    <Sun className="w-5 h-5 text-amber-400 shrink-0" />
+                  ) : (
+                    <Moon className="w-5 h-5 text-blue-400 shrink-0" />
+                  )}
+                  <span className="truncate">
+                    {theme === "dark" ? "Light Mode" : "Dark Mode"}
+                  </span>
+                </div>
+              </Button>
+
               {isAdmin && (
                 <Button
                   asChild

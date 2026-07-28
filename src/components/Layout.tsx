@@ -122,6 +122,8 @@ export default function Layout({ children }: LayoutProps) {
       <AppSidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
+        theme={theme}
+        toggleTheme={toggleTheme}
         isAdmin={isAdmin}
         username={username}
         handleLogout={handleLogout}

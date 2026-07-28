@@ -71,27 +71,6 @@ export function HeaderNavbar({
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-3">
-          <button
-            onClick={toggleLanguage}
-            className="h-9 sm:h-10 px-2 sm:px-3 rounded-xl bg-slate-800/80 light:bg-white hover:bg-slate-700/80 light:hover:bg-slate-100 text-white light:text-slate-800 border border-white/10 light:border-slate-300 transition-all flex items-center gap-1 shrink-0 text-xs font-bold shadow-sm"
-            title={language === "en" ? "التحويل إلى اللغة العربية" : "Switch to English"}
-          >
-            <Globe className="w-4 h-4 text-emerald-400 light:text-emerald-600" />
-            <span className="hidden xs:inline sm:inline">{t("switchLanguage")}</span>
-          </button>
-
-          <button
-            onClick={toggleTheme}
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-800/80 light:bg-white hover:bg-slate-700/80 light:hover:bg-slate-100 text-white light:text-slate-800 border border-white/10 light:border-slate-300 transition-all flex items-center justify-center shrink-0 shadow-sm"
-            title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
-          >
-            {theme === "dark" ? (
-              <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
-            ) : (
-              <Moon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
-            )}
-          </button>
-
           {isAdmin && (
             <Link
               to="/Admin"
