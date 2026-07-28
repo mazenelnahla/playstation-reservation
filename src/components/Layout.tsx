@@ -133,14 +133,14 @@ export default function Layout({ children }: LayoutProps) {
       {/* Main Content Area */}
       <motion.main
         className={cn(
-          "w-full min-w-0 p-3 sm:p-4 md:p-6 transition-all duration-300 pb-20 md:pb-6",
+          "w-full min-w-0 px-4 sm:px-6 md:px-8 py-4 sm:py-6 transition-all duration-300 pb-24 md:pb-8",
           isRtl
             ? sidebarOpen
-              ? "md:pr-64 md:pl-0"
-              : "md:pr-0 md:pl-0"
+              ? "md:pr-64"
+              : ""
             : sidebarOpen
-              ? "md:pl-64 md:pr-0"
-              : "md:pl-0 md:pr-0"
+              ? "md:pl-64"
+              : ""
         )}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

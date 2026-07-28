@@ -297,7 +297,7 @@ export default function SearchPage() {
 
   return (
     <>
-      <div className="w-full max-w-7xl mx-auto space-y-6 print:container-full">
+      <div className="w-full space-y-6 print:container-full">
         {/* Search & Table */}
         <Card>
           <div className="card-header no-print py-4 px-4 sm:px-6">

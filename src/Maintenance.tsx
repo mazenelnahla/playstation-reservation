@@ -185,7 +185,7 @@ export default function Maintenance() {
   }, [logs]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
       {/* Top Banner & Header */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/60 p-6 rounded-2xl border border-white/10 shadow-lg backdrop-blur-md">
         <div className="flex items-center gap-4">

@@ -36,7 +36,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
       {/* Top Header Banner with Add Session Button */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-5 rounded-2xl border border-white/10 shadow-lg">
         <div>
