@@ -157,22 +157,22 @@ export default function PrintTable({
         </div>
 
         <table className="w-full text-xs md:text-sm print-table text-slate-200 light:text-slate-900 border-collapse">
-          <thead className="bg-slate-950 light:bg-slate-200 text-slate-300 light:text-slate-800 text-center font-bold">
+          <thead className="bg-slate-950 light:bg-slate-100 text-slate-300 light:text-slate-800 text-center font-bold">
             {/* Column headers */}
             <tr className="border-b border-white/10 light:border-slate-300">
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-emerald-400 light:text-emerald-700">#</th>
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colDateIn")}</th>
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colCustomerName")}</th>
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colCustomerPhone")}</th>
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colDeviceType")}</th>
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colVendor")}</th>
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colModel")}</th>
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colIssue")}</th>
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colTechnician")}</th>
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-emerald-400 light:text-emerald-700">{t("colCost")}</th>
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colDateOut")}</th>
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700">{t("colNotes")}</th>
-              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-700 no-print">{t("colActions")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-emerald-400 light:text-emerald-800">#</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-800">{t("colDateIn")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-800">{t("colCustomerName")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-800">{t("colCustomerPhone")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-800">{t("colDeviceType")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-800">{t("colVendor")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-800">{t("colModel")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-800">{t("colIssue")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-800">{t("colTechnician")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-emerald-400 light:text-emerald-800">{t("colCost")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-800">{t("colDateOut")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-800">{t("colNotes")}</th>
+              <th className="px-3 py-3 font-extrabold uppercase text-[11px] tracking-wider text-slate-300 light:text-slate-800 no-print">{t("colActions")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5 light:divide-slate-200">

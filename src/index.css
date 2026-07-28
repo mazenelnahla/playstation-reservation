@@ -87,7 +87,56 @@ html.light [class*="Sidebar"] {
   border-color: #94a3b8 !important;
 }
 
+html.light nav,
+html.light nav.md\:hidden {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05), 0 -2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+}
+
+html.light nav a,
+html.light nav.md\:hidden a {
+  color: #475569 !important;
+}
+
+html.light nav a:hover,
+html.light nav.md\:hidden a:hover {
+  color: #0f172a !important;
+}
+
+html.light nav a.text-emerald-400,
+html.light nav.md\:hidden a.text-emerald-400 {
+  color: #059669 !important;
+}
+
+html.light table {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+html.light thead,
+html.light table thead tr,
+html.light table th {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light tbody tr,
+html.light table tbody tr {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #f1f5f9 !important;
+}
+
+html.light tbody tr:hover,
+html.light table tbody tr:hover {
+  background-color: #f1f5f9 !important;
+}
+
 html.light .bg-slate-900,
+html.light .bg-slate-900\/95,
 html.light .bg-slate-900\/90,
 html.light .bg-slate-900\/80,
 html.light .bg-slate-900\/60,
@@ -103,13 +152,13 @@ html.light .bg-slate-800\/50,
 html.light .bg-slate-800\/40,
 html.light .bg-slate-700\/50,
 html.light .bg-slate-700\/60 {
-  background-color: #f1f5f9 !important;
+  background-color: #f8fafc !important;
 }
 
 html.light .border-white\/10,
 html.light .border-white\/20,
 html.light .border-white\/5 {
-  border-color: #cbd5e1 !important;
+  border-color: #e2e8f0 !important;
 }
 
 /* Stat Cards & Station Cards Light Mode Gradients */
@@ -221,24 +270,46 @@ html.light .text-slate-100 {
   color: #0f172a;
 }
 
-/* Light Mode Amber/Yellow High-Contrast Overrides */
-html.light .text-amber-400,
-html.light .text-amber-300,
-html.light .text-yellow-400,
-html.light .text-yellow-300 {
-  color: #b45309 !important; /* Dark amber/gold for crisp readability on white */
+/* Light Mode Comprehensive Warning & Amber Palette Overrides */
+html.light .bg-amber-950\/40,
+html.light .bg-amber-950\/60,
+html.light .bg-amber-950\/80,
+html.light .bg-amber-950,
+html.light .light\:bg-amber-100\/90,
+html.light .light\:bg-amber-50\/90,
+html.light .light\:bg-amber-50 {
+  background-color: #fffbeb !important;
+  color: #78350f !important;
+  border-color: #fde68a !important;
 }
 
+html.light .bg-amber-500\/10,
 html.light .bg-amber-500\/20,
-html.light .bg-amber-500\/30 {
+html.light .bg-amber-500\/30,
+html.light .bg-amber-500\/40,
+html.light .bg-amber-100 {
   background-color: #fef3c7 !important;
   color: #92400e !important;
   border-color: #fde68a !important;
 }
 
+html.light .bg-amber-500\/10 *,
 html.light .bg-amber-500\/20 *,
-html.light .bg-amber-500\/30 * {
-  color: #92400e !important;
+html.light .bg-amber-500\/30 *,
+html.light .bg-amber-500\/40 *,
+html.light .bg-amber-950\/40 *,
+html.light .bg-amber-950 * {
+  color: #78350f !important;
+}
+
+html.light .text-amber-400,
+html.light .text-amber-300,
+html.light .text-amber-200,
+html.light .text-amber-500,
+html.light .text-yellow-400,
+html.light .text-yellow-300,
+html.light .text-yellow-500 {
+  color: #92400e !important; /* Crisp dark amber/gold for high contrast on light warning backgrounds */
 }
 
 /* Light Mode Emerald/Green High-Contrast Overrides */
@@ -307,21 +378,41 @@ html.light .bg-purple-500\/30 * {
   color: #6b21a8 !important;
 }
 
-/* Light Mode Red High-Contrast Overrides */
-html.light .text-red-400,
-html.light .text-red-300 {
-  color: #b91c1c !important; /* Deep crimson red */
+/* Light Mode Red & Overtime Extra-Time High-Contrast Overrides */
+html.light .bg-red-950\/40,
+html.light .bg-red-950\/60,
+html.light .bg-red-950\/80,
+html.light .bg-red-950,
+html.light .light\:bg-red-50\/90,
+html.light .light\:bg-red-50 {
+  background-color: #fef2f2 !important;
+  color: #991b1b !important;
+  border-color: #fca5a5 !important;
 }
 
+html.light .text-red-400,
+html.light .text-red-300,
+html.light .text-red-200,
+html.light .text-red-500 {
+  color: #b91c1c !important; /* Deep crimson red for high contrast on light backgrounds */
+}
+
+html.light .bg-red-500\/10,
 html.light .bg-red-500\/20,
-html.light .bg-red-500\/30 {
+html.light .bg-red-500\/30,
+html.light .bg-red-500\/40,
+html.light .bg-red-100 {
   background-color: #fee2e2 !important;
   color: #991b1b !important;
   border-color: #fca5a5 !important;
 }
 
+html.light .bg-red-500\/10 *,
 html.light .bg-red-500\/20 *,
-html.light .bg-red-500\/30 * {
+html.light .bg-red-500\/30 *,
+html.light .bg-red-500\/40 *,
+html.light .bg-red-950\/40 *,
+html.light .bg-red-950 * {
   color: #991b1b !important;
 }
 

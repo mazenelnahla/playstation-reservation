@@ -53,7 +53,7 @@ export function AppSidebar({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSidebarOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 md:hidden"
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs z-[90] md:hidden"
           />
         )}
       </AnimatePresence>
@@ -61,7 +61,7 @@ export function AppSidebar({
       {/* Sidebar */}
       <BaseSidebar
         isOpen={sidebarOpen}
-        className="bg-slate-900 light:bg-slate-300 border-r border-white/10 light:border-slate-400 top-[64px] h-[calc(100dvh-64px)] max-h-[calc(100dvh-64px)] shadow-2xl z-50 overflow-hidden"
+        className="bg-slate-900 light:bg-slate-300 border-r border-white/10 light:border-slate-400 top-[64px] h-[calc(100dvh-64px)] max-h-[calc(100dvh-64px)] shadow-2xl z-[100] overflow-hidden"
       >
         <SidebarContent className="py-3 pb-8 flex flex-col justify-between h-full overflow-y-auto">
           <div>

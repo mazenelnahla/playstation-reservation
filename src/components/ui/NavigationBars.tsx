@@ -112,59 +112,70 @@ export function HeaderNavbar({
 }
 
 export function MobileBottomNavbar() {
+  const { t } = useLanguage();
   const location = useLocation();
   const isActive = (path: string): boolean => location.pathname === path;
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-lg border-t border-white/10 px-2 py-2 flex items-center justify-around">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 light:bg-white/95 backdrop-blur-lg border-t border-white/10 light:border-slate-200 px-2 py-2 flex items-center justify-around shadow-lg">
       <Link
         to="/"
         className={`flex flex-col items-center gap-1 text-[10px] font-bold p-1.5 rounded-lg transition-colors ${
-          isActive("/") ? "text-emerald-400" : "text-slate-400 hover:text-white"
+          isActive("/")
+            ? "text-emerald-400 light:text-emerald-600 font-extrabold"
+            : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900"
         }`}
       >
         <Gamepad2 className="w-5 h-5" />
-        <span>Sessions</span>
+        <span>{t("jobs")}</span>
       </Link>
 
       <Link
         to="/Search"
         className={`flex flex-col items-center gap-1 text-[10px] font-bold p-1.5 rounded-lg transition-colors ${
-          isActive("/Search") ? "text-emerald-400" : "text-slate-400 hover:text-white"
+          isActive("/Search")
+            ? "text-emerald-400 light:text-emerald-600 font-extrabold"
+            : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900"
         }`}
       >
         <Archive className="w-5 h-5" />
-        <span>Archive</span>
+        <span>{t("archiveTable")}</span>
       </Link>
 
       <Link
         to="/Profits"
         className={`flex flex-col items-center gap-1 text-[10px] font-bold p-1.5 rounded-lg transition-colors ${
-          isActive("/Profits") ? "text-emerald-400" : "text-slate-400 hover:text-white"
+          isActive("/Profits")
+            ? "text-emerald-400 light:text-emerald-600 font-extrabold"
+            : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900"
         }`}
       >
         <TrendingUp className="w-5 h-5" />
-        <span>Profits</span>
+        <span>{t("profits")}</span>
       </Link>
 
       <Link
         to="/Maintenance"
         className={`flex flex-col items-center gap-1 text-[10px] font-bold p-1.5 rounded-lg transition-colors ${
-          isActive("/Maintenance") ? "text-emerald-400" : "text-slate-400 hover:text-white"
+          isActive("/Maintenance")
+            ? "text-emerald-400 light:text-emerald-600 font-extrabold"
+            : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900"
         }`}
       >
         <Wrench className="w-5 h-5" />
-        <span>Repairs</span>
+        <span>{t("maintenanceNav")}</span>
       </Link>
 
       <Link
         to="/Profile"
         className={`flex flex-col items-center gap-1 text-[10px] font-bold p-1.5 rounded-lg transition-colors ${
-          isActive("/Profile") ? "text-emerald-400" : "text-slate-400 hover:text-white"
+          isActive("/Profile")
+            ? "text-emerald-400 light:text-emerald-600 font-extrabold"
+            : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900"
         }`}
       >
         <User className="w-5 h-5" />
-        <span>Profile</span>
+        <span>{t("profile")}</span>
       </Link>
     </nav>
   );

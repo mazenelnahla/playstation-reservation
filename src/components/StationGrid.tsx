@@ -4,6 +4,7 @@ import { Gamepad2, Clock, AlertCircle, Coffee, DollarSign, Bell, CheckCircle, Fl
 import { DataRecord, fetchMaintenanceLogs, MaintenanceLog } from "../DataHandle/storage";
 import DetailedSessionReceipt from "./Dialog/DetailedSessionReceipt";
 import AddSnackDialog from "./Dialog/AddSnackDialog";
+import { useLanguage } from "../context/LanguageContext";
 
 interface StationGridProps {
   sessions: DataRecord[];
@@ -13,6 +14,7 @@ interface StationGridProps {
 }
 
 export default function StationGrid({ sessions, onRefresh, onSaveOut, onOpenNewSession }: StationGridProps) {
+  const { t } = useLanguage();
   const [activeReceiptSession, setActiveReceiptSession] = useState<DataRecord | null>(null);
   const [snackSession, setSnackSession] = useState<DataRecord | null>(null);
   const [alertedSessions, setAlertedSessions] = useState<Set<number>>(new Set());
@@ -116,29 +118,29 @@ export default function StationGrid({ sessions, onRefresh, onSaveOut, onOpenNewS
             <Gamepad2 className="w-6 h-6 animate-pulse" />
           </div>
           <div>
-            <h3 className="text-base font-extrabold text-white flex items-center gap-2">
-              Active Gaming Sessions
-              <span className="text-xs bg-emerald-500/20 text-emerald-300 font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/30">
-                {activeSessions.length} Active
+            <h3 className="text-base font-extrabold text-white light:text-slate-900 flex items-center gap-2">
+              {t("activeGamingSessions")}
+              <span className="text-xs bg-emerald-500/20 light:bg-emerald-100 text-emerald-300 light:text-emerald-800 font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/30 light:border-emerald-300">
+                {activeSessions.length} {t("activeBadgeText")}
               </span>
             </h3>
-            <p className="text-xs text-slate-400">
-              Live countdown timers with 5-minute alerts & delay fee tracking
+            <p className="text-xs text-slate-400 light:text-slate-500">
+              {t("activeSessionsSub")}
             </p>
           </div>
         </div>
 
         {/* Category Tabs: All + Dynamic station categories */}
-        <div className="flex flex-wrap items-center gap-2 bg-slate-950 p-1 rounded-xl border border-white/10 text-xs font-bold">
+        <div className="flex flex-wrap items-center gap-2 bg-slate-950 light:bg-slate-100 p-1 rounded-xl border border-white/10 light:border-slate-300 text-xs font-bold">
           <button
             onClick={() => setCategoryTab("ALL")}
             className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
               categoryTab === "ALL"
                 ? "bg-emerald-600 text-white shadow-sm"
-                : "text-slate-400 hover:text-white"
+                : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900"
             }`}
           >
-            <span>All Stations ({activeSessions.length})</span>
+            <span>{t("allStationsTab")} ({activeSessions.length})</span>
           </button>
           {availableCategories.map((catName: string) => {
             const count = activeSessions.filter((s) => (s.Device_Type || "").trim() === catName).length;
@@ -161,10 +163,10 @@ export default function StationGrid({ sessions, onRefresh, onSaveOut, onOpenNewS
       </div>
 
       {filteredSessions.length === 0 ? (
-        <div className="text-center py-10 bg-slate-900/40 rounded-2xl border border-white/5">
-          <Gamepad2 className="w-12 h-12 text-slate-600 mx-auto mb-2 opacity-50" />
-          <p className="text-sm font-semibold text-slate-400">No active stations in this category.</p>
-          <p className="text-xs text-slate-500">Click "+ Start New Session" to register a session.</p>
+        <div className="text-center py-10 bg-slate-900/40 light:bg-white rounded-2xl border border-white/5 light:border-slate-200">
+          <Gamepad2 className="w-12 h-12 text-slate-600 light:text-slate-400 mx-auto mb-2 opacity-50" />
+          <p className="text-sm font-semibold text-slate-400 light:text-slate-600">{t("noActiveStations")}</p>
+          <p className="text-xs text-slate-500 light:text-slate-400">{t("startNewSessionPrompt")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -188,16 +190,16 @@ export default function StationGrid({ sessions, onRefresh, onSaveOut, onOpenNewS
             // Card styling according to status
             let statusCardStyle = "bg-slate-900 light:bg-white border-white/10 light:border-slate-300 hover:border-blue-500/40";
             let badgeBg = "bg-blue-500/20 text-blue-300 light:text-blue-700 border-blue-500/30";
-            let statusText = "Active Session";
+            let statusText = t("activeSessionBadge");
 
             if (isWarning5Mins) {
-              statusCardStyle = "bg-amber-950/40 light:bg-amber-50 border-amber-500/60 animate-pulse";
-              badgeBg = "bg-amber-500/30 text-amber-200 light:text-amber-800 border-amber-500/50";
-              statusText = "⚠️ 5 MINS REMAINING!";
+              statusCardStyle = "bg-amber-950/40 light:bg-amber-50/90 border-amber-500/60 light:border-amber-300 animate-pulse";
+              badgeBg = "bg-amber-500/30 light:bg-amber-100 text-amber-200 light:text-amber-800 border-amber-500/50 light:border-amber-300";
+              statusText = t("warning5MinsBadge");
             } else if (isOverdue) {
-              statusCardStyle = "bg-red-950/40 light:bg-red-50 border-red-500/60";
-              badgeBg = "bg-red-500/30 text-red-200 light:text-red-800 border-red-500/50";
-              statusText = "🚨 OVERTIME / DELAYED";
+              statusCardStyle = "bg-red-950/40 light:bg-red-50/90 border-red-500/60 light:border-red-300";
+              badgeBg = "bg-red-500/30 light:bg-red-100 text-red-200 light:text-red-800 border-red-500/50 light:border-red-300";
+              statusText = t("overtimeBadge");
             }
 
             return (
@@ -210,7 +212,7 @@ export default function StationGrid({ sessions, onRefresh, onSaveOut, onOpenNewS
                 <div>
                   <div className="flex items-center justify-between border-b border-white/10 light:border-slate-200 pb-2 mb-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-emerald-500/20 light:bg-emerald-100 border border-emerald-500/30 flex items-center justify-center text-emerald-400 light:text-emerald-700 font-extrabold text-xs">
+                      <div className="w-8 h-8 rounded-lg bg-slate-800 light:bg-slate-100 border border-white/10 light:border-slate-300 flex items-center justify-center text-white light:text-slate-900 font-extrabold text-xs shadow-xs">
                         #{session.id}
                       </div>
                       <div>
@@ -226,21 +228,21 @@ export default function StationGrid({ sessions, onRefresh, onSaveOut, onOpenNewS
 
                   <div className="space-y-1 text-xs">
                     <div className="flex justify-between text-slate-300 light:text-slate-700">
-                      <span>Customer:</span>
+                      <span>{t("cardCustomerLabel")}</span>
                       <strong className="text-white light:text-slate-900">{session.CustomerName}</strong>
                     </div>
                     <div className="flex justify-between text-slate-400 light:text-slate-500 text-[11px]">
-                      <span>Shift Staff:</span>
+                      <span>{t("cardShiftStaffLabel")}</span>
                       <strong className="text-blue-400 light:text-blue-700">{session.DoneBy || "Employee"}</strong>
                     </div>
                   </div>
 
                   {/* Dynamic Timer Box */}
                   <div className="mt-3 bg-slate-950/80 light:bg-slate-100 p-3 rounded-xl border border-white/5 light:border-slate-200 text-center">
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 light:text-slate-500 block mb-0.5">
-                      {isOverdue ? "Overdue Delay Time" : "Time Remaining"}
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 light:text-slate-600 block mb-0.5">
+                      {isOverdue ? t("overdueDelayLabel") : t("timeRemainingLabel")}
                     </span>
-                    <div className={`text-2xl font-black font-mono tracking-widest ${isOverdue ? "text-red-400 light:text-red-600 animate-pulse" : isWarning5Mins ? "text-amber-400 light:text-amber-600" : "text-emerald-400 light:text-emerald-700"}`}>
+                    <div className={`text-2xl font-black font-mono tracking-widest ${isOverdue ? "text-red-400 light:text-red-700 animate-pulse" : isWarning5Mins ? "text-amber-400 light:text-amber-800" : "text-emerald-400 light:text-emerald-800"}`}>
                       {isOverdue ? `+ ${formattedTimer}` : formattedTimer}
                     </div>
                   </div>
@@ -249,17 +251,17 @@ export default function StationGrid({ sessions, onRefresh, onSaveOut, onOpenNewS
                 <div className="pt-2 border-t border-white/5 flex gap-2">
                   <button
                     onClick={() => setSnackSession(session)}
-                    className="w-1/2 h-9 bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-black border border-amber-500/30 font-bold text-xs rounded-xl shadow-md flex items-center justify-center gap-1 transition-all"
+                    className="w-1/2 h-9 bg-amber-500/20 light:bg-amber-100 hover:bg-amber-500 text-amber-300 light:text-amber-900 hover:text-black border border-amber-500/30 light:border-amber-300 font-bold text-xs rounded-xl shadow-md flex items-center justify-center gap-1 transition-all"
                   >
                     <Coffee className="w-3.5 h-3.5" />
-                    + Add Snacks
+                    {t("addSnacksBtn")}
                   </button>
                   <button
                     onClick={() => setActiveReceiptSession(session)}
                     className="w-1/2 h-9 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold text-xs rounded-xl shadow-md flex items-center justify-center gap-1 transition-all"
                   >
                     <CheckCircle className="w-3.5 h-3.5" />
-                    Checkout
+                    {t("checkout")}
                   </button>
                 </div>
               </motion.div>
