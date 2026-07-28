@@ -288,7 +288,7 @@ export default function EditRecordDialog({
           size="sm"
           variant="success"
           type="submit"
-          className="h-10 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold shadow-lg shadow-emerald-600/30"
+          className="h-10 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold"
         >
           <Save className="w-4 h-4 mr-1.5" />
           {t("save")}

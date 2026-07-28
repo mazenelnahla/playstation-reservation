@@ -259,7 +259,7 @@ export default function SearchPage() {
         {/* Page Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5 no-print">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white shrink-0">
               <Archive className="w-6 h-6" />
             </div>
             <div>
@@ -273,7 +273,7 @@ export default function SearchPage() {
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <Button
               size="sm"
-              className="h-10 px-5 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl shadow-lg shadow-blue-600/20 font-bold text-xs sm:text-sm transition-all shrink-0 border border-blue-400/30 w-full sm:w-auto"
+              className="h-10 px-5 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl font-bold text-xs sm:text-sm transition-all shrink-0 border border-blue-400/30 w-full sm:w-auto"
               onClick={() => setDataEntryOpen(true)}
             >
               <PlusIcon className="w-4 h-4 stroke-[2.5]" />

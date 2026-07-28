@@ -191,11 +191,11 @@ export default function StationGrid({ sessions, onRefresh, onSaveOut, onOpenNewS
             let statusText = "Active Session";
 
             if (isWarning5Mins) {
-              statusCardStyle = "bg-amber-950/40 border-amber-500/60 shadow-lg shadow-amber-500/10 animate-pulse";
+              statusCardStyle = "bg-amber-950/40 border-amber-500/60 animate-pulse";
               badgeBg = "bg-amber-500/30 text-amber-200 border-amber-500/50";
               statusText = "⚠️ 5 MINS REMAINING!";
             } else if (isOverdue) {
-              statusCardStyle = "bg-red-950/40 border-red-500/60 shadow-lg shadow-red-500/20";
+              statusCardStyle = "bg-red-950/40 border-red-500/60";
               badgeBg = "bg-red-500/30 text-red-200 border-red-500/50";
               statusText = "🚨 OVERTIME / DELAYED";
             }

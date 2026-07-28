@@ -356,7 +356,7 @@ export default function DataEntryDialog({
                 type="submit"
                 variant="success"
                 disabled={submitting || inUseDevices.has(selectedVendor) || downDevices.has(selectedVendor)}
-                className="h-10 px-6 text-xs font-bold bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl shadow-lg shadow-emerald-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="h-10 px-6 text-xs font-bold bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <PlusCircle className="w-4 h-4 mr-2" />
                 Start Session
