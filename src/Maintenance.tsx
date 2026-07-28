@@ -194,10 +194,10 @@ export default function Maintenance() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white light:text-slate-900 tracking-tight">
-              Equipment Maintenance & Station Repairs
+              {t("maintTitle")}
             </h1>
             <p className="text-xs text-slate-400 light:text-slate-500">
-              Track broken controllers, console hardware repairs & device maintenance costs (deducted from net profits)
+              {t("maintSub")}
             </p>
           </div>
         </div>
@@ -208,7 +208,7 @@ export default function Maintenance() {
           className="h-10 px-5 flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-xl shadow-lg shadow-amber-600/20 font-bold text-xs sm:text-sm transition-all shrink-0 border border-amber-400/30"
         >
           <Plus className="w-4 h-4 stroke-[2.5]" />
-          <span>Log Device Maintenance</span>
+          <span>{t("logMaint")}</span>
         </Button>
       </div>
 
@@ -222,16 +222,15 @@ export default function Maintenance() {
         >
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-              <AlertTriangle className="w-4 h-4 text-amber-400 animate-pulse" /> Devices Currently Down
+              <AlertTriangle className="w-4 h-4 text-amber-400 animate-pulse" /> {t("devicesDown")}
             </span>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-              Out of Service
+              {t("outOfService")}
             </span>
           </div>
           <div className="text-3xl font-extrabold text-white tracking-tight my-2">
-            {activeDownCount} <span className="text-sm font-normal text-slate-400">station{activeDownCount === 1 ? "" : "s"}</span>
+            {activeDownCount} <span className="text-sm font-normal text-slate-400">{t("activeCount")}</span>
           </div>
-          <p className="text-xs text-slate-400">Blocked from starting new gaming sessions</p>
         </motion.div>
 
         {/* Total Expense Card (Subtracted from Profit) */}
@@ -243,10 +242,10 @@ export default function Maintenance() {
         >
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
-              <DollarSign className="w-4 h-4 text-red-400" /> Total Repair Expenses
+              <DollarSign className="w-4 h-4 text-red-400" /> {t("totalExpenses")}
             </span>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/20 text-red-300 border border-red-500/30">
-              - Profit Deducted
+              {t("profitDeducted")}
             </span>
           </div>
           <div className="text-3xl font-extrabold text-red-400 tracking-tight my-2">

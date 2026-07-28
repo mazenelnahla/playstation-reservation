@@ -44,9 +44,9 @@ export default function HomePage() {
             <Gamepad2 className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white light:text-slate-900 tracking-tight">Active Stations Overview</h1>
+            <h1 className="text-2xl font-bold text-white light:text-slate-900 tracking-tight">{t("homeTitle")}</h1>
             <p className="text-xs text-slate-400 light:text-slate-500">
-              Real-time lounge management, active timers, and live capacity tracking
+              {t("homeSub")}
             </p>
           </div>
         </div>
@@ -66,9 +66,9 @@ export default function HomePage() {
         {/* Today's Revenue */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-950/80 via-slate-900 to-slate-900 border border-emerald-500/30 p-5 shadow-xl">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">Today's Revenue</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">{t("todaysRevenue")}</span>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-              Live
+              {t("live")}
             </span>
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight my-1">
@@ -85,38 +85,38 @@ export default function HomePage() {
         {/* Active Sessions */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-teal-950/80 via-slate-900 to-slate-900 border border-teal-500/30 p-5 shadow-xl">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-teal-400">Active Sessions</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-teal-400">{t("activeSessionsCard")}</span>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-teal-500/20 text-teal-300 border border-teal-500/30">
-              In-Progress
+              {t("inProgress")}
             </span>
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight my-1">
-            {items.filter((r) => !r.Date_out).length} <span className="text-xs font-normal text-slate-400">active</span>
+            {items.filter((r) => !r.Date_out).length} <span className="text-xs font-normal text-slate-400">{t("activeCount")}</span>
           </div>
         </div>
 
         {/* Completed Today */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-950/80 via-slate-900 to-slate-900 border border-blue-500/30 p-5 shadow-xl">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-400">Completed Today</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-400">{t("completedTodayCard")}</span>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
-              Checked Out
+              {t("checkedOut")}
             </span>
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight my-1">
             {items.filter((r) => {
               const today = new Date().toISOString().substring(0, 10);
               return r.Date_out && r.Date_out.startsWith(today);
-            }).length} <span className="text-xs font-normal text-slate-400">sessions</span>
+            }).length} <span className="text-xs font-normal text-slate-400">{t("sessionsCount")}</span>
           </div>
         </div>
 
         {/* Current Capacity */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-950/80 via-slate-900 to-slate-900 border border-purple-500/30 p-5 shadow-xl">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-purple-400">Current Capacity</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-purple-400">{t("currentCapacityCard")}</span>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-              Occupancy
+              {t("occupancy")}
             </span>
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight my-1">

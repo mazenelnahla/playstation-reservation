@@ -263,9 +263,9 @@ export default function SearchPage() {
               <Archive className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white light:text-slate-900 tracking-tight">Sessions History</h1>
+              <h1 className="text-2xl font-bold text-white light:text-slate-900 tracking-tight">{t("searchTitle")}</h1>
               <p className="text-xs text-slate-400 light:text-slate-500">
-                Search, filter by date or column, view session details, and generate printable reports
+                {t("searchSub")}
               </p>
             </div>
           </div>

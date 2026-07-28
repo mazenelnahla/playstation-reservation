@@ -59,6 +59,33 @@ export const translations = {
     copy: "Copy",
     copied: "Copied!",
 
+    // Home & General Headers
+    homeTitle: "Active Stations Overview",
+    homeSub: "Real-time lounge management, active timers, and live capacity tracking",
+    todaysRevenue: "Today's Revenue",
+    activeSessionsCard: "Active Sessions",
+    completedTodayCard: "Completed Today",
+    currentCapacityCard: "Current Capacity",
+    live: "Live",
+    inProgress: "In-Progress",
+    checkedOut: "Checked Out",
+    occupancy: "Occupancy",
+    activeCount: "active",
+    sessionsCount: "sessions",
+
+    // Search Page Header
+    searchTitle: "Sessions History",
+    searchSub: "Search, filter by date or column, view session details, and generate printable reports",
+
+    // Maintenance Page
+    maintTitle: "Equipment Maintenance & Repairs",
+    maintSub: "Track broken controllers, console hardware repairs & device maintenance costs",
+    logMaint: "Log Device Maintenance",
+    devicesDown: "Devices Currently Down",
+    outOfService: "Out of Service",
+    totalExpenses: "Total Repair Expenses",
+    profitDeducted: "Profit Deducted",
+
     // Dialogs
     deviceCheckIn: "🎮 Start Gaming Session",
     deviceCheckInDesc: "Enter customer details, select station and booked hours.",
@@ -172,6 +199,33 @@ export const translations = {
     checkout: "إنهاء الجلسة والحساب",
     copy: "نسخ",
     copied: "تم النسخ!",
+
+    // Home & General Headers
+    homeTitle: "الأجهزة والجلسات النشطة",
+    homeSub: "متابعة الأجهزة النشطة في الصالة، المؤقت المباشر، ونسبة الإشغال",
+    todaysRevenue: "أرباح اليوم",
+    activeSessionsCard: "الجلسات النشطة",
+    completedTodayCard: "جلسات مكتملة اليوم",
+    currentCapacityCard: "نسبة الإشغال الحالية",
+    live: "مباشر",
+    inProgress: "قيد اللعب",
+    checkedOut: "منتهية",
+    occupancy: "الإشغال",
+    activeCount: "نشط",
+    sessionsCount: "جلسة",
+
+    // Search Page Header
+    searchTitle: "سجل الجلسات والأرشيف",
+    searchSub: "البحث، التصفية بالتواريخ، عرض تفاصيل الجلسات وطباعة التقارير",
+
+    // Maintenance Page
+    maintTitle: "صيانة الأجهزة والأعطال",
+    maintSub: "متابعة صيانة الذراعات، الأجهزة المعطلة وتكاليف الإصلاح (تُخصم من صافي الأرباح)",
+    logMaint: "تسجيل صيانة جديدة",
+    devicesDown: "أجهزة معطلة حالياً",
+    outOfService: "خارج الخدمة",
+    totalExpenses: "إجمالي مصاريف الصيانة",
+    profitDeducted: "مخصوم من الأرباح",
 
     // Dialogs
     deviceCheckIn: "🎮 بدء جلسة ألعاب جديدة",
