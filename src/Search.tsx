@@ -298,6 +298,23 @@ export default function SearchPage() {
   return (
     <>
       <div className="w-full space-y-6 print:container-full">
+        {/* Top Header Banner */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-5 rounded-2xl border border-white/10 shadow-lg no-print">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-blue-400 border border-white/10 shadow-sm">
+              <Archive className="w-5 h-5" />
+            </div>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
+                📁 Session History & Archive Records
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+                Search, filter by date or column, view session details, and generate printable reports
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Search & Table */}
         <Card>
           <div className="card-header no-print py-4 px-4 sm:px-6">
