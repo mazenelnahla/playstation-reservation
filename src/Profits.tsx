@@ -218,7 +218,7 @@ export default function Profits() {
                   : "text-slate-400 hover:text-white"
               }`}
             >
-              By Date Out
+              {t("byDateOut")}
             </button>
             <button
               onClick={() => setDateField("Date_in")}
@@ -228,7 +228,7 @@ export default function Profits() {
                   : "text-slate-400 hover:text-white"
               }`}
             >
-              By Date In
+              {t("byDateIn")}
             </button>
           </div>
 
@@ -242,7 +242,7 @@ export default function Profits() {
             >
               {availableMonths.map((m) => (
                 <option key={m} value={m} className="bg-slate-900 text-white">
-                  {m === selectedMonth ? `Month: ${m}` : m}
+                  {m === selectedMonth ? `${t("monthLabel")}: ${m}` : m}
                 </option>
               ))}
             </select>
@@ -264,7 +264,7 @@ export default function Profits() {
           </div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5" /> Today's Net Profit
+              <Clock className="w-3.5 h-3.5" /> {t("todaysNetProfit")}
             </span>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
               {todayStr}
@@ -275,18 +275,18 @@ export default function Profits() {
           </div>
           <div className="text-[11px] text-slate-400 space-y-1 pt-2 border-t border-white/5">
             <div className="flex justify-between">
-              <span>Gross Revenue:</span>
+              <span>{t("grossRevenue")}</span>
               <span className="font-semibold text-slate-200">EGP {todayProfit.toFixed(2)}</span>
             </div>
             {todayMaintenanceExpense > 0 && (
               <div className="flex justify-between text-red-400">
-                <span>Equipment Repairs:</span>
+                <span>{t("equipmentRepairs")}</span>
                 <span className="font-semibold">- EGP {todayMaintenanceExpense.toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between text-emerald-300 font-bold">
-              <span>Completed Sessions:</span>
-              <span>{todayRecords.length} sessions</span>
+              <span>{t("completedSessionsCount")}</span>
+              <span>{todayRecords.length} {t("sessionsCount")}</span>
             </div>
           </div>
         </motion.div>
@@ -303,7 +303,7 @@ export default function Profits() {
           </div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
-              <CalendarRange className="w-3.5 h-3.5" /> Total Month Net Profit
+              <CalendarRange className="w-3.5 h-3.5" /> {t("monthNetProfit")}
             </span>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
               {selectedMonth}
@@ -314,18 +314,18 @@ export default function Profits() {
           </div>
           <div className="text-[11px] text-slate-400 space-y-1 pt-2 border-t border-white/5">
             <div className="flex justify-between">
-              <span>Gross Revenue:</span>
+              <span>{t("grossRevenue")}</span>
               <span className="font-semibold text-slate-200">EGP {monthProfit.toFixed(2)}</span>
             </div>
             {monthMaintenanceExpense > 0 && (
               <div className="flex justify-between text-red-400">
-                <span>Equipment Repairs:</span>
+                <span>{t("equipmentRepairs")}</span>
                 <span className="font-semibold">- EGP {monthMaintenanceExpense.toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between text-blue-300 font-bold">
-              <span>Completed Sessions:</span>
-              <span>{monthRecords.length} sessions</span>
+              <span>{t("completedSessionsCount")}</span>
+              <span>{monthRecords.length} {t("sessionsCount")}</span>
             </div>
           </div>
         </motion.div>
@@ -342,10 +342,10 @@ export default function Profits() {
           </div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
-              <Layers className="w-3.5 h-3.5" /> All-Time Net Profit
+              <Layers className="w-3.5 h-3.5" /> {t("allTimeNetProfit")}
             </span>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-              Overall
+              {t("overall")}
             </span>
           </div>
           <div className="text-3xl font-extrabold text-white tracking-tight my-2">
@@ -353,18 +353,18 @@ export default function Profits() {
           </div>
           <div className="text-[11px] text-slate-400 space-y-1 pt-2 border-t border-white/5">
             <div className="flex justify-between">
-              <span>Gross Revenue:</span>
+              <span>{t("grossRevenue")}</span>
               <span className="font-semibold text-slate-200">EGP {totalProfitAllTime.toFixed(2)}</span>
             </div>
             {totalMaintenanceExpenseAllTime > 0 && (
               <div className="flex justify-between text-red-400">
-                <span>Equipment Repairs:</span>
+                <span>{t("equipmentRepairs")}</span>
                 <span className="font-semibold">- EGP {totalMaintenanceExpenseAllTime.toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between text-purple-300 font-bold">
-              <span>Total Logged Sessions:</span>
-              <span>{records.length} sessions</span>
+              <span>{t("totalLoggedSessions")}</span>
+              <span>{records.length} {t("sessionsCount")}</span>
             </div>
           </div>
         </motion.div>
@@ -379,22 +379,22 @@ export default function Profits() {
               <div>
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
                   <Calendar className="w-5 h-5 text-emerald-400" />
-                  Daily Profit History ({selectedMonth})
+                  {t("dailyProfitHistory")} ({selectedMonth})
                 </h2>
                 <p className="text-xs text-slate-400">
-                  Preserved profit records for each day of the selected month
+                  {t("preservedProfitRecords")}
                 </p>
               </div>
               <div className="text-xs font-medium text-slate-400 bg-slate-800 px-3 py-1 rounded-lg border border-white/5">
-                {dailyHistory.length} active days
+                {dailyHistory.length} {t("activeDays")}
               </div>
             </div>
 
             {loading ? (
-              <div className="py-12 text-center text-slate-400">Loading profit history...</div>
+              <div className="py-12 text-center text-slate-400">{t("loadingProfitHistory")}</div>
             ) : dailyHistory.length === 0 ? (
               <div className="py-12 text-center text-slate-500 text-sm">
-                No profit records found for {selectedMonth}.
+                {t("noProfitRecordsMonth")}
               </div>
             ) : (
               <div className="space-y-3">
@@ -433,12 +433,12 @@ export default function Profits() {
                               </span>
                               {isToday && (
                                 <span className="px-2 py-0.5 text-[10px] font-extrabold uppercase bg-emerald-500 text-slate-950 rounded-full">
-                                  Today
+                                  {t("todayTag")}
                                 </span>
                               )}
                             </div>
                             <span className="text-xs text-slate-400">
-                              {dayGroup.count} session{dayGroup.count === 1 ? "" : "s"} completed
+                              {dayGroup.count} {t("sessionsCount")} {t("completedTodayCard")}
                             </span>
                           </div>
                         </div>
@@ -472,12 +472,12 @@ export default function Profits() {
                               <table className="w-full text-xs text-left text-slate-300">
                                 <thead>
                                   <tr className="border-b border-white/10 text-slate-400 font-semibold">
-                                    <th className="py-2 px-2">Customer</th>
-                                    <th className="py-2 px-2">Device & Model</th>
-                                    <th className="py-2 px-2">Notes</th>
-                                    <th className="py-2 px-2">Technician</th>
-                                    <th className="py-2 px-2 text-right">Price / Profit</th>
-                                    <th className="py-2 px-2 text-center">Receipt</th>
+                                    <th className="py-2 px-2">{t("colCustomerName")}</th>
+                                    <th className="py-2 px-2">{t("colDeviceType")}</th>
+                                    <th className="py-2 px-2">{t("colNotes")}</th>
+                                    <th className="py-2 px-2">{t("colTechnician")}</th>
+                                    <th className="py-2 px-2 text-right">{t("colCost")}</th>
+                                    <th className="py-2 px-2 text-center">{t("viewReceipt")}</th>
                                   </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
@@ -509,7 +509,7 @@ export default function Profits() {
                                           title="View / Print Receipt History"
                                         >
                                           <Receipt className="w-3.5 h-3.5 text-emerald-400" />
-                                          <span>Receipt</span>
+                                          <span>{t("viewReceipt")}</span>
                                         </button>
                                       </td>
                                     </tr>
@@ -534,16 +534,16 @@ export default function Profits() {
             <div className="pb-4 border-b border-white/10 mb-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
                 <User className="w-5 h-5 text-blue-400" />
-                Technician Profit ({selectedMonth})
+                {t("techProfitTitle")} ({selectedMonth})
               </h2>
               <p className="text-xs text-slate-400">
-                Revenue contribution per technician
+                {t("revenueContribPerTech")}
               </p>
             </div>
 
             {techBreakdown.length === 0 ? (
               <div className="py-8 text-center text-slate-500 text-sm">
-                No technician data for this month.
+                {t("noTechDataMonth")}
               </div>
             ) : (
               <div className="space-y-3">
@@ -576,8 +576,8 @@ export default function Profits() {
                       </div>
 
                       <div className="flex items-center justify-between text-[11px] text-slate-400">
-                        <span>{tech.count} session{tech.count === 1 ? "" : "s"}</span>
-                        <span>{percent.toFixed(1)}% of month total</span>
+                        <span>{tech.count} {t("sessionsCount")}</span>
+                        <span>{percent.toFixed(1)}% {t("ofMonthTotal")}</span>
                       </div>
                     </div>
                   );
