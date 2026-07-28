@@ -44,10 +44,6 @@ function formatCompactDateTime(dateStr: string | undefined) {
 
 interface PrintTableProps {
   filtered: RecordItem[];
-  DEVICE_TYPES: string[];
-  VendorName?: { id: number; name: string }[];
-  colFilters: Partial<Record<keyof RecordItem, string>>;
-  setColFilter: (col: keyof RecordItem, value: string) => void;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   PAGE_SIZE: number;
@@ -58,10 +54,6 @@ interface PrintTableProps {
 
 export default function PrintTable({
   filtered,
-  VendorName = [],
-  colFilters,
-  setColFilter,
-  DEVICE_TYPES,
   page,
   setPage,
   PAGE_SIZE,
@@ -72,12 +64,7 @@ export default function PrintTable({
   const { t } = useLanguage();
   const printRef = useRef<HTMLDivElement | null>(null);
   const [copiedId, setCopiedId] = useState<number | null>(null);
-  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
   const [showMissingOut, setShowMissingOut] = useState(false);
-
-  // new: date-out range filter state
-  const [dateOutFrom, setDateOutFrom] = useState<string>("");
-  const [dateOutTo, setDateOutTo] = useState<string>("");
 
   const copyToClipboard = async (text: string, recordId: number) => {
     try {
@@ -115,7 +102,6 @@ export default function PrintTable({
     )
     // apply Date_out range if either boundary is set
     .filter((r) => {
-      if (!dateOutFrom && !dateOutTo) return true;
       // if record has no Date_out, exclude when range is set
       if (!r.Date_out || r.Date_out.toString().trim() === "") return false;
       const rec = new Date(r.Date_out);
@@ -125,24 +111,6 @@ export default function PrintTable({
         rec.getMonth(),
         rec.getDate(),
       ).getTime();
-      if (dateOutFrom) {
-        const from = new Date(dateOutFrom);
-        const fromTime = new Date(
-          from.getFullYear(),
-          from.getMonth(),
-          from.getDate(),
-        ).getTime();
-        if (recTime < fromTime) return false;
-      }
-      if (dateOutTo) {
-        const to = new Date(dateOutTo);
-        const toTime = new Date(
-          to.getFullYear(),
-          to.getMonth(),
-          to.getDate(),
-        ).getTime();
-        if (recTime > toTime) return false;
-      }
       return true;
     });
 
@@ -163,32 +131,6 @@ export default function PrintTable({
 
   return (
     <div>
-      {/* Sleek Table Header Toolbar (no-print) */}
-      <div className="mb-4 no-print flex items-center justify-between gap-3 flex-wrap">
-        <button
-          onClick={() => {
-            setShowMissingOut((s) => {
-              setPage(0);
-              return !s;
-            });
-          }}
-          className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all text-xs sm:text-sm font-semibold shadow-sm ${
-            showMissingOut
-              ? "bg-amber-500 text-white border-amber-400 shadow-amber-500/20"
-              : "bg-slate-800/80 light:bg-slate-100 text-slate-200 light:text-slate-800 border-white/10 light:border-slate-300 hover:bg-slate-700/80"
-          }`}
-          title="Show active sessions currently in progress (Date Out empty)"
-          type="button"
-        >
-          <Gamepad2 className="h-4 w-4" aria-hidden />
-          <span>{t("underMaintenance")}</span>
-          {showMissingOut && <span className="w-2 h-2 rounded-full bg-white animate-pulse" />}
-        </button>
-
-        <div className="text-xs font-semibold text-slate-400">
-          {t("showingRecords")} <span className="text-slate-100 light:text-slate-900 font-bold">{displayList.length}</span> {t("records")}
-        </div>
-      </div>
 
       <div
         className="overflow-x-auto rounded-2xl border border-white/10 light:border-slate-300 shadow-xl print:border-0 print:overflow-visible bg-slate-900/90 light:bg-white"

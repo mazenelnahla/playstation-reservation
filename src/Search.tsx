@@ -136,7 +136,6 @@ export default function SearchPage() {
 
   // VendorName state
   const [VendorName, setVendorName] = useState<VendorNameItem[]>([]);
-  const [addVendorNameOpen, setAddVendorNameOpen] = useState(false);
   const [editingVendorNames, setEditingVendorNames] =
     useState<VendorNameItem | null>(null);
   const [confirmDeleteVendorNames, setConfirmDeleteVendorNames] =
@@ -189,9 +188,16 @@ export default function SearchPage() {
     setColFilters((prev) => ({ ...prev, [col]: value }));
   }
 
+  const [showMissingOut, setShowMissingOut] = useState(false);
+
   // Filtered records with per-column filters & date ranges
   const filtered = useMemo(() => {
     let arr = (items ?? [])
+      .filter((r) =>
+        showMissingOut
+          ? !r.Date_out || r.Date_out.toString().trim() === ""
+          : true,
+      )
       .filter(
         (r) =>
           includesAllFields(r, query) &&
@@ -212,55 +218,7 @@ export default function SearchPage() {
       return db - da;
     });
     return arr;
-  }, [items, query, fromDate, toDate, dateOutFrom, dateOutTo, colFilters]);
-
-  useEffect(() => {
-    loadVendorName()
-      .then(setVendorName)
-      .catch(() => setVendorName([]));
-  }, []);
-
-  // Add VendorNames using IndexedDB
-  async function addVendorNamesItem(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const VendorNamesform = new FormData(e.currentTarget);
-    const name = String(VendorNamesform.get("Name") || "");
-
-    try {
-      if (editingVendorNames) {
-        await addOrUpdateVendorName({ id: editingVendorNames.id, name });
-      } else {
-        await addOrUpdateVendorName({ name } as VendorName);
-      }
-      const updated = await loadVendorName();
-      setVendorName(updated);
-      setEditingVendorNames(null);
-      const form = e.currentTarget as HTMLFormElement;
-      if (form) form.reset();
-    } catch (err) {
-      console.error("[addVendorNamesItem] failed", err);
-    }
-  }
-
-  function handleEditVendorNames(s: VendorNameItem) {
-    setEditingVendorNames(s);
-  }
-
-  function handleDeleteVendorNames(s: VendorNameItem) {
-    setConfirmDeleteVendorNames(s);
-  }
-
-  async function confirmDeleteVendorNamesAction() {
-    if (!confirmDeleteVendorNames) return;
-    try {
-      await deleteVendorName(confirmDeleteVendorNames.id);
-      const updated = await loadVendorName();
-      setVendorName(updated);
-      setConfirmDeleteVendorNames(null);
-    } catch (err) {
-      console.error("[confirmDeleteVendorNamesAction] failed", err);
-    }
-  }
+  }, [items, query, fromDate, toDate, dateOutFrom, dateOutTo, colFilters, showMissingOut]);
 
   useEffect(() => {
     fetchUsers()
@@ -375,25 +333,33 @@ export default function SearchPage() {
                     </button>
                   </div>
                 </div>
+                
+              </div>
 
-                {/* Add Device & Print Buttons */}
-                <div className="flex items-center gap-2 justify-end">
-                  <Button
-                    size="sm"
-                    className="h-10 px-4 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl shadow-lg font-semibold text-xs sm:text-sm transition-all"
-                    onClick={() => setDataEntryOpen(true)}
-                  >
-                    <PlusIcon className="w-4 h-4" />
-                    <span>{t("addJob")}</span>
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="h-10 px-4 flex items-center justify-center gap-2 bg-slate-800 light:bg-slate-200 hover:bg-slate-700 light:hover:bg-slate-300 text-slate-200 light:text-slate-800 rounded-xl border border-white/10 light:border-slate-300 transition-colors text-xs sm:text-sm font-semibold"
-                    onClick={onPrint}
-                  >
-                    <Printer className="w-4 h-4" />
-                    <span className="hidden sm:inline">{t("printReport")}</span>
-                  </Button>
+              {/* Sleek Table Header Toolbar (no-print) */}
+              <div className="pt-2 no-print flex items-center justify-between gap-3 flex-wrap border-t border-white/10">
+                <button
+                  onClick={() => {
+                    setShowMissingOut((s) => {
+                      setPage(0);
+                      return !s;
+                    });
+                  }}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all text-xs sm:text-sm font-semibold shadow-sm ${
+                    showMissingOut
+                      ? "bg-amber-500 text-slate-950 font-bold border-amber-400 shadow-amber-500/20"
+                      : "bg-slate-800/80 light:bg-slate-100 text-slate-200 light:text-slate-800 border-white/10 light:border-slate-300 hover:bg-slate-700/80"
+                  }`}
+                  title="Show active sessions currently in progress (Date Out empty)"
+                  type="button"
+                >
+                  <Gamepad2 className="h-4 w-4" aria-hidden />
+                  <span>{t("underMaintenance")}</span>
+                  {showMissingOut && <span className="w-2 h-2 rounded-full bg-slate-950 animate-pulse" />}
+                </button>
+
+                <div className="text-xs font-semibold text-slate-400">
+                  {t("showingRecords")} <span className="text-slate-100 light:text-slate-900 font-bold">{filtered.length}</span> {t("records")}
                 </div>
               </div>
 
@@ -563,13 +529,7 @@ export default function SearchPage() {
 
           <CardContent className="px-4 pb-4 pt-2">
             <PrintTable
-              VendorName={VendorName.sort((a, b) =>
-                a.name.localeCompare(b.name),
-              )}
-              DEVICE_TYPES={DEVICE_TYPES}
               filtered={filtered}
-              colFilters={colFilters}
-              setColFilter={setColFilter}
               page={page}
               setPage={setPage}
               PAGE_SIZE={PAGE_SIZE}
