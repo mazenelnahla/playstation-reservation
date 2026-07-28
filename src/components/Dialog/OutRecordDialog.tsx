@@ -47,20 +47,13 @@ const OutRecordDialog: React.FC<OutRecordDialogProps> = ({
         <h3 className="text-sm font-semibold text-slate-200">
           {t("checkOutDetails")}
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field
             id="Date_out"
             name="Date_out"
             label={t("colDateOut")}
             type="date"
             defaultValue={Out.Date_out || new Date().toISOString().substring(0, 10)}
-          />
-          <SelectField
-            id="DoneBy"
-            name="DoneBy"
-            label={t("colTechnician")}
-            options={users.map((u) => u.name)}
-            defaultValue={Out.DoneBy}
           />
           <Field
             id="MaintinancePrice"
@@ -69,6 +62,7 @@ const OutRecordDialog: React.FC<OutRecordDialogProps> = ({
             label={t("colCost")}
             defaultValue={Out.MaintinancePrice}
           />
+          <input type="hidden" name="DoneBy" value={Out.DoneBy} />
         </div>
 
         {/* Checkout Notes / Leftover items field */}

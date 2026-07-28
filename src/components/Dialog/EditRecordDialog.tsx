@@ -198,30 +198,32 @@ export default function EditRecordDialog({
             />
           </div>
 
-          {/* Staff Assigned */}
-          <div className="grid gap-1">
-            <Label htmlFor="edit_DoneBy" className="text-xs font-semibold text-slate-300 flex items-center justify-between">
-              <span>Staff Member / Cashier</span>
-              {!isAdmin && <span className="text-[10px] text-amber-400 font-bold">(Admin Only)</span>}
-            </Label>
-            <select
-              id="edit_DoneBy"
-              value={doneBy}
-              disabled={!isAdmin}
-              onChange={(e) => setDoneBy(e.target.value)}
-              className="h-10 text-xs bg-slate-900 border border-white/10 text-white rounded-xl px-3 outline-none focus:border-blue-400 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {users.length > 0 ? (
-                users.map((u) => (
-                  <option key={u.name} value={u.name} className="bg-slate-900 text-white">
-                    {u.name}
-                  </option>
-                ))
-              ) : (
-                <option value={doneBy || "Staff"} className="bg-slate-900 text-white">{doneBy || "Staff"}</option>
-              )}
-            </select>
-          </div>
+          {/* Staff Assigned (Hidden for non-admin or hidden input) */}
+          {isAdmin ? (
+            <div className="grid gap-1">
+              <Label htmlFor="edit_DoneBy" className="text-xs font-semibold text-slate-300">
+                Staff Member / Cashier
+              </Label>
+              <select
+                id="edit_DoneBy"
+                value={doneBy}
+                onChange={(e) => setDoneBy(e.target.value)}
+                className="h-10 text-xs bg-slate-900 border border-white/10 text-white rounded-xl px-3 outline-none focus:border-blue-400"
+              >
+                {users.length > 0 ? (
+                  users.map((u) => (
+                    <option key={u.name} value={u.name} className="bg-slate-900 text-white">
+                      {u.name}
+                    </option>
+                  ))
+                ) : (
+                  <option value={doneBy || "Staff"} className="bg-slate-900 text-white">{doneBy || "Staff"}</option>
+                )}
+              </select>
+            </div>
+          ) : (
+            <input type="hidden" name="DoneBy" value={doneBy} />
+          )}
 
           {/* Start Date */}
           <div className="grid gap-1">

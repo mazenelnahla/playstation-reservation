@@ -200,7 +200,7 @@ export default function DataEntryDialog({
                   🎮 Register New Gaming Session
                 </DialogTitle>
                 <DialogDescription className="text-xs text-slate-400">
-                  Select station, booked hours, customer info. Rate: <strong className="text-emerald-400">{currentRate} EGP/hr</strong> | Staff: <strong className="text-blue-400">{loggedInEmployee}</strong>
+                  Select station, booked hours, and customer info. Rate: <strong className="text-emerald-400">{currentRate} EGP/hr</strong>
                 </DialogDescription>
               </div>
               <button
@@ -318,14 +318,7 @@ export default function DataEntryDialog({
                   <option value="0.5">0.5 Hour ({currentRate * 0.5} EGP)</option>
                 </select>
               </div>
-              <Field
-                id="DoneBy"
-                name="DoneBy"
-                label="Employee on Shift"
-                value={loggedInEmployee}
-                readOnly
-                className="bg-slate-800/80 text-blue-400 font-bold cursor-not-allowed"
-              />
+              <input type="hidden" name="DoneBy" value={loggedInEmployee} />
             </div>
 
             <div className="bg-slate-800/40 p-3 rounded-xl border border-white/5 grid grid-cols-1 md:grid-cols-2 gap-4">
