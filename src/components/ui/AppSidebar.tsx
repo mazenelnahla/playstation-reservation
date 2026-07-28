@@ -126,7 +126,7 @@ export function AppSidebar({
               >
                 <Link to="/Maintenance" onClick={closeSidebarOnMobile} className="flex items-center gap-3 w-full">
                   <Wrench className="w-5 h-5 shrink-0" />
-                  <span className="truncate">Maintenance</span>
+                  <span className="truncate">{t("maintenanceNav")}</span>
                 </Link>
               </Button>
             </div>
@@ -160,7 +160,7 @@ export function AppSidebar({
                     <Moon className="w-5 h-5 text-blue-400 shrink-0" />
                   )}
                   <span className="truncate">
-                    {theme === "dark" ? "Light Mode" : "Dark Mode"}
+                    {theme === "dark" ? t("lightMode") : t("darkMode")}
                   </span>
                 </div>
               </Button>
