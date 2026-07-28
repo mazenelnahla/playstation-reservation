@@ -298,20 +298,29 @@ export default function SearchPage() {
   return (
     <>
       <div className="w-full space-y-6 print:container-full">
-        {/* Top Header Banner */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-5 rounded-2xl border border-white/10 shadow-lg no-print">
+        {/* Page Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5 no-print">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-blue-400 border border-white/10 shadow-sm">
-              <Archive className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 shrink-0">
+              <Archive className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                Sessions History
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+              <h1 className="text-2xl font-bold text-white light:text-slate-900 tracking-tight">Sessions History</h1>
+              <p className="text-xs text-slate-400 light:text-slate-500">
                 Search, filter by date or column, view session details, and generate printable reports
               </p>
             </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              className="h-10 px-5 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl shadow-lg shadow-blue-600/20 font-bold text-xs sm:text-sm transition-all shrink-0 border border-blue-400/30"
+              onClick={() => setDataEntryOpen(true)}
+            >
+              <PlusIcon className="w-4 h-4 stroke-[2.5]" />
+              <span>{t("addJob")}</span>
+            </Button>
           </div>
         </div>
 
@@ -611,8 +620,6 @@ export default function SearchPage() {
                 DEVICE_TYPES={DEVICE_TYPES}
                 onClose={() => setEditing(null)}
                 onSave={saveEdit}
-                Field={Field}
-                SelectField={SelectField}
               />
             )}
           </div>

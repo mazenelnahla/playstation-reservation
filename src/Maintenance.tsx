@@ -186,17 +186,17 @@ export default function Maintenance() {
 
   return (
     <div className="w-full space-y-6">
-      {/* Top Banner & Header */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/60 p-6 rounded-2xl border border-white/10 shadow-lg backdrop-blur-md">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30 shadow-lg">
+      {/* Page Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/20 shrink-0">
             <Wrench className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-extrabold text-white tracking-tight">
-              🛠️ Equipment Maintenance & Station Repairs
+            <h1 className="text-2xl font-bold text-white light:text-slate-900 tracking-tight">
+              Equipment Maintenance & Station Repairs
             </h1>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-400 light:text-slate-500">
               Track broken controllers, console hardware repairs & device maintenance costs (deducted from net profits)
             </p>
           </div>
@@ -204,9 +204,10 @@ export default function Maintenance() {
 
         <Button
           onClick={openNewModal}
-          className="h-11 px-5 flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-xl shadow-lg shadow-amber-600/30 font-bold text-sm transition-all shrink-0"
+          size="sm"
+          className="h-10 px-5 flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-xl shadow-lg shadow-amber-600/20 font-bold text-xs sm:text-sm transition-all shrink-0 border border-amber-400/30"
         >
-          <Plus className="w-5 h-5" />
+          <Plus className="w-4 h-4 stroke-[2.5]" />
           <span>Log Device Maintenance</span>
         </Button>
       </div>
