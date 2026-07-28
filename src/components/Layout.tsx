@@ -136,10 +136,10 @@ export default function Layout({ children }: LayoutProps) {
           "w-full min-w-0 px-4 sm:px-6 md:px-8 py-4 sm:py-6 transition-all duration-300 pb-24 md:pb-8",
           isRtl
             ? sidebarOpen
-              ? "md:pr-64"
+              ? "md:pr-[17.5rem]"
               : ""
             : sidebarOpen
-              ? "md:pl-64"
+              ? "md:pl-[17.5rem]"
               : ""
         )}
         initial={{ opacity: 0, y: 20 }}
