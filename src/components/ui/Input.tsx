@@ -5,7 +5,7 @@ export default function Input(
   const { className = "", ...rest } = props;
   return (
     <input
-      className={`bg-white/5 border border-white/10 rounded-lg text-white placeholder-slate-400 px-4 py-2 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all ${className}`}
+      className={`bg-white/5 light:bg-white border border-white/10 light:border-slate-300 text-white light:text-slate-900 placeholder-slate-400 light:placeholder-slate-500 px-4 py-2 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all ${className}`}
       {...rest}
     />
   );

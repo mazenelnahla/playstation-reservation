@@ -64,14 +64,14 @@ export default function HomePage() {
       {/* Overview Stat Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Today's Revenue */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-950/80 via-slate-900 to-slate-900 border border-emerald-500/30 p-5 shadow-xl">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-950/80 via-slate-900 to-slate-900 light:from-emerald-50 light:to-white border border-emerald-500/30 light:border-emerald-300 p-5 shadow-xl">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">{t("todaysRevenue")}</span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 light:text-emerald-700">{t("todaysRevenue")}</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 light:bg-emerald-100 text-emerald-300 light:text-emerald-800 border border-emerald-500/30 light:border-emerald-300">
               {t("live")}
             </span>
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight my-1">
+          <div className="text-2xl sm:text-3xl font-extrabold text-white light:text-slate-900 tracking-tight my-1">
             EGP {items
               .filter((r) => {
                 const today = new Date().toISOString().substring(0, 10);
@@ -83,48 +83,48 @@ export default function HomePage() {
         </div>
 
         {/* Active Sessions */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-teal-950/80 via-slate-900 to-slate-900 border border-teal-500/30 p-5 shadow-xl">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-teal-950/80 via-slate-900 to-slate-900 light:from-teal-50 light:to-white border border-teal-500/30 light:border-teal-300 p-5 shadow-xl">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-teal-400">{t("activeSessionsCard")}</span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+            <span className="text-xs font-bold uppercase tracking-wider text-teal-400 light:text-teal-700">{t("activeSessionsCard")}</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-teal-500/20 light:bg-teal-100 text-teal-300 light:text-teal-800 border border-teal-500/30 light:border-teal-300">
               {t("inProgress")}
             </span>
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight my-1">
-            {items.filter((r) => !r.Date_out).length} <span className="text-xs font-normal text-slate-400">{t("activeCount")}</span>
+          <div className="text-2xl sm:text-3xl font-extrabold text-white light:text-slate-900 tracking-tight my-1">
+            {items.filter((r) => !r.Date_out).length} <span className="text-xs font-normal text-slate-400 light:text-slate-500">{t("activeCount")}</span>
           </div>
         </div>
 
         {/* Completed Today */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-950/80 via-slate-900 to-slate-900 border border-blue-500/30 p-5 shadow-xl">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-950/80 via-slate-900 to-slate-900 light:from-blue-50 light:to-white border border-blue-500/30 light:border-blue-300 p-5 shadow-xl">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-400">{t("completedTodayCard")}</span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-400 light:text-blue-700">{t("completedTodayCard")}</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500/20 light:bg-blue-100 text-blue-300 light:text-blue-800 border border-blue-500/30 light:border-blue-300">
               {t("checkedOut")}
             </span>
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight my-1">
+          <div className="text-2xl sm:text-3xl font-extrabold text-white light:text-slate-900 tracking-tight my-1">
             {items.filter((r) => {
               const today = new Date().toISOString().substring(0, 10);
               return r.Date_out && r.Date_out.startsWith(today);
-            }).length} <span className="text-xs font-normal text-slate-400">{t("sessionsCount")}</span>
+            }).length} <span className="text-xs font-normal text-slate-400 light:text-slate-500">{t("sessionsCount")}</span>
           </div>
         </div>
 
         {/* Current Capacity */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-950/80 via-slate-900 to-slate-900 border border-purple-500/30 p-5 shadow-xl">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-950/80 via-slate-900 to-slate-900 light:from-purple-50 light:to-white border border-purple-500/30 light:border-purple-300 p-5 shadow-xl">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-purple-400">{t("currentCapacityCard")}</span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+            <span className="text-xs font-bold uppercase tracking-wider text-purple-400 light:text-purple-700">{t("currentCapacityCard")}</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-purple-500/20 light:bg-purple-100 text-purple-300 light:text-purple-800 border border-purple-500/30 light:border-purple-300">
               {t("occupancy")}
             </span>
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight my-1">
+          <div className="text-2xl sm:text-3xl font-extrabold text-white light:text-slate-900 tracking-tight my-1">
             {Math.min(100, Math.round((items.filter((r) => !r.Date_out).length / 10) * 100))}%
           </div>
-          <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mt-2">
+          <div className="w-full bg-slate-800 light:bg-slate-200 h-1.5 rounded-full overflow-hidden mt-2">
             <div
-              className="bg-purple-400 h-full rounded-full transition-all duration-300"
+              className="bg-purple-400 light:bg-purple-600 h-full rounded-full transition-all duration-300"
               style={{ width: `${Math.min(100, Math.round((items.filter((r) => !r.Date_out).length / 10) * 100))}%` }}
             />
           </div>

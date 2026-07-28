@@ -137,12 +137,14 @@ html.light .from-purple-950 {
   border-color: #e9d5ff !important;
 }
 
+html.light .from-amber-950\/80,
 html.light .from-amber-950\/40,
 html.light .from-amber-950 {
   background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%) !important;
   border-color: #fde68a !important;
 }
 
+html.light .from-red-950\/80,
 html.light .from-red-950\/40,
 html.light .from-red-950 {
   background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%) !important;
@@ -156,19 +158,24 @@ html.light h2.text-white,
 html.light h3.text-white,
 html.light h4.text-white,
 html.light p.text-white,
-html.light strong.text-white {
+html.light strong.text-white,
+html.light span.text-white:not(button *):not(a *),
+html.light div.text-white:not(button *):not(a *),
+html.light td.text-white,
+html.light th.text-white,
+html.light label.text-white {
   color: #0f172a !important;
 }
 
-/* Preserve white text on dark buttons */
+/* Preserve white text on dark action buttons */
 html.light button.bg-emerald-600 *,
 html.light button.bg-blue-600 *,
 html.light button.bg-indigo-600 *,
-html.light [class*="bg-gradient-to-r"] *,
+html.light button[class*="bg-gradient-to-r"] *,
 html.light button.bg-emerald-600,
 html.light button.bg-blue-600,
 html.light button.bg-indigo-600,
-html.light [class*="bg-gradient-to-r"] {
+html.light button[class*="bg-gradient-to-r"] {
   color: #ffffff !important;
 }
 
@@ -214,12 +221,144 @@ html.light .text-slate-100 {
   color: #0f172a;
 }
 
-html.light .text-slate-400 {
-  color: #64748b;
+/* Light Mode Amber/Yellow High-Contrast Overrides */
+html.light .text-amber-400,
+html.light .text-amber-300,
+html.light .text-yellow-400,
+html.light .text-yellow-300 {
+  color: #b45309 !important; /* Dark amber/gold for crisp readability on white */
 }
 
-html.light .text-slate-500 {
-  color: #475569;
+html.light .bg-amber-500\/20,
+html.light .bg-amber-500\/30 {
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
+  border-color: #fde68a !important;
+}
+
+html.light .bg-amber-500\/20 *,
+html.light .bg-amber-500\/30 * {
+  color: #92400e !important;
+}
+
+/* Light Mode Emerald/Green High-Contrast Overrides */
+html.light .text-emerald-400,
+html.light .text-emerald-300,
+html.light .text-teal-400,
+html.light .text-teal-300 {
+  color: #047857 !important; /* Dark emerald/forest green for high legibility on light backgrounds */
+}
+
+html.light .bg-emerald-500\/20,
+html.light .bg-emerald-500\/30,
+html.light .bg-teal-500\/20,
+html.light .bg-teal-500\/30 {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+  border-color: #a7f3d0 !important;
+}
+
+html.light .bg-emerald-500\/20 *,
+html.light .bg-emerald-500\/30 *,
+html.light .bg-teal-500\/20 *,
+html.light .bg-teal-500\/30 * {
+  color: #065f46 !important;
+}
+
+/* Light Mode Blue & Indigo High-Contrast Overrides */
+html.light .text-blue-400,
+html.light .text-blue-300,
+html.light .text-indigo-400,
+html.light .text-indigo-300 {
+  color: #1d4ed8 !important; /* Deep blue/indigo for high contrast on light cards */
+}
+
+html.light .bg-blue-500\/20,
+html.light .bg-blue-500\/30,
+html.light .bg-indigo-500\/20,
+html.light .bg-indigo-500\/30 {
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
+  border-color: #bfdbfe !important;
+}
+
+html.light .bg-blue-500\/20 *,
+html.light .bg-blue-500\/30 *,
+html.light .bg-indigo-500\/20 *,
+html.light .bg-indigo-500\/30 * {
+  color: #1e40af !important;
+}
+
+/* Light Mode Purple High-Contrast Overrides */
+html.light .text-purple-400,
+html.light .text-purple-300 {
+  color: #7e22ce !important; /* Deep purple for crisp legibility */
+}
+
+html.light .bg-purple-500\/20,
+html.light .bg-purple-500\/30 {
+  background-color: #f3e8ff !important;
+  color: #6b21a8 !important;
+  border-color: #e9d5ff !important;
+}
+
+html.light .bg-purple-500\/20 *,
+html.light .bg-purple-500\/30 * {
+  color: #6b21a8 !important;
+}
+
+/* Light Mode Red High-Contrast Overrides */
+html.light .text-red-400,
+html.light .text-red-300 {
+  color: #b91c1c !important; /* Deep crimson red */
+}
+
+html.light .bg-red-500\/20,
+html.light .bg-red-500\/30 {
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+  border-color: #fca5a5 !important;
+}
+
+html.light .bg-red-500\/20 *,
+html.light .bg-red-500\/30 * {
+  color: #991b1b !important;
+}
+
+/* Universal Light Mode Contrast Enforcement */
+html.light,
+html.light body,
+html.light #root {
+  color: #0f172a !important;
+}
+
+html.light .text-white,
+html.light h1.text-white,
+html.light h2.text-white,
+html.light h3.text-white,
+html.light h4.text-white,
+html.light h5.text-white,
+html.light h6.text-white,
+html.light p.text-white,
+html.light strong.text-white,
+html.light span.text-white:not(button *):not(a *):not([class*="bg-"]):not([class*="from-"]),
+html.light div.text-white:not(button *):not(a *):not([class*="bg-"]):not([class*="from-"]),
+html.light td.text-white,
+html.light th.text-white,
+html.light label.text-white {
+  color: #0f172a !important;
+}
+
+html.light input,
+html.light select,
+html.light textarea {
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #64748b !important;
 }
 
 /* Light Mode Labels & Form Titles */

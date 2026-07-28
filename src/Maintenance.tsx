@@ -218,18 +218,18 @@ export default function Maintenance() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-950/80 via-slate-900 to-slate-900 border border-amber-500/40 p-6 shadow-xl"
+          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-950/80 via-slate-900 to-slate-900 light:from-amber-50 light:to-white border border-amber-500/40 light:border-amber-300 p-6 shadow-xl"
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-              <AlertTriangle className="w-4 h-4 text-amber-400 animate-pulse" /> {t("devicesDown")}
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-400 light:text-amber-700 flex items-center gap-1.5">
+              <AlertTriangle className="w-4 h-4 text-amber-400 light:text-amber-600 animate-pulse" /> {t("devicesDown")}
             </span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 light:bg-amber-100 text-amber-300 light:text-amber-800 border border-amber-500/30 light:border-amber-300">
               {t("outOfService")}
             </span>
           </div>
-          <div className="text-3xl font-extrabold text-white tracking-tight my-2">
-            {activeDownCount} <span className="text-sm font-normal text-slate-400">{t("activeCount")}</span>
+          <div className="text-3xl font-extrabold text-white light:text-slate-900 tracking-tight my-2">
+            {activeDownCount} <span className="text-sm font-normal text-slate-400 light:text-slate-500">{t("activeCount")}</span>
           </div>
         </motion.div>
 
@@ -238,20 +238,20 @@ export default function Maintenance() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-950/80 via-slate-900 to-slate-900 border border-red-500/40 p-6 shadow-xl"
+          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-950/80 via-slate-900 to-slate-900 light:from-red-50 light:to-white border border-red-500/40 light:border-red-300 p-6 shadow-xl"
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
-              <DollarSign className="w-4 h-4 text-red-400" /> {t("totalExpenses")}
+            <span className="text-xs font-bold uppercase tracking-wider text-red-400 light:text-red-700 flex items-center gap-1.5">
+              <DollarSign className="w-4 h-4 text-red-400 light:text-red-600" /> {t("totalExpenses")}
             </span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/20 text-red-300 border border-red-500/30">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/20 light:bg-red-100 text-red-300 light:text-red-800 border border-red-500/30 light:border-red-300">
               {t("profitDeducted")}
             </span>
           </div>
-          <div className="text-3xl font-extrabold text-red-400 tracking-tight my-2">
+          <div className="text-3xl font-extrabold text-red-400 light:text-red-600 tracking-tight my-2">
             EGP {totalExpense.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
-          <p className="text-xs text-slate-400">Automatically subtracted from Gross Profit</p>
+          <p className="text-xs text-slate-400 light:text-slate-500">Automatically subtracted from Gross Profit</p>
         </motion.div>
 
         {/* Repaired / Fixed Devices Card */}
@@ -259,43 +259,43 @@ export default function Maintenance() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-950/80 via-slate-900 to-slate-900 border border-emerald-500/40 p-6 shadow-xl"
+          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-950/80 via-slate-900 to-slate-900 light:from-emerald-50 light:to-white border border-emerald-500/40 light:border-emerald-300 p-6 shadow-xl"
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-              <CheckCircle className="w-4 h-4 text-emerald-400" /> {t("fixedRestored")}
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 light:text-emerald-700 flex items-center gap-1.5">
+              <CheckCircle className="w-4 h-4 text-emerald-400 light:text-emerald-600" /> {t("fixedRestored")}
             </span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 light:bg-emerald-100 text-emerald-300 light:text-emerald-800 border border-emerald-500/30 light:border-emerald-300">
               {t("ready")}
             </span>
           </div>
-          <div className="text-3xl font-extrabold text-white tracking-tight my-2">
-            {repairedCount} <span className="text-sm font-normal text-slate-400">{t("activeCount")}</span>
+          <div className="text-3xl font-extrabold text-white light:text-slate-900 tracking-tight my-2">
+            {repairedCount} <span className="text-sm font-normal text-slate-400 light:text-slate-500">{t("activeCount")}</span>
           </div>
         </motion.div>
       </div>
 
       {/* Filters & Search */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/60 p-4 rounded-xl border border-white/10">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/60 light:bg-white p-4 rounded-xl border border-white/10 light:border-slate-300 shadow-sm">
         <div className="relative w-full sm:w-72">
-          <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400 light:text-slate-500" />
           <input
             type="text"
             placeholder={t("searchMaintPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-slate-800/80 border border-white/10 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"
+            className="w-full pl-9 pr-4 py-2 bg-slate-800/80 light:bg-slate-50 border border-white/10 light:border-slate-300 rounded-xl text-xs text-white light:text-slate-900 placeholder-slate-400 light:placeholder-slate-500 focus:outline-none focus:border-amber-500"
           />
         </div>
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
-          <Filter className="w-4 h-4 text-slate-400" />
+          <Filter className="w-4 h-4 text-slate-400 light:text-slate-500" />
           <button
             onClick={() => setStatusFilter("ALL")}
             className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
               statusFilter === "ALL"
-                ? "bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/20"
-                : "bg-slate-800 text-slate-300 border-white/10 hover:bg-slate-700"
+                ? "bg-amber-500 text-slate-950 border-amber-400"
+                : "bg-slate-800 light:bg-slate-100 text-slate-300 light:text-slate-800 border-white/10 light:border-slate-300 hover:bg-slate-700 light:hover:bg-slate-200"
             }`}
           >
             {t("filterAll")} ({logs.length})
@@ -305,8 +305,8 @@ export default function Maintenance() {
             onClick={() => setStatusFilter("Under Maintenance")}
             className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
               statusFilter === "Under Maintenance"
-                ? "bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/20"
-                : "bg-slate-800 text-amber-400 border-white/10 hover:bg-slate-700"
+                ? "bg-amber-500 text-slate-950 border-amber-400"
+                : "bg-slate-800 light:bg-amber-50 text-amber-400 light:text-amber-800 border-white/10 light:border-amber-300 hover:bg-slate-700 light:hover:bg-amber-100"
             }`}
           >
             🛠️ {t("filterDown")} ({activeDownCount})
@@ -316,8 +316,8 @@ export default function Maintenance() {
             onClick={() => setStatusFilter("Repaired / Fixed")}
             className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
               statusFilter === "Repaired / Fixed"
-                ? "bg-emerald-500 text-slate-950 border-emerald-400 shadow-md shadow-emerald-500/20"
-                : "bg-slate-800 text-emerald-400 border-white/10 hover:bg-slate-700"
+                ? "bg-emerald-500 text-slate-950 border-emerald-400"
+                : "bg-slate-800 light:bg-emerald-50 text-emerald-400 light:text-emerald-800 border-white/10 light:border-emerald-300 hover:bg-slate-700 light:hover:bg-emerald-100"
             }`}
           >
             ✅ {t("filterFixed")} ({repairedCount})
@@ -326,10 +326,10 @@ export default function Maintenance() {
       </div>
 
       {/* Maintenance Records Table */}
-      <div className="bg-slate-900/60 border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+      <div className="bg-slate-900/60 light:bg-white border border-white/10 light:border-slate-300 rounded-2xl overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-800/80 text-slate-400 uppercase font-semibold text-[11px] border-b border-white/10">
+          <table className="w-full text-left text-xs text-slate-300 light:text-slate-900">
+            <thead className="bg-slate-800/80 light:bg-slate-100 text-slate-400 light:text-slate-700 uppercase font-semibold text-[11px] border-b border-white/10 light:border-slate-200">
               <tr>
                 <th className="py-3 px-4">{t("colStationDevice")}</th>
                 <th className="py-3 px-4">{t("colStatus")}</th>

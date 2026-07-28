@@ -10,7 +10,7 @@ export function Dialog({ open, onOpenChange, children }: Props) {
   return (
     <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => onOpenChange(false)} />
-      <div className="relative z-10 w-full max-w-lg rounded-2xl bg-slate-900 shadow-2xl border border-white/20 p-6 text-slate-100">{children}</div>
+      <div className="relative z-10 w-full max-w-lg rounded-2xl bg-slate-900 light:bg-white shadow-2xl border border-white/20 light:border-slate-300 p-6 text-slate-100 light:text-slate-900">{children}</div>
     </div>
   )
 }
@@ -18,9 +18,9 @@ export function DialogHeader({ children, className = '' }: { children: React.Rea
   return <div className={`mb-4 ${className}`.trim()}>{children}</div>
 }
 export function DialogTitle({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <h2 className={`text-xl font-bold text-white ${className}`.trim()}>{children}</h2>
+  return <h2 className={`text-xl font-bold text-white light:text-slate-900 ${className}`.trim()}>{children}</h2>
 }
 export function DialogDescription({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <p className={`text-sm text-slate-400 mt-1 ${className}`.trim()}>{children}</p>
+  return <p className={`text-sm text-slate-400 light:text-slate-600 mt-1 ${className}`.trim()}>{children}</p>
 }
 export default Dialog

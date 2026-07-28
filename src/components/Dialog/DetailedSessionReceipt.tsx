@@ -216,24 +216,24 @@ export default function DetailedSessionReceipt({
               </div>
 
               {/* Financial Grand Total */}
-              <div className="bg-gradient-to-r from-emerald-950/80 to-slate-900 light:from-emerald-50 light:to-emerald-100/50 print:from-slate-100 print:to-slate-100 p-4 rounded-xl border border-emerald-500/40 light:border-emerald-300 print:border-slate-400 text-emerald-300 light:text-emerald-900 print:text-black space-y-2">
-                <div className="flex justify-between text-xs text-slate-300 light:text-slate-700 print:text-slate-700">
+              <div className="bg-slate-950/80 light:bg-emerald-50 p-4 rounded-xl border border-emerald-500/40 light:border-emerald-300 text-emerald-300 light:text-emerald-950 space-y-2">
+                <div className="flex justify-between text-xs text-slate-300 light:text-slate-700">
                   <span>Base Gaming Session:</span>
-                  <span>{baseSessionPrice} EGP</span>
+                  <span className="font-semibold text-slate-100 light:text-slate-900">{baseSessionPrice} EGP</span>
                 </div>
                 {delayPenaltyFee > 0 && (
-                  <div className="flex justify-between text-xs text-red-300 light:text-red-700 print:text-red-700">
+                  <div className="flex justify-between text-xs text-red-300 light:text-red-700">
                     <span>Overtime Penalty Fee:</span>
-                    <span>+{delayPenaltyFee} EGP</span>
+                    <span className="font-semibold text-red-400 light:text-red-700">+{delayPenaltyFee} EGP</span>
                   </div>
                 )}
-                <div className="flex justify-between text-xs text-amber-300 light:text-amber-800 print:text-slate-700">
+                <div className="flex justify-between text-xs text-amber-300 light:text-amber-800">
                   <span>Drinks & Snacks Total:</span>
-                  <span>+{snacksTotal} EGP</span>
+                  <span className="font-semibold text-amber-400 light:text-amber-800">+{snacksTotal} EGP</span>
                 </div>
-                <div className="border-t border-emerald-500/30 light:border-emerald-300 print:border-slate-400 pt-2 flex justify-between items-center text-lg font-extrabold text-white light:text-slate-900 print:text-black">
-                  <span>Grand Total Bill:</span>
-                  <span className="text-2xl text-emerald-400 light:text-emerald-700 print:text-black">{grandTotal} EGP</span>
+                <div className="border-t border-emerald-500/30 light:border-emerald-300 pt-2 flex justify-between items-center text-lg font-extrabold text-white light:text-slate-900">
+                  <span className="text-white light:text-slate-900">Grand Total Bill:</span>
+                  <span className="text-2xl text-emerald-400 light:text-emerald-700 font-black">{grandTotal} EGP</span>
                 </div>
               </div>
 
