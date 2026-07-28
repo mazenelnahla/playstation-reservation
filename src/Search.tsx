@@ -270,10 +270,10 @@ export default function SearchPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
             <Button
               size="sm"
-              className="h-10 px-5 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl shadow-lg shadow-blue-600/20 font-bold text-xs sm:text-sm transition-all shrink-0 border border-blue-400/30"
+              className="h-10 px-5 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl shadow-lg shadow-blue-600/20 font-bold text-xs sm:text-sm transition-all shrink-0 border border-blue-400/30 w-full sm:w-auto"
               onClick={() => setDataEntryOpen(true)}
             >
               <PlusIcon className="w-4 h-4 stroke-[2.5]" />
@@ -333,11 +333,8 @@ export default function SearchPage() {
                     </button>
                   </div>
                 </div>
-                
-              </div>
-
               {/* Sleek Table Header Toolbar (no-print) */}
-              <div className="pt-2 no-print flex items-center justify-between gap-3 flex-wrap border-t border-white/10">
+              <div className="pt-3 no-print flex items-center justify-between gap-3 flex-wrap">
                 <button
                   onClick={() => {
                     setShowMissingOut((s) => {
@@ -362,6 +359,9 @@ export default function SearchPage() {
                   {t("showingRecords")} <span className="text-slate-100 light:text-slate-900 font-bold">{filtered.length}</span> {t("records")}
                 </div>
               </div>
+
+              </div>
+
 
               {/* Advanced Search Dropdown Box Panel */}
               <AnimatePresence>
