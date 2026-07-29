@@ -255,11 +255,12 @@ const Login = ({ theme = "dark", toggleTheme }: LoginProps) => {
             {/* Success Message */}
             {success && (
               <motion.div
-                className="flex items-center gap-2 p-2.5 bg-emerald-500/10 light:bg-emerald-50 border border-emerald-500/50 light:border-emerald-300 rounded-lg"
+                className="flex items-center gap-2 p-2.5 bg-emerald-950/40 light:bg-emerald-100/90 border border-emerald-500/50 light:border-emerald-300 rounded-lg shadow-sm"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <span className="text-emerald-200 light:text-emerald-800 text-xs sm:text-sm font-semibold">
+                <CheckCircle className="text-emerald-400 light:text-emerald-700 shrink-0" size={18} />
+                <span className="text-emerald-300 light:text-emerald-950 text-xs sm:text-sm font-bold">
                   {isLogin
                     ? t("loginSuccess")
                     : t("accountCreatedSuccess")}

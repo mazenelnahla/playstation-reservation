@@ -163,10 +163,10 @@ export default function StationGrid({ sessions, onRefresh, onSaveOut, onOpenNewS
       </div>
 
       {filteredSessions.length === 0 ? (
-        <div className="text-center py-10 bg-slate-900/40 light:bg-white rounded-2xl border border-white/5 light:border-slate-200">
-          <Gamepad2 className="w-12 h-12 text-slate-600 light:text-slate-400 mx-auto mb-2 opacity-50" />
-          <p className="text-sm font-semibold text-slate-400 light:text-slate-600">{t("noActiveStations")}</p>
-          <p className="text-xs text-slate-500 light:text-slate-400">{t("startNewSessionPrompt")}</p>
+        <div className="empty-station-card text-center py-10 rounded-2xl border border-white/10 dark:bg-slate-900/40 light:bg-white light:border-slate-300 light:shadow-md shadow-xs">
+          <Gamepad2 className="w-12 h-12 text-emerald-500 light:text-emerald-600 mx-auto mb-2 opacity-90" />
+          <p className="text-sm font-extrabold text-slate-200 light:text-slate-900">{t("noActiveStations")}</p>
+          <p className="text-xs text-slate-400 light:text-slate-600 mt-1">{t("startNewSessionPrompt")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

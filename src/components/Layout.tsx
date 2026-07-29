@@ -126,6 +126,8 @@ export default function Layout({ children }: LayoutProps) {
         toggleTheme={toggleTheme}
         isAdmin={isAdmin}
         username={username}
+        avatarColor={avatarColor}
+        colorGradients={colorGradients}
         handleLogout={handleLogout}
         closeSidebarOnMobile={closeSidebarOnMobile}
       />

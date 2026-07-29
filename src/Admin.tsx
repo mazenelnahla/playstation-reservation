@@ -460,7 +460,7 @@ export default function AdminPage() {
 
       {/* Users List Table Container */}
       <div className="bg-slate-800/60 light:bg-white border border-white/10 light:border-slate-300 rounded-2xl shadow-xl overflow-hidden backdrop-blur-md">
-        <div className="p-4 border-b border-white/10 light:border-slate-200 flex items-center justify-between bg-slate-900/40 light:bg-slate-100/80">
+        <div className="p-4 border-b border-white/10 light:border-slate-200 flex items-center justify-between bg-slate-900/40 light:bg-slate-100">
           <div className="flex items-center gap-2 text-white light:text-slate-900 font-bold text-base">
             <Users className="w-5 h-5 text-blue-400 light:text-blue-600" />
             <span>{t("registeredUsers")} ({users.length})</span>
@@ -672,7 +672,7 @@ export default function AdminPage() {
 
       {/* ⏱️ Overtime Charging Rate Settings (Admin Only) */}
       <div className="bg-slate-800/60 light:bg-white border border-white/10 light:border-slate-300 rounded-2xl shadow-xl overflow-hidden backdrop-blur-md">
-        <div className="p-4 border-b border-white/10 light:border-slate-200 flex items-center justify-between bg-slate-900/40 light:bg-slate-100/80">
+        <div className="p-4 border-b border-white/10 light:border-slate-200 flex items-center justify-between bg-slate-900/40 light:bg-slate-100">
           <div className="flex items-center gap-2 text-white light:text-slate-900 font-bold text-base">
             <Clock className="w-5 h-5 text-amber-400" />
             <span>Overtime Charging Rate Settings</span>
@@ -690,18 +690,18 @@ export default function AdminPage() {
                   : "bg-slate-900/80 border-white/10 text-slate-400 hover:border-white/20"
               }`}
             >
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-xs text-white">Standard Hourly Pro-Rata</span>
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <span className="font-bold text-xs text-white truncate">Standard Hourly Pro-Rata</span>
                 <input
                   type="radio"
                   name="overtimeMode"
                   checked={overtimeConfig.mode === "standard"}
                   onChange={() => {}}
-                  className="accent-amber-500 cursor-pointer"
+                  className="w-4 h-4 accent-amber-500 cursor-pointer shrink-0"
                 />
               </div>
               <p className="text-[11px] opacity-80 leading-relaxed">
-                Calculated directly from the station's standard hourly rate (<code className="text-amber-400">Station Hourly Rate / 60 mins</code>).
+                Calculated directly from the station's standard hourly rate (<code className="text-amber-400">Rate / 60m</code>).
               </p>
             </div>
 
@@ -713,10 +713,10 @@ export default function AdminPage() {
                   : "bg-slate-900/80 border-white/10 text-slate-400"
               }`}
             >
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between gap-2 mb-2">
                 <span
                   onClick={() => handleSaveOvertimeConfig({ ...overtimeConfig, mode: "fixed" })}
-                  className="font-bold text-xs text-white cursor-pointer"
+                  className="font-bold text-xs text-white cursor-pointer truncate"
                 >
                   Fixed EGP per Minute
                 </span>
@@ -725,7 +725,7 @@ export default function AdminPage() {
                   name="overtimeMode"
                   checked={overtimeConfig.mode === "fixed"}
                   onChange={() => handleSaveOvertimeConfig({ ...overtimeConfig, mode: "fixed" })}
-                  className="accent-amber-500 cursor-pointer"
+                  className="w-4 h-4 accent-amber-500 cursor-pointer shrink-0"
                 />
               </div>
               <div className="flex items-center gap-2 mt-2">
@@ -740,9 +740,9 @@ export default function AdminPage() {
                       customRatePerMin: parseFloat(e.target.value) || 0,
                     })
                   }
-                  className="w-full h-9 bg-slate-800 border border-amber-500/30 rounded-lg px-2 text-xs font-bold text-amber-400 focus:outline-none focus:border-amber-400"
+                  className="!w-24 h-9 bg-slate-800 light:bg-white border border-amber-500/30 rounded-lg px-2.5 text-xs font-bold text-amber-400 light:text-amber-700 focus:outline-none focus:border-amber-400"
                 />
-                <span className="text-xs font-semibold text-slate-300 shrink-0">EGP / min</span>
+                <span className="text-xs font-semibold text-slate-300 light:text-slate-700 shrink-0">EGP / min</span>
               </div>
             </div>
 
@@ -754,10 +754,10 @@ export default function AdminPage() {
                   : "bg-slate-900/80 border-white/10 text-slate-400"
               }`}
             >
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between gap-2 mb-2">
                 <span
                   onClick={() => handleSaveOvertimeConfig({ ...overtimeConfig, mode: "multiplier" })}
-                  className="font-bold text-xs text-white cursor-pointer"
+                  className="font-bold text-xs text-white cursor-pointer truncate"
                 >
                   Overtime Multiplier Rate
                 </span>
@@ -766,7 +766,7 @@ export default function AdminPage() {
                   name="overtimeMode"
                   checked={overtimeConfig.mode === "multiplier"}
                   onChange={() => handleSaveOvertimeConfig({ ...overtimeConfig, mode: "multiplier" })}
-                  className="accent-amber-500 cursor-pointer"
+                  className="w-4 h-4 accent-amber-500 cursor-pointer shrink-0"
                 />
               </div>
               <div className="flex items-center gap-2 mt-2">
@@ -781,9 +781,9 @@ export default function AdminPage() {
                       multiplier: parseFloat(e.target.value) || 1,
                     })
                   }
-                  className="w-full h-9 bg-slate-800 border border-amber-500/30 rounded-lg px-2 text-xs font-bold text-amber-400 focus:outline-none focus:border-amber-400"
+                  className="!w-24 h-9 bg-slate-800 light:bg-white border border-amber-500/30 rounded-lg px-2.5 text-xs font-bold text-amber-400 light:text-amber-700 focus:outline-none focus:border-amber-400"
                 />
-                <span className="text-xs font-semibold text-slate-300 shrink-0">x Hourly Rate</span>
+                <span className="text-xs font-semibold text-slate-300 light:text-slate-700 shrink-0">x Hourly Rate</span>
               </div>
             </div>
           </div>

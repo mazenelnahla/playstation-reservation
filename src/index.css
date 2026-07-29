@@ -51,6 +51,11 @@ html.light h1, html.light h2, html.light h3, html.light h4, html.light h5, html.
   color: #0f172a;
 }
 
+input, select, textarea {
+  width: 100%;
+  border-radius: 0.75rem;
+}
+
 html.light input, html.light textarea, html.light select {
   background-color: #ffffff !important;
   border-color: #cbd5e1 !important;
@@ -143,6 +148,31 @@ html.light .bg-slate-900\/60,
 html.light .bg-slate-950\/80,
 html.light .bg-slate-950 {
   background-color: #ffffff !important;
+}
+
+html.light .empty-station-card {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+}
+
+html.light .empty-station-card p,
+html.light .empty-station-card span {
+  color: #0f172a !important;
+}
+
+
+html.light .bg-slate-900\/40 {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html.light .bg-slate-900\/40 h1,
+html.light .bg-slate-900\/40 h2,
+html.light .bg-slate-900\/40 h3,
+html.light .bg-slate-900\/40 span,
+html.light .bg-slate-900\/40 p {
+  color: #0f172a !important;
 }
 
 html.light .bg-slate-800,

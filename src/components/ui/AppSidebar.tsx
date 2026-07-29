@@ -25,6 +25,8 @@ interface SidebarNavProps {
   toggleTheme: () => void;
   isAdmin: boolean;
   username: string;
+  avatarColor: string;
+  colorGradients: Record<string, string>;
   handleLogout: () => void;
   closeSidebarOnMobile: () => void;
 }
@@ -36,6 +38,8 @@ export function AppSidebar({
   toggleTheme,
   isAdmin,
   username,
+  avatarColor,
+  colorGradients,
   handleLogout,
   closeSidebarOnMobile,
 }: SidebarNavProps) {
@@ -193,8 +197,12 @@ export function AppSidebar({
                 title={t("profile")}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold shrink-0 bg-slate-700 light:bg-slate-400">
-                    <User className="w-4 h-4 text-white shrink-0" />
+                  <div
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0 bg-gradient-to-br ${
+                      colorGradients[avatarColor] || colorGradients.blue
+                    }`}
+                  >
+                    {username ? username.charAt(0).toUpperCase() : "U"}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs sm:text-sm font-semibold text-white light:text-slate-900 truncate">
