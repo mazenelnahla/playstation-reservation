@@ -24,90 +24,95 @@ if (!fs.existsSync(dataDir)) {
 }
 
 const dbPath = path.join(dataDir, "data.db");
-const db = new Database(dbPath);
+let db = null;
+let isDbInitialized = fs.existsSync(dbPath);
 
-console.log(`Database location: ${dbPath}`);
+console.log(`Database location: ${dbPath} (Exists: ${isDbInitialized})`);
 
-// Initialize database
-db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id TEXT PRIMARY KEY,
-    email TEXT NOT NULL UNIQUE,
-    name TEXT NOT NULL,
-    password TEXT NOT NULL,
-    isAdmin INTEGER DEFAULT 0,
-    createdAt TEXT NOT NULL,
-    updatedAt TEXT NOT NULL
-  );
-
-  CREATE TABLE IF NOT EXISTS records (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    Date_in TEXT NOT NULL,
-    CustomerName TEXT NOT NULL,
-    CustomerPhoneNumber TEXT NOT NULL,
-    Device_Type TEXT NOT NULL,
-    VendorName TEXT NOT NULL,
-    ModelName TEXT NOT NULL,
-    issue TEXT NOT NULL,
-    MaintinancePrice TEXT NOT NULL,
-    Date_out TEXT,
-    DoneBy TEXT,
-    Notes TEXT
-  );
-
-  CREATE TABLE IF NOT EXISTS vendorNames (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,
-    stationType TEXT DEFAULT 'PS5 Station'
-  );
-
-  CREATE TABLE IF NOT EXISTS menuItems (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,
-    category TEXT NOT NULL,
-    price REAL NOT NULL
-  );
-
-  CREATE TABLE IF NOT EXISTS sessionOrders (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    recordId INTEGER NOT NULL,
-    itemName TEXT NOT NULL,
-    quantity INTEGER NOT NULL,
-    price REAL NOT NULL,
-    createdAt TEXT NOT NULL
-  );
-
-  CREATE TABLE IF NOT EXISTS dailyResets (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    resetAt TEXT NOT NULL,
-    totalProfit REAL NOT NULL,
-    sessionCount INTEGER NOT NULL,
-    resetBy TEXT NOT NULL
-  );
-
-  CREATE TABLE IF NOT EXISTS maintenanceLogs (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    deviceName TEXT NOT NULL,
-    cost REAL NOT NULL DEFAULT 0,
-    description TEXT,
-    status TEXT NOT NULL DEFAULT 'Under Maintenance',
-    createdAt TEXT NOT NULL
-  );
-`);
-
-// Migration: add stationType column if missing
-try {
-  const tableInfo = db.prepare("PRAGMA table_info(vendorNames)").all();
-  const hasStationType = tableInfo.some((col) => col.name === 'stationType');
-  if (!hasStationType) {
-    db.exec("ALTER TABLE vendorNames ADD COLUMN stationType TEXT DEFAULT 'PS5 Station'");
+// Helper function to initialize sqlite tables and default data
+async function initializeDatabase() {
+  if (!db) {
+    db = new Database(dbPath);
   }
-} catch (e) {
-  console.warn("vendorNames migration warning:", e);
-}
 
-// Seed default Admin user if users table is empty
-(async () => {
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      email TEXT NOT NULL UNIQUE,
+      name TEXT NOT NULL,
+      password TEXT NOT NULL,
+      isAdmin INTEGER DEFAULT 0,
+      createdAt TEXT NOT NULL,
+      updatedAt TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS records (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      Date_in TEXT NOT NULL,
+      CustomerName TEXT NOT NULL,
+      CustomerPhoneNumber TEXT NOT NULL,
+      Device_Type TEXT NOT NULL,
+      VendorName TEXT NOT NULL,
+      ModelName TEXT NOT NULL,
+      issue TEXT NOT NULL,
+      MaintinancePrice TEXT NOT NULL,
+      Date_out TEXT,
+      DoneBy TEXT,
+      Notes TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS vendorNames (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL UNIQUE,
+      stationType TEXT DEFAULT 'PS5 Station'
+    );
+
+    CREATE TABLE IF NOT EXISTS menuItems (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL UNIQUE,
+      category TEXT NOT NULL,
+      price REAL NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS sessionOrders (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      recordId INTEGER NOT NULL,
+      itemName TEXT NOT NULL,
+      quantity INTEGER NOT NULL,
+      price REAL NOT NULL,
+      createdAt TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS dailyResets (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      resetAt TEXT NOT NULL,
+      totalProfit REAL NOT NULL,
+      sessionCount INTEGER NOT NULL,
+      resetBy TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS maintenanceLogs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      deviceName TEXT NOT NULL,
+      cost REAL NOT NULL DEFAULT 0,
+      description TEXT,
+      status TEXT NOT NULL DEFAULT 'Under Maintenance',
+      createdAt TEXT NOT NULL
+    );
+  `);
+
+  try {
+    db.exec("DROP TABLE IF EXISTS maintenanceNames;");
+    const tableInfo = db.prepare("PRAGMA table_info(vendorNames)").all();
+    const hasStationType = tableInfo.some((col) => col.name === 'stationType');
+    if (!hasStationType) {
+      db.exec("ALTER TABLE vendorNames ADD COLUMN stationType TEXT DEFAULT 'PS5 Station'");
+    }
+  } catch (e) {
+    console.warn("Migration warning:", e);
+  }
+
+  // Seed default Admin user if users table is empty
   try {
     const count = db.prepare("SELECT COUNT(*) as count FROM users").get();
     if (count.count === 0) {
@@ -133,7 +138,53 @@ try {
   } catch (err) {
     console.error("Failed to seed default admin or device categories:", err);
   }
-})();
+
+  isDbInitialized = true;
+}
+
+if (isDbInitialized) {
+  initializeDatabase();
+}
+
+// Check database status
+app.get("/api/db/status", (req, res) => {
+  res.json({
+    initialized: isDbInitialized && fs.existsSync(dbPath),
+    exists: fs.existsSync(dbPath),
+  });
+});
+
+// Create/Unlock database with master password
+app.post("/api/db/initialize", async (req, res) => {
+  try {
+    const { password } = req.body;
+    // Accept valid master password ('123456' or tech password)
+    if (!password || (password !== "123456" && password !== "admin123")) {
+      return res.status(401).json({ error: "Invalid master authorization password." });
+    }
+
+    await initializeDatabase();
+    console.log("✅ Database initialized successfully after password authorization!");
+    res.json({ success: true, message: "Database created and initialized successfully." });
+  } catch (error) {
+    console.error("Error initializing database:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Middleware to block all API routes if database is not authorized / created
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api/db/")) {
+    return next();
+  }
+  if (!isDbInitialized || !fs.existsSync(dbPath)) {
+    return res.status(423).json({
+      error: "Database file is missing or not initialized. Master authorization password required.",
+      dbLocked: true,
+    });
+  }
+  next();
+});
 
 // Records API
 app.get("/api/records", (req, res) => {
@@ -601,7 +652,53 @@ app.delete("/api/users/:id", (req, res) => {
   }
 });
 
+// Reset Database (Admin only, retains admin users & default categories)
+app.post("/api/admin/reset-database", async (req, res) => {
+  try {
+    const { techPassword } = req.body;
+    if (!techPassword) {
+      return res.status(400).json({ error: "Password verification required" });
+    }
+
+    // Verify password against any existing Admin account
+    const adminUsers = db.prepare("SELECT * FROM users WHERE isAdmin = 1").all();
+    if (!adminUsers || adminUsers.length === 0) {
+      return res.status(403).json({ error: "No admin user found to authorize operation" });
+    }
+
+    let authenticated = false;
+    for (const admin of adminUsers) {
+      const match = await bcrypt.compare(techPassword, admin.password);
+      if (match) {
+        authenticated = true;
+        break;
+      }
+    }
+
+    if (!authenticated) {
+      return res.status(401).json({ error: "Invalid password. Access denied." });
+    }
+
+    // Clear all application data tables
+    db.exec(`
+      DELETE FROM records;
+      DELETE FROM sessionOrders;
+      DELETE FROM dailyResets;
+      DELETE FROM maintenanceLogs;
+      DELETE FROM users WHERE isAdmin = 0;
+      DELETE FROM sqlite_sequence WHERE name IN ('records', 'sessionOrders', 'dailyResets', 'maintenanceLogs');
+    `);
+
+    console.log("🧹 Database successfully reset by Admin. All session records, orders, resets, maintenance logs, and non-admin staff deleted.");
+    res.json({ success: true, message: "Database wiped successfully. Admin accounts preserved." });
+  } catch (error) {
+    console.error("Failed to reset database:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
   console.log(`📁 Database: ${dbPath}`);
 });
+

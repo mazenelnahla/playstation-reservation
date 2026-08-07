@@ -41,6 +41,7 @@ import {
   createMenuItem,
   updateMenuItem,
   deleteMenuItem,
+  resetDatabase,
   MenuItem,
 } from "./DataHandle/storage";
 import {
@@ -52,13 +53,43 @@ import {
 import { useLanguage } from "./context/LanguageContext";
 
 export default function AdminPage() {
-  const { t } = useLanguage();
+  const { language, isRtl, t } = useLanguage();
+  const isAr = language === "ar";
   const [users, setUsers] = useState<UserItem[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [newSnackName, setNewSnackName] = useState("");
   const [newSnackCategory, setNewSnackCategory] = useState("Beverage");
   const [newSnackPrice, setNewSnackPrice] = useState("");
   const [addingSnack, setAddingSnack] = useState(false);
+
+  // Reset Database State (Admin Only + Tech Password Verification)
+  const [isResetDbModalOpen, setIsResetDbModalOpen] = useState(false);
+  const [techPasswordInput, setTechPasswordInput] = useState("");
+  const [resettingDb, setResettingDb] = useState(false);
+  const [resetDbError, setResetDbError] = useState("");
+
+  const handleResetDatabase = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!techPasswordInput.trim()) return;
+    setResettingDb(true);
+    setResetDbError("");
+    try {
+      const res = await resetDatabase(techPasswordInput.trim());
+      if (!res.success) {
+        setResetDbError(res.error || "Invalid password or access denied.");
+        return;
+      }
+      setIsResetDbModalOpen(false);
+      setTechPasswordInput("");
+      setSuccessMsg("Database successfully wiped and reset! All admin accounts preserved.");
+      await loadUserList();
+      setTimeout(() => setSuccessMsg(""), 5000);
+    } catch (err: any) {
+      setResetDbError(err.message || "Failed to reset database.");
+    } finally {
+      setResettingDb(false);
+    }
+  };
 
   // Edit Menu Item state
   const [editingMenuItem, setEditingMenuItem] = useState<MenuItem | null>(null);
@@ -585,10 +616,10 @@ export default function AdminPage() {
         <div className="p-4 border-b border-white/10 light:border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-900/40 light:bg-slate-100/80">
           <div className="flex items-center gap-2 text-white light:text-slate-900 font-bold text-base">
             <DollarSign className="w-5 h-5 text-emerald-400" />
-            <span>Gaming Station Rates & Hourly Pricing</span>
+            <span>{isAr ? "أسعار وسعر الساعة للأجهزة والغرف" : "Gaming Station Rates & Hourly Pricing"}</span>
           </div>
           <span className="text-xs text-slate-400">
-            Edit station names, hourly rates, or add new gaming stations
+            {isAr ? "تعديل أسعار الساعة وإضافة أجهزة وغرف جديدة" : "Edit station names, hourly rates, or add new gaming stations"}
           </span>
         </div>
 
@@ -596,9 +627,11 @@ export default function AdminPage() {
           {/* Add New Gaming Station Rate Form */}
           <form onSubmit={handleAddStationRate} className="bg-slate-900/90 light:bg-slate-100 p-4 rounded-xl border border-white/10 light:border-slate-300 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end shadow-md">
             <div className="sm:col-span-2">
-              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">Station Name</Label>
+              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">
+                {isAr ? "اسم الجهاز / الفئة" : "Station Name"}
+              </Label>
               <Input
-                placeholder="e.g. PS5 Station 2, VIP Room B..."
+                placeholder={isAr ? "مثال: جهاز PS5 #2، غرفة VIP B..." : "e.g. PS5 Station 2, VIP Room B..."}
                 value={newStationName}
                 onChange={(e) => setNewStationName(e.target.value)}
                 className="h-10 text-xs bg-slate-800 light:bg-white text-white light:text-slate-900 border-white/10 focus:border-emerald-500"
@@ -606,7 +639,9 @@ export default function AdminPage() {
               />
             </div>
             <div>
-              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">Hourly Rate (EGP/hr)</Label>
+              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">
+                {isAr ? "سعر الساعة (جنيه/ساعة)" : "Hourly Rate (EGP/hr)"}
+              </Label>
               <Input
                 type="number"
                 step="5"
@@ -623,7 +658,7 @@ export default function AdminPage() {
                 className="w-full h-10 text-xs bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-slate-950 font-extrabold flex items-center justify-center gap-1.5 rounded-xl shadow-md transition-all"
               >
                 <Plus className="w-4 h-4" />
-                Add Station
+                {isAr ? "إضافة فئة/جهاز" : "Add Station"}
               </Button>
             </div>
           </form>
@@ -662,7 +697,7 @@ export default function AdminPage() {
                     onChange={(e) => handleSaveHourlyRate(station, parseFloat(e.target.value) || 0)}
                     className="w-full h-9 bg-slate-800 border border-emerald-500/30 rounded-lg px-2.5 text-sm font-bold text-emerald-400 focus:outline-none focus:border-emerald-400"
                   />
-                  <span className="text-xs font-semibold text-slate-400 shrink-0">EGP/hr</span>
+                  <span className="text-xs font-semibold text-slate-400 shrink-0">{isAr ? "ج.م/ساعة" : "EGP/hr"}</span>
                 </div>
               </div>
             ))}
@@ -675,7 +710,7 @@ export default function AdminPage() {
         <div className="p-4 border-b border-white/10 light:border-slate-200 flex items-center justify-between bg-slate-900/40 light:bg-slate-100">
           <div className="flex items-center gap-2 text-white light:text-slate-900 font-bold text-base">
             <Clock className="w-5 h-5 text-amber-400" />
-            <span>Overtime Charging Rate Settings</span>
+            <span>{isAr ? "إعدادات احتساب رسوم الوقت الإضافي (التأخير)" : "Overtime Charging Rate Settings"}</span>
           </div>
         </div>
 
@@ -691,7 +726,7 @@ export default function AdminPage() {
               }`}
             >
               <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="font-bold text-xs text-white truncate">Standard Hourly Pro-Rata</span>
+                <span className="font-bold text-xs text-white truncate">{isAr ? "حساب دقيق بنسبة سعر الساعة" : "Standard Hourly Pro-Rata"}</span>
                 <input
                   type="radio"
                   name="overtimeMode"
@@ -701,7 +736,7 @@ export default function AdminPage() {
                 />
               </div>
               <p className="text-[11px] opacity-80 leading-relaxed">
-                Calculated directly from the station's standard hourly rate (<code className="text-amber-400">Rate / 60m</code>).
+                {isAr ? "يتم الحساب تلقائياً حسب سعر ساعة الجهاز المعين (سعر الساعة / ٦٠ دقيقة)." : "Calculated directly from the station's standard hourly rate (Rate / 60m)."}
               </p>
             </div>
 
@@ -718,7 +753,7 @@ export default function AdminPage() {
                   onClick={() => handleSaveOvertimeConfig({ ...overtimeConfig, mode: "fixed" })}
                   className="font-bold text-xs text-white cursor-pointer truncate"
                 >
-                  Fixed EGP per Minute
+                  {isAr ? "مبلغ ثابت لكل دقيقة تأخير" : "Fixed EGP per Minute"}
                 </span>
                 <input
                   type="radio"
@@ -742,7 +777,7 @@ export default function AdminPage() {
                   }
                   className="!w-24 h-9 bg-slate-800 light:bg-white border border-amber-500/30 rounded-lg px-2.5 text-xs font-bold text-amber-400 light:text-amber-700 focus:outline-none focus:border-amber-400"
                 />
-                <span className="text-xs font-semibold text-slate-300 light:text-slate-700 shrink-0">EGP / min</span>
+                <span className="text-xs font-semibold text-slate-300 light:text-slate-700 shrink-0">{isAr ? "جنيه / دقيقة" : "EGP / min"}</span>
               </div>
             </div>
 
@@ -759,7 +794,7 @@ export default function AdminPage() {
                   onClick={() => handleSaveOvertimeConfig({ ...overtimeConfig, mode: "multiplier" })}
                   className="font-bold text-xs text-white cursor-pointer truncate"
                 >
-                  Overtime Multiplier Rate
+                  {isAr ? "مضاعف سعر الساعة للتأخير" : "Overtime Multiplier Rate"}
                 </span>
                 <input
                   type="radio"
@@ -783,7 +818,7 @@ export default function AdminPage() {
                   }
                   className="!w-24 h-9 bg-slate-800 light:bg-white border border-amber-500/30 rounded-lg px-2.5 text-xs font-bold text-amber-400 light:text-amber-700 focus:outline-none focus:border-amber-400"
                 />
-                <span className="text-xs font-semibold text-slate-300 light:text-slate-700 shrink-0">x Hourly Rate</span>
+                <span className="text-xs font-semibold text-slate-300 light:text-slate-700 shrink-0">{isAr ? "× سعر الساعة" : "x Hourly Rate"}</span>
               </div>
             </div>
           </div>
@@ -795,7 +830,7 @@ export default function AdminPage() {
         <div className="p-4 border-b border-white/10 light:border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-900/40 light:bg-slate-100/80">
           <div className="flex items-center gap-2 text-white light:text-slate-900 font-bold text-base">
             <Coffee className="w-5 h-5 text-amber-400" />
-            <span>Coffee Net Drinks & Snacks Prices</span>
+            <span>{isAr ? "قائمة أسعار المشروبات والمأكولات (الكافيه)" : "Coffee Net Drinks & Snacks Prices"}</span>
           </div>
         </div>
 
@@ -803,9 +838,11 @@ export default function AdminPage() {
           {/* Add New Snack/Drink Price Form */}
           <form onSubmit={handleAddSnack} className="bg-slate-900/90 light:bg-slate-100 p-4 rounded-xl border border-white/10 light:border-slate-300 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-md">
             <div>
-              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">Item Name</Label>
+              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">
+                {isAr ? "اسم المشروب / الصنف" : "Item Name"}
+              </Label>
               <Input
-                placeholder="e.g. Espresso"
+                placeholder={isAr ? "مثال: اسبرسو، شاي..." : "e.g. Espresso"}
                 value={newSnackName}
                 onChange={(e) => setNewSnackName(e.target.value)}
                 className="h-10 text-xs bg-slate-800 light:bg-white text-white light:text-slate-900 border-white/10 light:border-slate-300 focus:border-amber-500"
@@ -813,19 +850,23 @@ export default function AdminPage() {
               />
             </div>
             <div>
-              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">Category</Label>
+              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">
+                {isAr ? "الفئة" : "Category"}
+              </Label>
               <select
                 value={newSnackCategory}
                 onChange={(e) => setNewSnackCategory(e.target.value)}
                 className="w-full h-10 text-xs bg-slate-800 light:bg-white text-white light:text-slate-900 border border-white/10 light:border-slate-300 rounded-xl px-3 outline-none focus:border-amber-500"
               >
-                <option value="Beverage" className="bg-slate-900 text-white">Beverage ☕</option>
-                <option value="Snack" className="bg-slate-900 text-white">Snack 🥨</option>
-                <option value="Other" className="bg-slate-900 text-white">Other 🛒</option>
+                <option value="Beverage" className="bg-slate-900 text-white">{isAr ? "مشروبات ☕" : "Beverage ☕"}</option>
+                <option value="Snack" className="bg-slate-900 text-white">{isAr ? "مأكولات 🥨" : "Snack 🥨"}</option>
+                <option value="Other" className="bg-slate-900 text-white">{isAr ? "أخرى 🛒" : "Other 🛒"}</option>
               </select>
             </div>
             <div>
-              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">Price (EGP)</Label>
+              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">
+                {isAr ? "السعر (جنيه)" : "Price (EGP)"}
+              </Label>
               <Input
                 type="number"
                 step="0.5"
@@ -843,7 +884,7 @@ export default function AdminPage() {
                 className="w-full h-10 text-xs bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold flex items-center justify-center gap-1.5 rounded-xl shadow-md transition-all"
               >
                 <Plus className="w-4 h-4" />
-                Add to Menu
+                {isAr ? "إضافة للقائمة" : "Add to Menu"}
               </Button>
             </div>
           </form>
@@ -853,17 +894,17 @@ export default function AdminPage() {
             <table className="w-full text-xs text-left text-slate-200">
               <thead className="bg-slate-900 text-slate-400 uppercase text-[11px]">
                 <tr>
-                  <th className="p-3">Item Name</th>
-                  <th className="p-3">Category</th>
-                  <th className="p-3">Price</th>
-                  <th className="p-3 text-right">Actions</th>
+                  <th className="p-3">{isAr ? "اسم الصنف" : "Item Name"}</th>
+                  <th className="p-3">{isAr ? "الفئة" : "Category"}</th>
+                  <th className="p-3">{isAr ? "السعر" : "Price"}</th>
+                  <th className="p-3 text-right">{isAr ? "الإجراءات" : "Actions"}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5 bg-slate-900/40">
                 {menuItems.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="p-4 text-center text-slate-500">
-                      No menu items added yet. Use the form above to add items.
+                      {isAr ? "لا توجد أصناف في القائمة حالياً." : "No menu items added yet. Use the form above to add items."}
                     </td>
                   </tr>
                 ) : (
@@ -871,7 +912,7 @@ export default function AdminPage() {
                     <tr key={item.id} className="hover:bg-slate-800/40">
                       <td className="p-3 font-semibold text-white">{item.name}</td>
                       <td className="p-3 text-slate-400">{item.category}</td>
-                      <td className="p-3 font-bold text-amber-400">{item.price} EGP</td>
+                      <td className="p-3 font-bold text-amber-400">{item.price} {isAr ? "ج.م" : "EGP"}</td>
                       <td className="p-3 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <button
@@ -880,7 +921,7 @@ export default function AdminPage() {
                             title="Edit Item Price or Name"
                           >
                             <Pencil className="w-3.5 h-3.5" />
-                            <span>Edit</span>
+                            <span>{isAr ? "تعديل" : "Edit"}</span>
                           </button>
                           <button
                             onClick={() => handleDeleteSnack(item.id, item.name)}
@@ -905,10 +946,10 @@ export default function AdminPage() {
         <div className="p-4 border-b border-white/10 light:border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-900/40 light:bg-slate-100/80">
           <div className="flex items-center gap-2 text-white light:text-slate-900 font-bold text-base">
             <Gamepad2 className="w-5 h-5 text-blue-400" />
-            <span>Device Models & Categories (PS4, PS5, PC, etc.)</span>
+            <span>{isAr ? "قائمة أسماء وموديلات الأجهزة المعرفة" : "Device Models & Categories (PS4, PS5, PC, etc.)"}</span>
           </div>
           <span className="text-xs text-slate-400">
-            Available across Customer Check-In, Maintenance & Repair Page
+            {isAr ? "الأجهزة المعرفة لاستخدامها عند تسجيل الدخول والصيانة" : "Available across Customer Check-In, Maintenance & Repair Page"}
           </span>
         </div>
 
@@ -916,9 +957,11 @@ export default function AdminPage() {
           {/* Add New Device Category Form */}
           <form onSubmit={handleAddVendor} className="bg-slate-900/90 light:bg-slate-100 p-4 rounded-xl border border-white/10 light:border-slate-300 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end shadow-md">
             <div className="sm:col-span-2">
-              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">Device Model / Device Name</Label>
+              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">
+                {isAr ? "اسم ورقم الجهاز" : "Device Model / Device Name"}
+              </Label>
               <Input
-                placeholder="e.g. PS5 #1, PS4 #2, Gaming PC #3..."
+                placeholder={isAr ? "مثال: PS5 #1، كمبيوتر #3..." : "e.g. PS5 #1, PS4 #2, Gaming PC #3..."}
                 value={newVendorName}
                 onChange={(e) => setNewVendorName(e.target.value)}
                 className="h-10 text-xs bg-slate-800 light:bg-white text-white light:text-slate-900 border-white/10 light:border-slate-300 focus:border-blue-500"
@@ -926,7 +969,9 @@ export default function AdminPage() {
               />
             </div>
             <div>
-              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">Linked Station Type / Room</Label>
+              <Label className="text-xs font-semibold text-slate-300 light:text-slate-700 mb-1.5 block">
+                {isAr ? "فئة الجهاز / الغرفة" : "Linked Station Type / Room"}
+              </Label>
               <select
                 value={newVendorStationType}
                 onChange={(e) => setNewVendorStationType(e.target.value)}
@@ -946,7 +991,7 @@ export default function AdminPage() {
                 className="w-full h-10 text-xs bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-extrabold flex items-center justify-center gap-1.5 rounded-xl shadow-md transition-all"
               >
                 <Plus className="w-4 h-4" />
-                Add Device
+                {isAr ? "إضافة جهاز" : "Add Device"}
               </Button>
             </div>
           </form>
@@ -956,16 +1001,16 @@ export default function AdminPage() {
             <table className="w-full text-xs text-left text-slate-200">
               <thead className="bg-slate-900 text-slate-400 uppercase text-[11px]">
                 <tr>
-                  <th className="p-3">Device Name</th>
-                  <th className="p-3">Linked Station Type / Room</th>
-                  <th className="p-3 text-right">Actions</th>
+                  <th className="p-3">{isAr ? "اسم الجهاز" : "Device Name"}</th>
+                  <th className="p-3">{isAr ? "فئة الجهاز" : "Linked Station Type / Room"}</th>
+                  <th className="p-3 text-right">{isAr ? "الإجراءات" : "Actions"}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5 bg-slate-900/40">
                 {vendorList.length === 0 ? (
                   <tr>
                     <td colSpan={3} className="p-4 text-center text-slate-500">
-                      No devices registered yet. Use the form above to add a device.
+                      {isAr ? "لا توجد أجهزة معرفة." : "No devices registered yet. Use the form above to add a device."}
                     </td>
                   </tr>
                 ) : (
@@ -986,7 +1031,7 @@ export default function AdminPage() {
                             title="Edit Device"
                           >
                             <Pencil className="w-3.5 h-3.5" />
-                            <span>Edit</span>
+                            <span>{isAr ? "تعديل" : "Edit"}</span>
                           </button>
                           <button
                             onClick={() => handleDeleteVendor(v.id, v.name)}
@@ -1383,6 +1428,32 @@ export default function AdminPage() {
         </div>
       </Dialog>
 
+      {/* Danger Zone: Reset Database Section */}
+      <div className="bg-[#1F2020] light:bg-white p-6 rounded-2xl border border-red-500/30 light:border-red-300 shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-red-400 light:text-red-600 flex items-center gap-2">
+              <ShieldAlert className="w-5 h-5" />
+              {t("resetDatabaseTitle")}
+            </h3>
+            <p className="text-xs text-slate-400 light:text-slate-600 max-w-2xl">
+              {t("resetDatabaseSub")}
+            </p>
+          </div>
+          <Button
+            onClick={() => {
+              setTechPasswordInput("");
+              setResetDbError("");
+              setIsResetDbModalOpen(true);
+            }}
+            className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-lg shadow-red-600/20 shrink-0"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span>{t("wipeDatabaseBtn")}</span>
+          </Button>
+        </div>
+      </div>
+
       {/* Confirm Delete User Dialog */}
       <Dialog open={!!userToDelete} onOpenChange={() => setUserToDelete(null)}>
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
@@ -1415,6 +1486,76 @@ export default function AdminPage() {
                 {t("delete")}
               </Button>
             </div>
+          </motion.div>
+        </div>
+      </Dialog>
+
+      {/* Reset Database Password Modal */}
+      <Dialog open={isResetDbModalOpen} onOpenChange={setIsResetDbModalOpen}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-slate-900 light:bg-white border border-red-500/40 light:border-red-300 rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-4 text-slate-100 light:text-slate-900"
+          >
+            <div className="flex items-center justify-between border-b border-white/10 light:border-slate-200 pb-3">
+              <div className="flex items-center gap-2 text-red-400 light:text-red-600 font-bold text-lg">
+                <ShieldAlert className="w-5 h-5" />
+                <span>{t("confirmResetDbTitle")}</span>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-300 light:text-slate-700 leading-relaxed bg-red-500/10 light:bg-red-50 p-3 rounded-xl border border-red-500/20 light:border-red-200">
+              {t("confirmResetDbDesc")}
+            </p>
+
+            {resetDbError && (
+              <div className="p-3 bg-red-500/20 light:bg-red-100 border border-red-500/40 text-red-300 light:text-red-800 text-xs rounded-xl flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{resetDbError}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleResetDatabase} className="space-y-4">
+              <div className="space-y-1.5">
+                <Label className="text-xs text-slate-300 light:text-slate-700">
+                  {t("enterTechPassword")}
+                </Label>
+                <div className="relative">
+                  <KeyRound className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+                  <Input
+                    required
+                    type="password"
+                    placeholder="••••••••"
+                    value={techPasswordInput}
+                    onChange={(e) => setTechPasswordInput(e.target.value)}
+                    className="pl-9 bg-slate-800 light:bg-slate-50 border-slate-700 light:border-slate-300 text-white light:text-slate-900 placeholder-slate-500 focus:border-red-500"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => setIsResetDbModalOpen(false)}
+                  className="text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900"
+                >
+                  {t("cancel")}
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={resettingDb || !techPasswordInput.trim()}
+                  className="bg-red-600 hover:bg-red-700 text-white font-bold px-5 flex items-center justify-center gap-2"
+                >
+                  {resettingDb ? (
+                    <Loader className="w-4 h-4 animate-spin" />
+                  ) : (
+                    t("wipeAllDataBtn")
+                  )}
+                </Button>
+              </div>
+            </form>
           </motion.div>
         </div>
       </Dialog>

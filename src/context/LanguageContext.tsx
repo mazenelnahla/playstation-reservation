@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { appConfig } from "../config/appConfig";
 
 export type Language = "en" | "ar";
 
 export const translations = {
   en: {
     // Navbar & Sidebar
-    appName: "Playstation Hub",
-    appSub: "Gaming & Coffee Net",
+    appName: appConfig.appName,
+    appSub: appConfig.appSubtitle,
     jobs: "Dashboard",
     archiveTable: "Sessions History",
     profits: "Financials",
@@ -39,7 +40,7 @@ export const translations = {
     signInLink: "Sign in",
     loginSuccess: "Login successful! Redirecting...",
     accountCreatedSuccess: "Account created! Redirecting to login...",
-    footerCopyright: "PlayStation Hub & Coffee Net System",
+    footerCopyright: appConfig.copyrightText,
 
     // Search & Filter
     searchPlaceholder: "Search customer, station, employee...",
@@ -203,6 +204,13 @@ export const translations = {
     makeAdmin: "Make Admin",
     makeUser: "Remove Admin",
     confirmDeleteUser: "Confirm Delete Employee Account",
+    resetDatabaseTitle: "Database Factory Reset & Wipe",
+    resetDatabaseSub: "Purge all session logs, beverage orders, financial daily resets, and maintenance records while preserving admin accounts.",
+    wipeDatabaseBtn: "Wipe & Reset Entire Database",
+    confirmResetDbTitle: "⚠️ Danger Zone: Confirm Database Reset",
+    confirmResetDbDesc: "This action will permanently delete all session history, snacks orders, repair logs, and non-admin staff accounts. This action CANNOT be undone.",
+    enterTechPassword: "Enter Admin / Tech Password to authorize wipe:",
+    wipeAllDataBtn: "Wipe All Data Permanently",
 
     // Profile Page
     profileTitle: "Profile Configuration",
@@ -225,8 +233,8 @@ export const translations = {
   },
   ar: {
     // Navbar & Sidebar
-    appName: "بلايستيشن هب",
-    appSub: "مركز ألعاب بلايستيشن وكافيه",
+    appName: appConfig.appNameAr || appConfig.appName,
+    appSub: appConfig.appSubtitleAr || appConfig.appSubtitle,
     jobs: "لوحة التحكم",
     archiveTable: "سجل الجلسات",
     profits: "الحسابات والأرباح",
@@ -259,7 +267,7 @@ export const translations = {
     signInLink: "تسجيل الدخول",
     loginSuccess: "تم تسجيل الدخول بنجاح! جاري التوجيه...",
     accountCreatedSuccess: "تم إنشاء الحساب بنجاح! جاري التوجيه لتسجيل الدخول...",
-    footerCopyright: "نظام إدارة صالة البلايستيشن والكافيه",
+    footerCopyright: appConfig.copyrightTextAr || appConfig.copyrightText,
 
     // Search & Filter
     searchPlaceholder: "بحث باسم العميل، الجهاز، الموظف...",
@@ -423,6 +431,13 @@ export const translations = {
     makeAdmin: "منح صلاحية أدمن",
     makeUser: "إلغاء صلاحية أدمن",
     confirmDeleteUser: "تأكيد حذف حساب الموظف",
+    resetDatabaseTitle: "تصفير وإعادة ضبط قاعدة البيانات",
+    resetDatabaseSub: "مسح كافة الجلسات والطلبات وسجلات الصيانة والحسابات اليومية مع الإبقاء على حسابات الآدمن فقط.",
+    wipeDatabaseBtn: "تصفير ومسح قاعدة البيانات بالكامل",
+    confirmResetDbTitle: "⚠️ منطقة الخطر: تأكيد تصفير قاعدة البيانات",
+    confirmResetDbDesc: "هذا الإجراء سيقوم بمسح كافة سجلات الجلسات والمشروبات والمصاريف والموظفين غير الأدمن نهائياً ولا يمكن التراجع عنه.",
+    enterTechPassword: "أدخل كلمة مرور الأدمن / الفني للتأكيد:",
+    wipeAllDataBtn: "تصفير ومسح كافة البيانات نهائياً",
 
     // Profile Page
     profileTitle: "إعدادات الحساب",
@@ -467,6 +482,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     localStorage.setItem("language", language);
     document.documentElement.lang = language;
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    document.title = translations[language].appName || appConfig.appName;
   }, [language]);
 
   const setLanguage = (lang: Language) => {

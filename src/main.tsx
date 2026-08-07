@@ -66,46 +66,84 @@ function LoginWrapper() {
   return <Login theme={theme} toggleTheme={toggleTheme} />;
 }
 
+import { DbUnlockModal } from "./components/DbUnlockModal";
+
+function DbGuard({ children }: { children: React.ReactNode }) {
+  const [dbLocked, setDbLocked] = React.useState<boolean | null>(null);
+
+  const checkStatus = React.useCallback(async () => {
+    try {
+      const res = await fetch("/api/db/status");
+      const data = await res.json();
+      setDbLocked(!data.initialized || !data.exists);
+    } catch (err) {
+      console.error("Failed to check DB status:", err);
+      // If endpoint failed or returned locked status
+      setDbLocked(true);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    checkStatus();
+  }, [checkStatus]);
+
+  if (dbLocked === null) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 font-sans">
+        <div className="animate-pulse">Checking database authorization status...</div>
+      </div>
+    );
+  }
+
+  if (dbLocked) {
+    return <DbUnlockModal onUnlocked={() => setDbLocked(false)} />;
+  }
+
+  return <>{children}</>;
+}
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <LanguageProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/login"
-            element={
-              <GuestRoute>
-                <LoginWrapper />
-              </GuestRoute>
-            }
-          />
-          <Route
-            path="/*"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/Search" element={<SearchPage />} />
-                    <Route path="/Profits" element={<ProfitsPage />} />
-                    <Route path="/Maintenance" element={<MaintenancePage />} />
-                    <Route path="/Profile" element={<Profile />} />
-                    <Route
-                      path="/Admin"
-                      element={
-                        <AdminRoute>
-                          <AdminPage />
-                        </AdminRoute>
-                      }
-                    />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+      <DbGuard>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/login"
+              element={
+                <GuestRoute>
+                  <LoginWrapper />
+                </GuestRoute>
+              }
+            />
+            <Route
+              path="/*"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Routes>
+                      <Route path="/" element={<HomePage />} />
+                      <Route path="/Search" element={<SearchPage />} />
+                      <Route path="/Profits" element={<ProfitsPage />} />
+                      <Route path="/Maintenance" element={<MaintenancePage />} />
+                      <Route path="/Profile" element={<Profile />} />
+                      <Route
+                        path="/Admin"
+                        element={
+                          <AdminRoute>
+                            <AdminPage />
+                          </AdminRoute>
+                        }
+                      />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </DbGuard>
     </LanguageProvider>
   </React.StrictMode>,
 );

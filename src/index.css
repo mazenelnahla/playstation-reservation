@@ -791,17 +791,23 @@ td {
 }
 @media print {
   @page {
-    size: A4 landscape;
-    margin: 5mm;
+    size: portrait;
+    margin: 8mm;
   }
 
-  /* neutralize app-y min-heights/margins so they don't create extra pages */
-  html,
   body {
     margin: 0 !important;
     padding: 0 !important;
-    background: #fff !important;
+    background: #ffffff !important;
+    color: #000000 !important;
     height: auto !important;
+  }
+
+  th {
+    background-color: #cbd5e1 !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .min-h-screen {
@@ -819,6 +825,12 @@ td {
     display: revert !important;
   }
 
+  /* Force background colors/gradients and icons to render cleanly when printing */
+  #print-area * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
   .no-print,
   #print-area .no-print,
   #print-area .no-print * {
@@ -830,17 +842,34 @@ td {
     display: revert !important;
   }
 
-  /* Let the table expand instead of being clipped/scrolling */
+  /* Clean white printable receipt layout */
   #print-area {
     position: absolute !important;
     left: 0;
     top: 0;
     width: 100% !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 12px !important;
     border: 0 !important;
     box-shadow: none !important;
-    background: #fff !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  #print-area div,
+  #print-area section,
+  #print-area span,
+  #print-area h2,
+  #print-area h4,
+  #print-area p,
+  #print-area strong {
+    background-color: transparent !important;
+    background-image: none !important;
+    color: #000000 !important;
+    border-color: #e2e8f0 !important;
   }
 
   .print-table {

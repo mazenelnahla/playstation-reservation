@@ -4,6 +4,7 @@ import Dialog, { DialogHeader, DialogTitle, DialogDescription } from "../ui/Dial
 import { Gamepad2, Clock, AlertTriangle, Coffee, X, Check, UserCheck, Printer } from "lucide-react";
 import { DataRecord, fetchSessionOrders, SessionOrder } from "../../DataHandle/storage";
 import AddSnackDialog from "./AddSnackDialog";
+import { useLanguage } from "../../context/LanguageContext";
 
 interface DetailedSessionReceiptProps {
   open: boolean;
@@ -18,6 +19,8 @@ export default function DetailedSessionReceipt({
   session,
   onCheckout,
 }: DetailedSessionReceiptProps) {
+  const { language, isRtl } = useLanguage();
+  const isAr = language === "ar";
   const [orders, setOrders] = useState<SessionOrder[]>([]);
   const [snackDialogOpen, setSnackDialogOpen] = useState(false);
 
@@ -93,7 +96,7 @@ export default function DetailedSessionReceipt({
   const grandTotal = baseSessionPrice + delayPenaltyFee + snacksTotal;
 
   // Staff on duty
-  const loggedInEmployee = localStorage.getItem("username") || session.DoneBy || "Shift Staff";
+  const loggedInEmployee = localStorage.getItem("username") || session.DoneBy || (isAr ? "موظف الشفت" : "Shift Staff");
 
   const handleConfirmCheckout = () => {
     const nowIso = new Date().toISOString();
@@ -102,7 +105,9 @@ export default function DetailedSessionReceipt({
       Date_out: nowIso,
       DoneBy: loggedInEmployee,
       MaintinancePrice: String(grandTotal),
-      Notes: overdueMinutes > 0 ? `Overdue by ${overdueMinutes} mins. Penalty: ${delayPenaltyFee} EGP. ${session.Notes || ""}` : session.Notes,
+      Notes: overdueMinutes > 0 
+        ? (isAr ? `تأخير ${overdueMinutes} دقيقة. الغرامة: ${delayPenaltyFee} ج.م. ${session.Notes || ""}` : `Overdue by ${overdueMinutes} mins. Penalty: ${delayPenaltyFee} EGP. ${session.Notes || ""}`)
+        : session.Notes,
     };
     onCheckout(updated);
   };
@@ -111,29 +116,53 @@ export default function DetailedSessionReceipt({
     window.print();
   };
 
+  const currencyLabel = isAr ? "ج.م" : "EGP";
+  const now = new Date();
+  const printDateStr = now.toLocaleDateString(isAr ? 'ar-EG' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  const printTimeStr = now.toLocaleTimeString(isAr ? 'ar-EG' : 'en-US', { hour: '2-digit', minute: '2-digit' });
+
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
-          <div id="print-area" className="bg-slate-900 light:bg-white border border-emerald-500/30 light:border-slate-300 rounded-2xl shadow-2xl w-[96vw] max-w-xl max-h-[92vh] overflow-y-auto p-4 md:p-6 text-slate-100 light:text-slate-900 print:bg-white print:text-black print:border-0 print:shadow-none print:w-full print:max-w-none print:p-0">
+          <div id="print-area" dir={isRtl ? "rtl" : "ltr"} className="bg-slate-900 light:bg-white border border-emerald-500/30 light:border-slate-300 rounded-2xl shadow-2xl w-[96vw] max-w-xl max-h-[92vh] overflow-y-auto p-4 md:p-6 text-slate-100 light:text-slate-900 print:bg-white print:text-black print:border-0 print:shadow-none print:w-full print:max-w-none print:p-0">
+            
+            {/* Top Logo & Date/Time Header - PRINT ONLY (Hidden on screen dialog view) */}
+            <div className="hidden print:block text-center border-b border-dashed border-slate-300 pb-3 mb-4">
+              <div className="mx-auto w-12 h-12 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-black mb-1.5 print:flex print:items-center print:justify-center">
+                <Gamepad2 className="w-7 h-7 text-black" style={{ stroke: "#000000", fill: "none" }} />
+              </div>
+              <h2 className="text-xl font-black tracking-tight text-black">
+                {isAr ? "بلايستيشن هب" : "PLAYSTATION HUB"}
+              </h2>
+              <p className="text-xs text-slate-700 font-semibold mt-0.5">
+                {isAr ? "مركز ألعاب بلايستيشن وكافيه" : "Gaming Lounge & Coffee Net"}
+              </p>
+              <div className="mt-2 flex items-center justify-center gap-3 text-xs text-slate-800 font-medium print:flex print:items-center print:justify-center">
+                <span>📅 {printDateStr}</span>
+                <span>•</span>
+                <span>⏰ {printTimeStr}</span>
+              </div>
+            </div>
+
             <DialogHeader>
-              <div className="flex items-center justify-between border-b border-white/10 light:border-slate-200 pb-4 mb-4">
+              <div className="flex items-center justify-between border-b border-white/10 light:border-slate-200 pb-3 mb-4 no-print">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-emerald-500/20 light:bg-emerald-100 border border-emerald-500/30 text-emerald-400 light:text-emerald-700 no-print">
+                  <div className="p-3 rounded-xl bg-emerald-500/20 light:bg-emerald-100 border border-emerald-500/30 text-emerald-400 light:text-emerald-700">
                     <Gamepad2 className="w-6 h-6" />
                   </div>
                   <div>
-                    <DialogTitle className="text-xl font-bold text-white light:text-slate-900 print:text-black flex items-center gap-2">
-                      Station Receipt & Checkout
+                    <DialogTitle className="text-xl font-bold text-white light:text-slate-900 flex items-center gap-2">
+                      {isAr ? "فاتورة الجلسة وإنهاء الحساب" : "Station Receipt & Checkout"}
                     </DialogTitle>
-                    <DialogDescription className="text-xs text-slate-400 light:text-slate-600 print:text-slate-700">
-                      Station: <strong className="text-emerald-400 light:text-emerald-700 print:text-black">{session.Device_Type} - {session.VendorName}</strong>
+                    <DialogDescription className="text-xs text-slate-400 light:text-slate-600">
+                      {isAr ? "الجهاز / الغرفة: " : "Station: "}<strong className="text-emerald-400 light:text-emerald-700">{session.Device_Type} - {session.VendorName}</strong>
                     </DialogDescription>
                   </div>
                 </div>
                 <button
                   onClick={() => onOpenChange(false)}
-                  className="p-2 rounded-lg text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900 hover:bg-slate-800 light:hover:bg-slate-100 transition-colors no-print"
+                  className="p-2 rounded-lg text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900 hover:bg-slate-800 light:hover:bg-slate-100 transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -144,19 +173,19 @@ export default function DetailedSessionReceipt({
               {/* Customer & Staff Info */}
               <div className="grid grid-cols-2 gap-3 bg-slate-800/60 light:bg-slate-100 p-3 rounded-xl border border-white/5 light:border-slate-200 text-xs print:bg-slate-50 print:border-slate-300 print:text-black">
                 <div>
-                  <span className="text-slate-400 light:text-slate-600 print:text-slate-600 block">Customer Name:</span>
+                  <span className="text-slate-400 light:text-slate-600 print:text-slate-600 block">{isAr ? "اسم العميل:" : "Customer Name:"}</span>
                   <strong className="text-white light:text-slate-900 print:text-black text-sm">{session.CustomerName}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 light:text-slate-600 print:text-slate-600 block">Phone Number:</span>
-                  <strong className="text-slate-300 light:text-slate-800 print:text-black">{session.CustomerPhoneNumber || "N/A"}</strong>
+                  <span className="text-slate-400 light:text-slate-600 print:text-slate-600 block">{isAr ? "رقم الهاتف:" : "Phone Number:"}</span>
+                  <strong className="text-slate-300 light:text-slate-800 print:text-black">{session.CustomerPhoneNumber || (isAr ? "غير متوفر" : "N/A")}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 light:text-slate-600 print:text-slate-600 block">Start Time:</span>
-                  <strong className="text-slate-300 light:text-slate-800 print:text-black">{new Date(session.Date_in).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</strong>
+                  <span className="text-slate-400 light:text-slate-600 print:text-slate-600 block">{isAr ? "وقت البدء:" : "Start Time:"}</span>
+                  <strong className="text-slate-300 light:text-slate-800 print:text-black">{new Date(session.Date_in).toLocaleTimeString(isAr ? 'ar-EG' : [], { hour: '2-digit', minute: '2-digit' })}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-400 light:text-slate-600 print:text-slate-600 block">Registered Employee (Shift):</span>
+                  <span className="text-slate-400 light:text-slate-600 print:text-slate-600 block">{isAr ? "الموظف المسجل (الشفت):" : "Registered Employee (Shift):"}</span>
                   <strong className="text-blue-400 light:text-blue-700 print:text-black flex items-center gap-1">
                     <UserCheck className="w-3.5 h-3.5 no-print" />
                     {loggedInEmployee}
@@ -169,18 +198,18 @@ export default function DetailedSessionReceipt({
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-400 light:text-slate-600 print:text-slate-600 flex items-center gap-1">
                     <Clock className="w-4 h-4 text-blue-400 light:text-blue-600 no-print" />
-                    Booked Duration:
+                    {isAr ? "المدة المحجوزة:" : "Booked Duration:"}
                   </span>
-                  <span className="font-bold text-white light:text-slate-900 print:text-black">{bookedHours} Hour(s) ({baseSessionPrice} EGP)</span>
+                  <span className="font-bold text-white light:text-slate-900 print:text-black">{bookedHours} {isAr ? "ساعة" : "Hour(s)"} ({baseSessionPrice} {currencyLabel})</span>
                 </div>
 
                 {isOverdue && (
                   <div className="flex items-center justify-between text-xs bg-red-500/20 light:bg-red-50 p-2.5 rounded-lg border border-red-500/40 light:border-red-200 text-red-300 light:text-red-800 print:bg-red-50 print:text-red-800 print:border-red-300">
                     <span className="flex items-center gap-1 font-semibold">
                       <AlertTriangle className="w-4 h-4 text-red-400 light:text-red-600 animate-pulse no-print" />
-                      Overdue Delay ({overdueMinutes} mins overstay):
+                      {isAr ? `وقت التأخير الإضافي (${overdueMinutes} دقيقة تأخير):` : `Overdue Delay (${overdueMinutes} mins overstay):`}
                     </span>
-                    <strong className="text-red-400 light:text-red-700 print:text-red-800 font-bold">+ {delayPenaltyFee} EGP</strong>
+                    <strong className="text-red-400 light:text-red-700 print:text-red-800 font-bold">+ {delayPenaltyFee} {currencyLabel}</strong>
                   </div>
                 )}
               </div>
@@ -190,25 +219,25 @@ export default function DetailedSessionReceipt({
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-bold text-amber-400 light:text-amber-700 print:text-black flex items-center gap-1.5 uppercase tracking-wider">
                     <Coffee className="w-4 h-4 no-print" />
-                    Ordered Snacks & Drinks
+                    {isAr ? "المأكولات والمشروبات المطلوبة" : "Ordered Snacks & Drinks"}
                   </h4>
                   <button
                     type="button"
                     onClick={() => setSnackDialogOpen(true)}
                     className="text-xs font-semibold text-amber-300 light:text-amber-800 hover:text-amber-200 bg-amber-500/20 light:bg-amber-100 px-2.5 py-1 rounded-lg border border-amber-500/30 light:border-amber-300 flex items-center gap-1 no-print"
                   >
-                    + Add / Edit Snacks
+                    {isAr ? "+ إضافة / تعديل الطلبات" : "+ Add / Edit Snacks"}
                   </button>
                 </div>
 
                 {orders.length === 0 ? (
-                  <p className="text-xs text-slate-500 light:text-slate-500 italic text-center py-2">No snacks or beverages added to receipt.</p>
+                  <p className="text-xs text-slate-500 light:text-slate-500 italic text-center py-2">{isAr ? "لم يتم إضافة مأكولات أو مشروبات لهذه الفاتورة." : "No snacks or beverages added to receipt."}</p>
                 ) : (
                   <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1 print:max-h-none print:overflow-visible">
                     {orders.map((item) => (
                       <div key={item.id} className="flex justify-between text-xs text-slate-300 light:text-slate-800 print:text-black bg-slate-900/60 light:bg-white p-2 rounded border border-white/5 light:border-slate-200">
                         <span>{item.quantity}x {item.itemName}</span>
-                        <strong className="text-amber-300 light:text-amber-700 print:text-black">{item.price * item.quantity} EGP</strong>
+                        <strong className="text-amber-300 light:text-amber-700 print:text-black">{item.price * item.quantity} {currencyLabel}</strong>
                       </div>
                     ))}
                   </div>
@@ -218,22 +247,22 @@ export default function DetailedSessionReceipt({
               {/* Financial Grand Total */}
               <div className="bg-slate-950/80 light:bg-emerald-50 p-4 rounded-xl border border-emerald-500/40 light:border-emerald-300 text-emerald-300 light:text-emerald-950 space-y-2">
                 <div className="flex justify-between text-xs text-slate-300 light:text-slate-700">
-                  <span>Base Gaming Session:</span>
-                  <span className="font-semibold text-slate-100 light:text-slate-900">{baseSessionPrice} EGP</span>
+                  <span>{isAr ? "تكلفة حجز اللعب الأساسية:" : "Base Gaming Session:"}</span>
+                  <span className="font-semibold text-slate-100 light:text-slate-900">{baseSessionPrice} {currencyLabel}</span>
                 </div>
                 {delayPenaltyFee > 0 && (
                   <div className="flex justify-between text-xs text-red-300 light:text-red-700">
-                    <span>Overtime Penalty Fee:</span>
-                    <span className="font-semibold text-red-400 light:text-red-700">+{delayPenaltyFee} EGP</span>
+                    <span>{isAr ? "غرامة الوقت الإضافي:" : "Overtime Penalty Fee:"}</span>
+                    <span className="font-semibold text-red-400 light:text-red-700">+{delayPenaltyFee} {currencyLabel}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-xs text-amber-300 light:text-amber-800">
-                  <span>Drinks & Snacks Total:</span>
-                  <span className="font-semibold text-amber-400 light:text-amber-800">+{snacksTotal} EGP</span>
+                  <span>{isAr ? "إجمالي المشروبات والمأكولات:" : "Drinks & Snacks Total:"}</span>
+                  <span className="font-semibold text-amber-400 light:text-amber-800">+{snacksTotal} {currencyLabel}</span>
                 </div>
                 <div className="border-t border-emerald-500/30 light:border-emerald-300 pt-2 flex justify-between items-center text-lg font-extrabold text-white light:text-slate-900">
-                  <span className="text-white light:text-slate-900">Grand Total Bill:</span>
-                  <span className="text-2xl text-emerald-400 light:text-emerald-700 font-black">{grandTotal} EGP</span>
+                  <span className="text-white light:text-slate-900">{isAr ? "إجمالي الفاتورة النهائية:" : "Grand Total Bill:"}</span>
+                  <span className="text-2xl text-emerald-400 light:text-emerald-700 font-black">{grandTotal} {currencyLabel}</span>
                 </div>
               </div>
 
@@ -244,7 +273,7 @@ export default function DetailedSessionReceipt({
                   onClick={() => onOpenChange(false)}
                   className="w-1/4 h-10 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold"
                 >
-                  Cancel
+                  {isAr ? "إلغاء" : "Cancel"}
                 </Button>
                 <Button
                   type="button"
@@ -252,7 +281,7 @@ export default function DetailedSessionReceipt({
                   className="w-1/3 h-10 text-xs bg-blue-600 hover:bg-blue-700 text-white font-bold flex items-center justify-center gap-1.5 shadow-md shadow-blue-600/20 transition-colors"
                 >
                   <Printer className="w-4 h-4" />
-                  Print Receipt
+                  {isAr ? "طباعة الفاتورة" : "Print Receipt"}
                 </Button>
                 <Button
                   type="button"
@@ -260,7 +289,7 @@ export default function DetailedSessionReceipt({
                   className="flex-1 h-10 text-xs bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30"
                 >
                   <Check className="w-4 h-4" />
-                  Confirm Checkout
+                  {isAr ? "تأكيد الحساب والإنهاء" : "Confirm Checkout"}
                 </Button>
               </div>
             </div>
@@ -277,3 +306,4 @@ export default function DetailedSessionReceipt({
     </>
   );
 }
+

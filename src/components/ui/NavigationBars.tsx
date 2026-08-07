@@ -14,6 +14,7 @@ import {
   User,
 } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
+import { AppLogo } from "../../config/appConfig";
 
 interface HeaderNavbarProps {
   sidebarOpen: boolean;
@@ -52,10 +53,8 @@ export function HeaderNavbar({
             <Menu className="w-5 h-5 text-emerald-400" />
           </button>
           <Link to="/" className="flex items-center gap-3 group min-w-0">
-            <div className="relative flex items-center justify-center shrink-0">
-              <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 border border-emerald-400/40 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 overflow-hidden group-hover:scale-105 transition-transform duration-300">
-                <Gamepad2 className="w-6 h-6 text-white group-hover:rotate-12 transition-transform duration-300" />
-              </div>
+            <div className="relative flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">
+              <AppLogo />
             </div>
 
             <div className="flex flex-col min-w-0">

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { LogIn, Mail, Lock, AlertCircle, Loader, Sun, Moon, Globe } from "lucide-react";
+import { LogIn, Mail, Lock, AlertCircle, CheckCircle, Loader, Sun, Moon, Globe } from "lucide-react";
 import Button from "./components/ui/Button";
 import { useLanguage } from "./context/LanguageContext";
+import { AppLogo } from "./config/appConfig";
 
 interface LoginProps {
   theme?: "dark" | "light";
@@ -147,8 +148,11 @@ const Login = ({ theme = "dark", toggleTheme }: LoginProps) => {
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
           >
-            <div className="hidden sm:flex w-16 h-16 bg-gradient-to-br from-blue-500 to-emerald-500 rounded-2xl items-center justify-center mx-auto mb-4 shadow-lg">
-              <LogIn className="text-white w-8 h-8" />
+            <div className="flex items-center justify-center mb-4">
+              <AppLogo
+                className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 border border-emerald-400/40 flex items-center justify-center text-white shadow-xl overflow-hidden"
+                iconClassName="w-9 h-9 text-white"
+              />
             </div>
             <h1 className="text-xl sm:text-3xl font-bold text-white light:text-slate-900 mb-1 sm:mb-2">
               {isLogin ? t("welcomeBack") : t("createAccountTitle")}

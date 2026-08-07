@@ -229,3 +229,23 @@ export async function deleteMaintenanceLog(id: number): Promise<boolean> {
   const res = await fetch(`${API_URL}/maintenance/${id}`, { method: 'DELETE' });
   return res.ok;
 }
+
+export async function resetDatabase(techPassword: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const res = await fetch(`${API_URL}/admin/reset-database`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ techPassword }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      return { success: false, error: data.error || "Failed to reset database" };
+    }
+    cache = null;
+    return { success: true };
+  } catch (err: any) {
+    console.error("[storage.resetDatabase] Failed:", err);
+    return { success: false, error: err.message || "Network error while resetting database" };
+  }
+}
+
