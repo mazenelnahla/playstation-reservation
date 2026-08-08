@@ -1,53 +1,67 @@
 const API_URL = '/api';
 
-export type DataRecord = {
+export type SessionRecord = {
   id: number;
-  Date_in: string;
-  CustomerName: string;
-  CustomerPhoneNumber: string;
-  Device_Type: string;
-  VendorName: string;
-  ModelName: string;
-  issue: string;
-  MaintinancePrice: string;
-  Date_out: string;
-  DoneBy: string;
-  Notes: string;
+  startTime: string;
+  customerName: string;
+  customerPhone: string;
+  stationType: string;
+  stationName: string;
+  gameType: string;
+  sessionNotes: string;
+  hourlyRate: string;
+  endTime: string;
+  staffMember: string;
+  notes: string;
+  // Legacy aliases
+  Date_in?: string;
+  CustomerName?: string;
+  CustomerPhoneNumber?: string;
+  Device_Type?: string;
+  VendorName?: string;
+  ModelName?: string;
+  issue?: string;
+  MaintinancePrice?: string;
+  Date_out?: string;
+  DoneBy?: string;
+  Notes?: string;
 };
+
+export type DataRecord = SessionRecord;
 
 let cache: any = null;
 
-export async function load<T = DataRecord[]>(fallback: T = [] as unknown as T): Promise<T> {
+export async function load<T = SessionRecord[]>(fallback: T = [] as unknown as T): Promise<T> {
   try {
-    const res = await fetch(`${API_URL}/records`);
-    const records = await res.json();
-    cache = records;
-    return records as T;
+    const res = await fetch(`${API_URL}/sessions`);
+    const sessions = await res.json();
+    cache = sessions;
+    return sessions as T;
   } catch (err) {
     console.warn("[storage.load] API fetch failed:", err);
     return fallback;
   }
 }
 
-export async function createRecord(record: Omit<DataRecord, 'id'>): Promise<DataRecord> {
+export async function createRecord(record: Omit<SessionRecord, 'id'>): Promise<SessionRecord> {
   try {
-    const res = await fetch(`${API_URL}/records`, {
+    const res = await fetch(`${API_URL}/sessions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(record),
     });
-    const newRecord = await res.json();
+    const newSession = await res.json();
     cache = null;
-    return newRecord;
+    return newSession;
   } catch (err) {
     console.error("[storage.createRecord] Failed:", err);
     throw err;
   }
 }
 
-export async function updateRecord(id: number, data: Partial<DataRecord>): Promise<boolean> {
+export async function updateRecord(id: number, data: Partial<SessionRecord>): Promise<boolean> {
   try {
-    const res = await fetch(`${API_URL}/records/${id}`, {
+    const res = await fetch(`${API_URL}/sessions/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -62,7 +76,7 @@ export async function updateRecord(id: number, data: Partial<DataRecord>): Promi
 
 export async function deleteRecord(id: number): Promise<boolean> {
   try {
-    const res = await fetch(`${API_URL}/records/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_URL}/sessions/${id}`, { method: 'DELETE' });
     cache = null;
     return res.ok;
   } catch (err) {

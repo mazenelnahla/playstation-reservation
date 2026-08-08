@@ -46,22 +46,22 @@ async function initializeDatabase() {
       updatedAt TEXT NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS records (
+    CREATE TABLE IF NOT EXISTS sessions (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      Date_in TEXT NOT NULL,
-      CustomerName TEXT NOT NULL,
-      CustomerPhoneNumber TEXT NOT NULL,
-      Device_Type TEXT NOT NULL,
-      VendorName TEXT NOT NULL,
-      ModelName TEXT NOT NULL,
-      issue TEXT NOT NULL,
-      MaintinancePrice TEXT NOT NULL,
-      Date_out TEXT,
-      DoneBy TEXT,
-      Notes TEXT
+      startTime TEXT NOT NULL,
+      customerName TEXT NOT NULL,
+      customerPhone TEXT NOT NULL,
+      stationType TEXT NOT NULL,
+      stationName TEXT NOT NULL,
+      gameType TEXT NOT NULL,
+      sessionNotes TEXT NOT NULL,
+      hourlyRate TEXT NOT NULL,
+      endTime TEXT,
+      staffMember TEXT,
+      notes TEXT
     );
 
-    CREATE TABLE IF NOT EXISTS vendorNames (
+    CREATE TABLE IF NOT EXISTS stations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL UNIQUE,
       stationType TEXT DEFAULT 'PS5 Station'
@@ -76,7 +76,7 @@ async function initializeDatabase() {
 
     CREATE TABLE IF NOT EXISTS sessionOrders (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      recordId INTEGER NOT NULL,
+      sessionId INTEGER NOT NULL,
       itemName TEXT NOT NULL,
       quantity INTEGER NOT NULL,
       price REAL NOT NULL,
@@ -102,11 +102,35 @@ async function initializeDatabase() {
   `);
 
   try {
-    db.exec("DROP TABLE IF EXISTS maintenanceNames;");
-    const tableInfo = db.prepare("PRAGMA table_info(vendorNames)").all();
-    const hasStationType = tableInfo.some((col) => col.name === 'stationType');
-    if (!hasStationType) {
-      db.exec("ALTER TABLE vendorNames ADD COLUMN stationType TEXT DEFAULT 'PS5 Station'");
+    // Migration logic: migrate vendorNames -> stations if vendorNames exists
+    const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table'").all().map((t) => t.name);
+    
+    if (tables.includes("vendorNames")) {
+      const stationsCount = db.prepare("SELECT COUNT(*) as count FROM stations").get().count;
+      if (stationsCount === 0) {
+        db.exec(`
+          INSERT INTO stations (id, name, stationType)
+          SELECT id, name, COALESCE(stationType, 'PS5 Station') FROM vendorNames;
+        `);
+      }
+    }
+
+    if (tables.includes("records")) {
+      const sessionsCount = db.prepare("SELECT COUNT(*) as count FROM sessions").get().count;
+      if (sessionsCount === 0) {
+        db.exec(`
+          INSERT INTO sessions (id, startTime, customerName, customerPhone, stationType, stationName, gameType, sessionNotes, hourlyRate, endTime, staffMember, notes)
+          SELECT id, Date_in, CustomerName, CustomerPhoneNumber, Device_Type, VendorName, ModelName, issue, MaintinancePrice, Date_out, DoneBy, Notes FROM records;
+        `);
+      }
+    }
+
+    if (tables.includes("sessionOrders")) {
+      const orderCols = db.prepare("PRAGMA table_info(sessionOrders)").all().map((c) => c.name);
+      if (orderCols.includes("recordId") && !orderCols.includes("sessionId")) {
+        db.exec("ALTER TABLE sessionOrders ADD COLUMN sessionId INTEGER DEFAULT 0;");
+        db.exec("UPDATE sessionOrders SET sessionId = recordId WHERE sessionId = 0;");
+      }
     }
   } catch (e) {
     console.warn("Migration warning:", e);
@@ -125,15 +149,15 @@ async function initializeDatabase() {
       console.log("🔑 Default admin user seeded: admin@admin.com / 123456");
     }
 
-    const vCount = db.prepare("SELECT COUNT(*) as count FROM vendorNames").get();
+    const vCount = db.prepare("SELECT COUNT(*) as count FROM stations").get();
     if (vCount.count === 0) {
-      const insertVendor = db.prepare("INSERT INTO vendorNames (name, stationType) VALUES (?, ?)");
-      insertVendor.run("PS5 #1", "PS5 Station");
-      insertVendor.run("PS5 #2", "PS5 Station");
-      insertVendor.run("PS4 #1", "PS4 Station");
-      insertVendor.run("VIP Room #1", "VIP Room");
-      insertVendor.run("Gaming PC #1", "Gaming PC");
-      console.log("🎮 Default device categories seeded with Station Types");
+      const insertStation = db.prepare("INSERT INTO stations (name, stationType) VALUES (?, ?)");
+      insertStation.run("PS5 #1", "PS5 Station");
+      insertStation.run("PS5 #2", "PS5 Station");
+      insertStation.run("PS4 #1", "PS4 Station");
+      insertStation.run("VIP Room #1", "VIP Room");
+      insertStation.run("Gaming PC #1", "Gaming PC");
+      console.log("🎮 Default station categories seeded with Station Types");
     }
   } catch (err) {
     console.error("Failed to seed default admin or device categories:", err);
@@ -186,80 +210,168 @@ app.use((req, res, next) => {
   next();
 });
 
-// Records API
-app.get("/api/records", (req, res) => {
+// Helper mapper for session objects to ensure front-end compatibility
+function formatSession(row) {
+  if (!row) return null;
+  const startTime = row.startTime || row.Date_in || "";
+  const customerName = row.customerName || row.CustomerName || "";
+  const customerPhone = row.customerPhone || row.CustomerPhoneNumber || "";
+  const stationType = row.stationType || row.Device_Type || "";
+  const stationName = row.stationName || row.VendorName || "";
+  const gameType = row.gameType || row.ModelName || "";
+  const sessionNotes = row.sessionNotes || row.issue || "";
+  const hourlyRate = row.hourlyRate || row.MaintinancePrice || "";
+  const endTime = row.endTime !== undefined ? row.endTime : row.Date_out;
+  const staffMember = row.staffMember !== undefined ? row.staffMember : row.DoneBy;
+  const notes = row.notes !== undefined ? row.notes : row.Notes;
+
+  return {
+    id: row.id,
+    startTime,
+    customerName,
+    customerPhone,
+    stationType,
+    stationName,
+    gameType,
+    sessionNotes,
+    hourlyRate,
+    endTime,
+    staffMember,
+    notes,
+    // Legacy field aliases
+    Date_in: startTime,
+    CustomerName: customerName,
+    CustomerPhoneNumber: customerPhone,
+    Device_Type: stationType,
+    VendorName: stationName,
+    ModelName: gameType,
+    issue: sessionNotes,
+    MaintinancePrice: hourlyRate,
+    Date_out: endTime,
+    DoneBy: staffMember,
+    Notes: notes,
+  };
+}
+
+// Sessions API
+const getSessionsHandler = (req, res) => {
   try {
-    const records = db.prepare("SELECT * FROM records ORDER BY id DESC").all();
-    res.json(records);
+    const rows = db.prepare("SELECT * FROM sessions ORDER BY id DESC").all();
+    res.json(rows.map(formatSession));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+};
 
-app.post("/api/records", (req, res) => {
+app.get("/api/sessions", getSessionsHandler);
+app.get("/api/records", getSessionsHandler);
+
+const createSessionHandler = (req, res) => {
   try {
+    const startTime = req.body.startTime || req.body.Date_in || "";
+    const customerName = req.body.customerName || req.body.CustomerName || "";
+    const customerPhone = req.body.customerPhone || req.body.CustomerPhoneNumber || "";
+    const stationType = req.body.stationType || req.body.Device_Type || "";
+    const stationName = req.body.stationName || req.body.VendorName || "";
+    const gameType = req.body.gameType || req.body.ModelName || "";
+    const sessionNotes = req.body.sessionNotes || req.body.issue || "";
+    const hourlyRate = req.body.hourlyRate || req.body.MaintinancePrice || "";
+    const endTime = req.body.endTime !== undefined ? req.body.endTime : req.body.Date_out;
+    const staffMember = req.body.staffMember !== undefined ? req.body.staffMember : req.body.DoneBy;
+    const notes = req.body.notes !== undefined ? req.body.notes : req.body.Notes;
+
     const stmt = db.prepare(`
-      INSERT INTO records (Date_in, CustomerName, CustomerPhoneNumber, Device_Type,
-        VendorName, ModelName, issue, MaintinancePrice, Date_out, DoneBy, Notes)
+      INSERT INTO sessions (startTime, customerName, customerPhone, stationType,
+        stationName, gameType, sessionNotes, hourlyRate, endTime, staffMember, notes)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     const info = stmt.run(
-      req.body.Date_in,
-      req.body.CustomerName,
-      req.body.CustomerPhoneNumber,
-      req.body.Device_Type,
-      req.body.VendorName,
-      req.body.ModelName,
-      req.body.issue,
-      req.body.MaintinancePrice,
-      req.body.Date_out,
-      req.body.DoneBy,
-      req.body.Notes,
+      startTime,
+      customerName,
+      customerPhone,
+      stationType,
+      stationName,
+      gameType,
+      sessionNotes,
+      hourlyRate,
+      endTime,
+      staffMember,
+      notes,
     );
-    res.json({ id: Number(info.lastInsertRowid), ...req.body });
+
+    const insertedRow = db.prepare("SELECT * FROM sessions WHERE id = ?").get(info.lastInsertRowid);
+    res.json(formatSession(insertedRow));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+};
 
-app.put("/api/records/:id", (req, res) => {
+app.post("/api/sessions", createSessionHandler);
+app.post("/api/records", createSessionHandler);
+
+const updateSessionHandler = (req, res) => {
   try {
-    const fields = Object.keys(req.body).filter((k) => k !== "id");
-    const setClause = fields.map((f) => `${f} = ?`).join(", ");
-    const values = fields.map((f) => req.body[f]);
+    const body = req.body;
+    const updateData = {};
+    if (body.startTime !== undefined || body.Date_in !== undefined) updateData.startTime = body.startTime || body.Date_in;
+    if (body.customerName !== undefined || body.CustomerName !== undefined) updateData.customerName = body.customerName || body.CustomerName;
+    if (body.customerPhone !== undefined || body.CustomerPhoneNumber !== undefined) updateData.customerPhone = body.customerPhone || body.CustomerPhoneNumber;
+    if (body.stationType !== undefined || body.Device_Type !== undefined) updateData.stationType = body.stationType || body.Device_Type;
+    if (body.stationName !== undefined || body.VendorName !== undefined) updateData.stationName = body.stationName || body.VendorName;
+    if (body.gameType !== undefined || body.ModelName !== undefined) updateData.gameType = body.gameType || body.ModelName;
+    if (body.sessionNotes !== undefined || body.issue !== undefined) updateData.sessionNotes = body.sessionNotes || body.issue;
+    if (body.hourlyRate !== undefined || body.MaintinancePrice !== undefined) updateData.hourlyRate = body.hourlyRate || body.MaintinancePrice;
+    if (body.endTime !== undefined || body.Date_out !== undefined) updateData.endTime = body.endTime !== undefined ? body.endTime : body.Date_out;
+    if (body.staffMember !== undefined || body.DoneBy !== undefined) updateData.staffMember = body.staffMember !== undefined ? body.staffMember : body.DoneBy;
+    if (body.notes !== undefined || body.Notes !== undefined) updateData.notes = body.notes !== undefined ? body.notes : body.Notes;
 
-    const stmt = db.prepare(`UPDATE records SET ${setClause} WHERE id = ?`);
-    stmt.run(...values, req.params.id);
+    const fields = Object.keys(updateData);
+    if (fields.length > 0) {
+      const setClause = fields.map((f) => `${f} = ?`).join(", ");
+      const values = fields.map((f) => updateData[f]);
+      const stmt = db.prepare(`UPDATE sessions SET ${setClause} WHERE id = ?`);
+      stmt.run(...values, req.params.id);
+    }
+
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+};
 
-app.delete("/api/records/:id", (req, res) => {
+app.put("/api/sessions/:id", updateSessionHandler);
+app.put("/api/records/:id", updateSessionHandler);
+
+const deleteSessionHandler = (req, res) => {
   try {
-    db.prepare("DELETE FROM records WHERE id = ?").run(req.params.id);
+    db.prepare("DELETE FROM sessions WHERE id = ?").run(req.params.id);
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+};
 
-// Vendor Names API
-app.get("/api/vendors", (req, res) => {
+app.delete("/api/sessions/:id", deleteSessionHandler);
+app.delete("/api/records/:id", deleteSessionHandler);
+
+// Stations API
+const getStationsHandler = (req, res) => {
   try {
-    const vendors = db.prepare("SELECT * FROM vendorNames ORDER BY name").all();
-    res.json(vendors);
+    const stations = db.prepare("SELECT * FROM stations ORDER BY name").all();
+    res.json(stations);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+};
 
-app.post("/api/vendors", (req, res) => {
+app.get("/api/stations", getStationsHandler);
+app.get("/api/vendors", getStationsHandler);
+
+const saveStationHandler = (req, res) => {
   try {
     const { id, name, stationType } = req.body;
     if (id) {
-      db.prepare("UPDATE vendorNames SET name = ?, stationType = ? WHERE id = ?").run(
+      db.prepare("UPDATE stations SET name = ?, stationType = ? WHERE id = ?").run(
         name,
         stationType || 'PS5 Station',
         id,
@@ -267,23 +379,29 @@ app.post("/api/vendors", (req, res) => {
       res.json({ id, name, stationType: stationType || 'PS5 Station' });
     } else {
       const info = db
-        .prepare("INSERT INTO vendorNames (name, stationType) VALUES (?, ?)")
+        .prepare("INSERT INTO stations (name, stationType) VALUES (?, ?)")
         .run(name, stationType || 'PS5 Station');
       res.json({ id: Number(info.lastInsertRowid), name, stationType: stationType || 'PS5 Station' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+};
 
-app.delete("/api/vendors/:id", (req, res) => {
+app.post("/api/stations", saveStationHandler);
+app.post("/api/vendors", saveStationHandler);
+
+const deleteStationHandler = (req, res) => {
   try {
-    db.prepare("DELETE FROM vendorNames WHERE id = ?").run(req.params.id);
+    db.prepare("DELETE FROM stations WHERE id = ?").run(req.params.id);
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+};
+
+app.delete("/api/stations/:id", deleteStationHandler);
+app.delete("/api/vendors/:id", deleteStationHandler);
 
 // Menu Items API (Drinks & Snacks)
 app.get("/api/menu", (req, res) => {
@@ -324,29 +442,33 @@ app.delete("/api/menu/:id", (req, res) => {
   }
 });
 
-// Session Orders API (Snacks & Drinks attached to record)
-app.get("/api/orders/:recordId", (req, res) => {
+// Session Orders API (Snacks & Drinks attached to session)
+const getOrdersHandler = (req, res) => {
   try {
-    const orders = db.prepare("SELECT * FROM sessionOrders WHERE recordId = ? ORDER BY id ASC").all(req.params.recordId);
-    res.json(orders);
+    const targetId = req.params.sessionId || req.params.recordId;
+    const orders = db.prepare("SELECT * FROM sessionOrders WHERE sessionId = ? OR recordId = ? ORDER BY id ASC").all(targetId, targetId);
+    res.json(orders.map((o) => ({ ...o, recordId: o.sessionId || o.recordId, sessionId: o.sessionId || o.recordId })));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+};
+
+app.get("/api/orders/:sessionId", getOrdersHandler);
 
 app.post("/api/orders", (req, res) => {
   try {
-    const { recordId, itemName, quantity, price } = req.body;
+    const { recordId, sessionId, itemName, quantity, price } = req.body;
+    const targetId = sessionId || recordId;
     const qtyToAdd = quantity || 1;
-    const existing = db.prepare("SELECT * FROM sessionOrders WHERE recordId = ? AND itemName = ?").get(recordId, itemName);
+    const existing = db.prepare("SELECT * FROM sessionOrders WHERE (sessionId = ? OR recordId = ?) AND itemName = ?").get(targetId, targetId, itemName);
     if (existing) {
       const newQty = existing.quantity + qtyToAdd;
       db.prepare("UPDATE sessionOrders SET quantity = ? WHERE id = ?").run(newQty, existing.id);
-      res.json({ ...existing, quantity: newQty });
+      res.json({ ...existing, quantity: newQty, recordId: targetId, sessionId: targetId });
     } else {
       const now = new Date().toISOString();
-      const info = db.prepare("INSERT INTO sessionOrders (recordId, itemName, quantity, price, createdAt) VALUES (?, ?, ?, ?, ?)").run(recordId, itemName, qtyToAdd, price, now);
-      res.json({ id: Number(info.lastInsertRowid), recordId, itemName, quantity: qtyToAdd, price, createdAt: now });
+      const info = db.prepare("INSERT INTO sessionOrders (sessionId, recordId, itemName, quantity, price, createdAt) VALUES (?, ?, ?, ?, ?, ?)").run(targetId, targetId, itemName, qtyToAdd, price, now);
+      res.json({ id: Number(info.lastInsertRowid), recordId: targetId, sessionId: targetId, itemName, quantity: qtyToAdd, price, createdAt: now });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -393,10 +515,10 @@ app.post("/api/maintenance", (req, res) => {
     const now = new Date().toISOString();
     const itemStatus = status || 'Under Maintenance';
 
-    // If putting device under maintenance, close any active sessions for this device so it becomes idle
+    // If putting device under maintenance, close any active sessions for this station so it becomes idle
     if (itemStatus === 'Under Maintenance' && deviceName) {
       db.prepare(
-        "UPDATE records SET Date_out = ? WHERE VendorName = ? AND (Date_out IS NULL OR Date_out = '' OR Date_out = 'null')"
+        "UPDATE sessions SET endTime = ? WHERE stationName = ? AND (endTime IS NULL OR endTime = '' OR endTime = 'null')"
       ).run(now, deviceName);
     }
 
@@ -681,12 +803,14 @@ app.post("/api/admin/reset-database", async (req, res) => {
 
     // Clear all application data tables
     db.exec(`
-      DELETE FROM records;
+      DELETE FROM sessions;
       DELETE FROM sessionOrders;
       DELETE FROM dailyResets;
       DELETE FROM maintenanceLogs;
       DELETE FROM users WHERE isAdmin = 0;
-      DELETE FROM sqlite_sequence WHERE name IN ('records', 'sessionOrders', 'dailyResets', 'maintenanceLogs');
+      DROP TABLE IF EXISTS records;
+      DROP TABLE IF EXISTS vendorNames;
+      DELETE FROM sqlite_sequence WHERE name IN ('sessions', 'records', 'sessionOrders', 'dailyResets', 'maintenanceLogs');
     `);
 
     console.log("🧹 Database successfully reset by Admin. All session records, orders, resets, maintenance logs, and non-admin staff deleted.");
