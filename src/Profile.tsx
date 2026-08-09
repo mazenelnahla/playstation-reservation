@@ -141,9 +141,11 @@ export default function Profile() {
           <div className="p-4 rounded-xl bg-slate-800/40 border border-white/5 space-y-4">
             <div className="flex items-center gap-4">
               <div
-                className={`w-14 h-14 bg-gradient-to-br ${selectedColorObj.gradientClass} rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg border-2 border-white/20`}
+                className={`w-14 h-14 avatar-circle bg-gradient-to-br ${selectedColorObj.gradientClass} rounded-full flex items-center justify-center font-bold text-xl shadow-lg border-2 border-white/20`}
               >
-                {name ? name.charAt(0).toUpperCase() : "U"}
+                <span className="user-avatar-letter" style={{ color: "#ffffff" }}>
+                  {name ? name.charAt(0).toUpperCase() : "U"}
+                </span>
               </div>
               <div>
                 <h3 className="text-base font-semibold text-white flex items-center gap-2">

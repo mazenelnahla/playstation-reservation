@@ -89,7 +89,7 @@ function DbGuard({ children }: { children: React.ReactNode }) {
 
   if (dbLocked === null) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 font-sans">
+      <div className="min-h-screen bg-slate-950 light:bg-slate-100 dark:bg-slate-950 text-slate-400 light:text-slate-600 flex items-center justify-center font-sans">
         <div className="animate-pulse">Checking database authorization status...</div>
       </div>
     );

@@ -198,11 +198,13 @@ export function AppSidebar({
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className={`w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0 bg-gradient-to-br ${
+                    className={`w-9 h-9 rounded-full avatar-circle flex items-center justify-center font-bold text-xs shrink-0 bg-gradient-to-br ${
                       colorGradients[avatarColor] || colorGradients.blue
                     }`}
                   >
-                    {username ? username.charAt(0).toUpperCase() : "U"}
+                    <span className="user-avatar-letter" style={{ color: "#ffffff" }}>
+                      {username ? username.charAt(0).toUpperCase() : "U"}
+                    </span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs sm:text-sm font-semibold text-white light:text-slate-900 truncate">

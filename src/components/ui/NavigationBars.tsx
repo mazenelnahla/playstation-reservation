@@ -86,11 +86,13 @@ export function HeaderNavbar({
             title={t("profile")}
           >
             <div
-              className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-white font-bold text-[10px] sm:text-xs bg-gradient-to-br ${
+              className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full avatar-circle flex items-center justify-center font-bold text-[10px] sm:text-xs bg-gradient-to-br ${
                 colorGradients[avatarColor] || colorGradients.blue
               }`}
             >
-              {username ? username.charAt(0).toUpperCase() : "U"}
+              <span className="user-avatar-letter" style={{ color: "#ffffff" }}>
+                {username ? username.charAt(0).toUpperCase() : "U"}
+              </span>
             </div>
             <span className="hidden sm:inline text-sm font-medium text-white light:text-slate-800 max-w-[90px] sm:max-w-[120px] truncate">
               {username}

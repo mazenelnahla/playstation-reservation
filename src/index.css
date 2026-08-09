@@ -269,6 +269,19 @@ html.light .bg-slate-800\/80 {
   border-color: #cbd5e1 !important;
 }
 
+/* User Profile Picture Avatar Initial Letter Styling */
+.user-avatar-letter,
+html.light .user-avatar-letter,
+html.light a .user-avatar-letter,
+html.light a:hover .user-avatar-letter,
+html.light button .user-avatar-letter,
+html.light aside a:hover .user-avatar-letter,
+html.light aside button:hover .user-avatar-letter,
+html.light .hover\:bg-slate-800:hover .user-avatar-letter,
+html.light .hover\:bg-slate-700:hover .user-avatar-letter {
+  color: #ffffff !important;
+}
+
 html.light button.bg-slate-800:hover,
 html.light button.bg-slate-700:hover,
 html.light .hover\:bg-slate-800:hover,
@@ -276,13 +289,6 @@ html.light .hover\:bg-slate-700:hover,
 html.light aside a:hover,
 html.light aside button:hover {
   background-color: #cbd5e1 !important;
-  color: #0f172a !important;
-}
-
-html.light aside a:hover *,
-html.light aside button:hover *,
-html.light .hover\:bg-slate-800:hover *,
-html.light .hover\:bg-slate-700:hover * {
   color: #0f172a !important;
 }
 
