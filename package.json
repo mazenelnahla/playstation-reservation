@@ -7,10 +7,10 @@
   "scripts": {
     "dev": "vite",
     "server": "node server/index.js",
-    "dev:full": "concurrently \"npm run server\" \"npm run dev\"",
-    "start": "concurrently \"npm run server\" \"npm run dev\"",
+    "dev:full": "npm run server & npm run dev",
+    "start": "npm run server & npm run dev",
     "electron": "electron .",
-    "electron:dev": "concurrently \"npm run server\" \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:dev": "npm run server & vite & wait-on http://localhost:5173 && electron .",
     "electron:build": "npm run build && electron-builder",
     "build": "vite build",
     "preview": "vite preview"
@@ -26,11 +26,9 @@
     "express": "^5.1.0",
     "framer-motion": "^11.0.0",
     "lucide-react": "^0.378.0",
-    "next": "^16.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.9.1",
-    "sqlite3": "^5.1.7",
     "tailwind-merge": "^3.3.1",
     "uuid": "^14.0.1"
   },
@@ -45,7 +43,6 @@
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^5.0.1",
     "autoprefixer": "^10.4.18",
-    "concurrently": "^9.2.4",
     "electron": "^43.2.0",
     "electron-builder": "^26.15.3",
     "postcss": "^8.4.38",
