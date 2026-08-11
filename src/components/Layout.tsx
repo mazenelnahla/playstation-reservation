@@ -59,10 +59,10 @@ export default function Layout({ children }: LayoutProps) {
     return () => window.removeEventListener("profile-updated", loadProfile);
   }, []);
 
-  // Handle responsive sidebar
+  // Handle responsive sidebar (Closed on mobile & tablet <1024px, Open on desktop >=1024px)
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth >= 1024) {
         setSidebarOpen(true);
       } else {
         setSidebarOpen(false);
@@ -98,7 +98,7 @@ export default function Layout({ children }: LayoutProps) {
   };
 
   const closeSidebarOnMobile = () => {
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < 1024) {
       setSidebarOpen(false);
     }
   };
@@ -135,13 +135,13 @@ export default function Layout({ children }: LayoutProps) {
       {/* Main Content Area */}
       <motion.main
         className={cn(
-          "w-full min-w-0 px-4 sm:px-6 md:px-8 py-4 sm:py-6 transition-all duration-300 pb-24 md:pb-8",
+          "w-full min-w-0 px-4 sm:px-6 md:px-8 py-4 sm:py-6 transition-all duration-300 pb-24 lg:pb-8",
           isRtl
             ? sidebarOpen
-              ? "md:pr-[17.5rem]"
+              ? "lg:pr-[17.5rem]"
               : ""
             : sidebarOpen
-              ? "md:pl-[17.5rem]"
+              ? "lg:pl-[17.5rem]"
               : ""
         )}
         initial={{ opacity: 0, y: 20 }}

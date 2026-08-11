@@ -118,65 +118,65 @@ export function MobileBottomNavbar() {
   const isActive = (path: string): boolean => location.pathname === path;
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 light:bg-white/95 backdrop-blur-lg border-t border-white/10 light:border-slate-200 px-2 py-2 flex items-center justify-around shadow-lg">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 light:bg-white/95 backdrop-blur-lg border-t border-white/10 light:border-slate-200 px-1 py-2 grid grid-cols-5 items-stretch shadow-lg">
       <Link
         to="/"
-        className={`flex flex-col items-center gap-1 text-[10px] font-bold p-1.5 rounded-lg transition-colors ${
+        className={`flex flex-col items-center justify-center text-center gap-1 text-[10px] font-bold p-1 rounded-lg transition-colors leading-tight ${
           isActive("/")
             ? "text-emerald-400 light:text-emerald-600 font-extrabold"
             : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900"
         }`}
       >
-        <Gamepad2 className="w-5 h-5" />
-        <span>{t("jobs")}</span>
+        <Gamepad2 className="w-5 h-5 shrink-0" />
+        <span className="text-center truncate w-full">{t("jobs")}</span>
       </Link>
 
       <Link
         to="/Search"
-        className={`flex flex-col items-center gap-1 text-[10px] font-bold p-1.5 rounded-lg transition-colors ${
+        className={`flex flex-col items-center justify-center text-center gap-1 text-[10px] font-bold p-1 rounded-lg transition-colors leading-tight ${
           isActive("/Search")
             ? "text-emerald-400 light:text-emerald-600 font-extrabold"
             : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900"
         }`}
       >
-        <Archive className="w-5 h-5" />
-        <span>{t("archiveTable")}</span>
+        <Archive className="w-5 h-5 shrink-0" />
+        <span className="text-center truncate w-full">{t("archiveTable")}</span>
       </Link>
 
       <Link
         to="/Profits"
-        className={`flex flex-col items-center gap-1 text-[10px] font-bold p-1.5 rounded-lg transition-colors ${
+        className={`flex flex-col items-center justify-center text-center gap-1 text-[10px] font-bold p-1 rounded-lg transition-colors leading-tight ${
           isActive("/Profits")
             ? "text-emerald-400 light:text-emerald-600 font-extrabold"
             : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900"
         }`}
       >
-        <TrendingUp className="w-5 h-5" />
-        <span>{t("profits")}</span>
+        <TrendingUp className="w-5 h-5 shrink-0" />
+        <span className="text-center truncate w-full">{t("profits")}</span>
       </Link>
 
       <Link
         to="/Maintenance"
-        className={`flex flex-col items-center gap-1 text-[10px] font-bold p-1.5 rounded-lg transition-colors ${
+        className={`flex flex-col items-center justify-center text-center gap-1 text-[10px] font-bold p-1 rounded-lg transition-colors leading-tight ${
           isActive("/Maintenance")
             ? "text-emerald-400 light:text-emerald-600 font-extrabold"
             : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900"
         }`}
       >
-        <Wrench className="w-5 h-5" />
-        <span>{t("maintenanceNav")}</span>
+        <Wrench className="w-5 h-5 shrink-0" />
+        <span className="text-center truncate w-full">{t("maintenanceNav")}</span>
       </Link>
 
       <Link
         to="/Profile"
-        className={`flex flex-col items-center gap-1 text-[10px] font-bold p-1.5 rounded-lg transition-colors ${
+        className={`flex flex-col items-center justify-center text-center gap-1 text-[10px] font-bold p-1 rounded-lg transition-colors leading-tight ${
           isActive("/Profile")
             ? "text-emerald-400 light:text-emerald-600 font-extrabold"
             : "text-slate-400 light:text-slate-600 hover:text-white light:hover:text-slate-900"
         }`}
       >
-        <User className="w-5 h-5" />
-        <span>{t("profile")}</span>
+        <User className="w-5 h-5 shrink-0" />
+        <span className="text-center truncate w-full">{t("profile")}</span>
       </Link>
     </nav>
   );
