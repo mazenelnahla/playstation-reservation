@@ -1,5 +1,6 @@
 import express from "express";
 import fs from "fs";
+import bcrypt from "bcryptjs";
 import { checkIsDbInitialized, dbPath, initializeDatabase } from "../db.js";
 
 const router = express.Router();
@@ -16,8 +17,10 @@ router.get("/status", (req, res) => {
 router.post("/initialize", async (req, res) => {
   try {
     const { password } = req.body;
+    const authenticated = await bcrypt.compare(password, process.env.TECH_PASSWORD);
+
     // Accept valid master password ('123456' or tech password)
-    if (!password || (password !== "123456" && password !== "admin123")) {
+    if (!authenticated) {
       return res.status(401).json({ error: "Invalid master authorization password." });
     }
 

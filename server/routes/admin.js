@@ -13,11 +13,7 @@ router.post("/reset-database", async (req, res) => {
       return res.status(400).json({ error: "Password verification required" });
     }
 
-    let authenticated = false;
-    const match = await bcrypt.compare(techPassword, process.env.TECH_PASSWORD);
-    if (match) {
-      authenticated = true;
-    }
+    const authenticated = await bcrypt.compare(techPassword, process.env.TECH_PASSWORD);
 
     if (!authenticated) {
       console.warn("❌ Admin reset-database authentication failed. Input password did not match TECH_PASSWORD.");
