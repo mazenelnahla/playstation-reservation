@@ -13,7 +13,8 @@
     "electron:dev": "npm run server & vite & wait-on http://localhost:5173 && electron .",
     "electron:build": "npm run build && electron-builder",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "hash": "node scripts/hash.js"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
@@ -23,6 +24,7 @@
     "clsx": "^1.2.1",
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
+    "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "framer-motion": "^11.0.0",
     "lucide-react": "^0.378.0",

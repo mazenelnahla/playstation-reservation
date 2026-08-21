@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { dbPath } from "./db.js";
@@ -15,7 +16,7 @@ import usersRouter from "./routes/users.js";
 import adminRouter from "./routes/admin.js";
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
